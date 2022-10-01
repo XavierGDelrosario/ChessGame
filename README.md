@@ -41,4 +41,8 @@ closer to the center as long as the following conditions are met:
     One reason is that I can play and test at the same time. It makes it less frustrating when bugs occur. I chose 
     chess because I enjoy playing it and it has the right amount of complexity for my knowledge in programming.
 
-
+## User Stories
+- As a user I want to be able to capture and piece and remove it from the board.
+- As a user I want to be able to make a move and have it added to a list of moves made in the game.
+- As a user I want to be able to move a piece, remove it from one square and add it to another.
+- As a user I want to be restricted to make moves that puts my king out of check.
