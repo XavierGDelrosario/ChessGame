@@ -58,12 +58,12 @@ public class PawnTest {
         d4.setPiece(new Pawn("black"));
         b6.setPiece(new Pawn("white"));
         d5.setPiece(new Pawn("white"));
-        List<Square> b2PieceSquares = b2.getPiece().squaresCanMoveTo(board);
-        List<Square> d2PieceSquares = d2.getPiece().squaresCanMoveTo(board);
-        List<Square> b7PieceSquares = b7.getPiece().squaresCanMoveTo(board);
-        List<Square> d7PieceSquares = d7.getPiece().squaresCanMoveTo(board);
-        List<Square> f2PieceSquares = f2.getPiece().squaresCanMoveTo(board);
-        List<Square> f7PieceSquares = f7.getPiece().squaresCanMoveTo(board);
+        List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> b7PieceSquares = b7.getPiece().getSquaresCanMoveTo(board);
+        List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
+        List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(0, b2PieceSquares.size());
         assertEquals(1, d2PieceSquares.size());
@@ -83,12 +83,12 @@ public class PawnTest {
         d4.setPiece(new Pawn("black"));
         b6.setPiece(new Pawn("white"));
         d5.setPiece(new Pawn("white"));
-        List<Square> b2PieceSquares = b2.getPiece().squaresCanMoveTo(board);
-        List<Square> d2PieceSquares = d2.getPiece().squaresCanMoveTo(board);
-        List<Square> b7PieceSquares =b7.getPiece().squaresCanMoveTo(board);
-        List<Square> d7PieceSquares = d7.getPiece().squaresCanMoveTo(board);
-        List<Square> f2PieceSquares = f2.getPiece().squaresCanMoveTo(board);
-        List<Square> f7PieceSquares = f7.getPiece().squaresCanMoveTo(board);
+        List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> b7PieceSquares =b7.getPiece().getSquaresCanMoveTo(board);
+        List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
+        List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(0, b2PieceSquares.size());
         assertEquals(1, d2PieceSquares.size());
@@ -108,12 +108,12 @@ public class PawnTest {
         d4.setPiece(new Pawn("white"));
         b6.setPiece(new Pawn("black"));
         d5.setPiece(new Pawn("black"));
-        List<Square> b2PieceSquares = b2.getPiece().squaresCanMoveTo(board);
-        List<Square> d2PieceSquares = d2.getPiece().squaresCanMoveTo(board);
-        List<Square> b7PieceSquares =b7.getPiece().squaresCanMoveTo(board);
-        List<Square> d7PieceSquares = d7.getPiece().squaresCanMoveTo(board);
-        List<Square> f2PieceSquares = f2.getPiece().squaresCanMoveTo(board);
-        List<Square> f7PieceSquares = f7.getPiece().squaresCanMoveTo(board);
+        List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> b7PieceSquares =b7.getPiece().getSquaresCanMoveTo(board);
+        List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
+        List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
+        List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(0, b2PieceSquares.size());
         assertEquals(1, d2PieceSquares.size());
@@ -129,7 +129,7 @@ public class PawnTest {
         assertFalse(pawn.getHasMoved());
         pawn.setHasMovedTrue();
         assertTrue(pawn.getHasMoved());
-        assertEquals(1, pawn.squaresCanMoveTo(board).size());
+        assertEquals(1, pawn.getSquaresCanMoveTo(board).size());
     }
 
     @Test
@@ -139,12 +139,12 @@ public class PawnTest {
         board.movePiece(b2,board.getSquare(2,4));
         c4Pawn.setCanEnPassantLeft(true);
         c4Pawn.setHasMovedTrue();
-        assertEquals(2, c4Pawn.squaresCanMoveTo(board).size());
+        assertEquals(2, c4Pawn.getSquaresCanMoveTo(board).size());
         c4Pawn.setCanEnPassantRight(true);
-        assertEquals(3, c4Pawn.squaresCanMoveTo(board).size());
+        assertEquals(3, c4Pawn.getSquaresCanMoveTo(board).size());
         c4Pawn.setCanEnPassantRight(false);
         c4Pawn.setCanEnPassantLeft(false);
-        assertEquals(1, c4Pawn.squaresCanMoveTo(board).size());
+        assertEquals(1, c4Pawn.getSquaresCanMoveTo(board).size());
 
     }
 
@@ -156,8 +156,22 @@ public class PawnTest {
         board.getSquare(5,5).setPiece(new Rook("black"));
         Square d3 = board.getSquare(4,3);
         d3.setPiece(new King("white"));
-        assertEquals(0, pawn.legalMoves(board).size());
+        assertEquals(0, pawn.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(1, pawn.legalMoves(board).size());
+        assertEquals(1, pawn.getLegalMoves(board).size());
+    }
+
+    @Test
+    public void testCantCaptureOwnPieces() {
+        Pawn pawn = new Pawn("white");
+        board.getSquare(4,4).setPiece(pawn);
+        Square c5 = board.getSquare(3,5);
+        c5.setPiece(new Rook("white"));
+        assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
+        assertFalse(pawn.getLegalMoves(board).contains(c5));
+        pawn.setCanEnPassantLeft(true);
+        assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
+        assertFalse(pawn.getLegalMoves(board).contains(c5));
+
     }
 }

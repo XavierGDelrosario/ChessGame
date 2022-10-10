@@ -20,14 +20,14 @@ public class Board {
     }
 
     //MODIFIES:squares that will have pieces, and the pieces themselves
-    //EFFECTS: Places pieces on their starting square based on chess rules
+    //EFFECTS: places pieces on their starting square based on chess rules
     public void setupBoard() {
         setupWhitePieces();
         setupBlackPieces();
     }
 
     //MODIFIES:squares that will have pieces, and the pieces themselves
-    //EFFECTS: Places white pieces on their starting square based on chess rules
+    //EFFECTS: places white pieces on their starting square based on chess rules
     private void setupWhitePieces() {
         this.getSquare(1, 1).setPiece(new Rook("white"));
         this.getSquare(2, 1).setPiece(new Knight("white"));
@@ -57,6 +57,19 @@ public class Board {
         for (int i = 1; i < 9; i++) {
             Square square = this.getSquare(i, 7);
             square.setPiece(new Pawn("black"));
+        }
+    }
+
+    //MODIFIES: fromSquares, toSquares
+    //EFFECTS: adds legal moves to given list, each fromSquare has the same index as the corresponding toSquare;
+    public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
+        List<Piece> pieces = getPieces(color);
+        for (Piece piece : pieces) {
+            List<Square> squares = piece.getLegalMoves(this);
+            for (Square square : squares) {
+                fromSquares.add(piece.getSquare());
+                toSquares.add(square);
+            }
         }
     }
 
@@ -93,7 +106,7 @@ public class Board {
             pieces = this.getPieces("white");
         }
         for (Piece piece : pieces) {
-            List<Square> squares = piece.squaresCanMoveTo(this);
+            List<Square> squares = piece.getSquaresCanMoveTo(this);
             if (squares.contains(kingSquare)) {
                 return true;
             }
@@ -103,7 +116,7 @@ public class Board {
 
     //REQUIRES:fromSquare piece != null, both squares != null
     //MODIFIES:fromSquare, toSquare, fromSquare piece
-    //EFFECTS:removes piece reference from one square and adds that piece to the other square.
+    //EFFECTS:removes piece reference from one square and adds reference to that piece to the other square.
     // The piece's square reference is the toSquare.
     public void movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
@@ -148,7 +161,7 @@ public class Board {
         return pieces;
     }
 
-    //EFFECTS:Returns square with given coordinates from board, if square is not in board return null
+    //EFFECTS:returns square with given coordinates from board, if square is not in board return null
     public Square getSquare(int x, int y) {
         for (Square square : squares) {
             if (square.getXCoordinate() == x && square.getYCoordinate() == y) {

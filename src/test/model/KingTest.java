@@ -71,8 +71,8 @@ public class KingTest {
         Square h8 = board1.getSquare(8,8);
         a1.setPiece(new King("white"));
         h8.setPiece(new King("black"));
-        List<Square> a1PieceSquares = a1.getPiece().squaresCanMoveTo(board1);
-        List<Square> h8PieceSquares = h8.getPiece().squaresCanMoveTo(board1);
+        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board1);
+        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board1);
         assertEquals(3, a1PieceSquares.size());
         assertEquals(3, h8PieceSquares.size());
     }
@@ -80,14 +80,14 @@ public class KingTest {
     @Test
     public void testPossibleCaptures() {
         d4.setPiece(new King("white"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board1);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
         assertEquals(8, d4PieceSquares.size());
     }
 
     @Test
     public void testPieceBlocked() {
         d4.setPiece(new King("black"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board1);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
         assertEquals(0, d4PieceSquares.size());
     }
 
@@ -103,7 +103,7 @@ public class KingTest {
     @Test
     public void testCantCastleFromCheck() {
         board2.getSquare(5,8).setPiece(new Rook("black"));
-        List<Square> kingLegalMoves = e1.getPiece().legalMoves(board2);
+        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertEquals(4, kingLegalMoves.size());
         assertFalse(kingLegalMoves.contains(board2.getSquare(7,1)));
         assertFalse(kingLegalMoves.contains(board2.getSquare(3,1)));
@@ -112,17 +112,17 @@ public class KingTest {
     @Test
     public void testCantCastlePastSquareInCheck() {
         board2.getSquare(6,8).setPiece(new Rook("black"));
-        List<Square> kingLegalMoves = e1.getPiece().legalMoves(board2);
+        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertEquals(4, kingLegalMoves.size());
         assertFalse(kingLegalMoves.contains(g1));
         assertTrue(kingLegalMoves.contains(c1));
 
         board2.getSquare(2,8).setPiece(new Rook ("black"));
-        kingLegalMoves = e1.getPiece().legalMoves(board2);
+        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertTrue(kingLegalMoves.contains(c1));
 
         board2.getSquare(4,8).setPiece(new Rook ("black"));
-        kingLegalMoves = e1.getPiece().legalMoves(board2);
+        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(c1));
     }
 
@@ -132,7 +132,7 @@ public class KingTest {
         Rook rookH1 = (Rook) h1.getPiece();
         rookA1.setHasMovedTrue();
         rookH1.setHasMovedTrue();
-        List<Square> kingLegalMoves = e1.getPiece().legalMoves(board2);
+        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(g1));
         assertFalse(kingLegalMoves.contains(c1));
     }
@@ -141,7 +141,7 @@ public class KingTest {
     public void testCantCastleIfKingMoved() {
         King king = (King) e1.getPiece();
         king.setHasMovedTrue();
-        List<Square> kingLegalMoves = e1.getPiece().legalMoves(board2);
+        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(g1));
         assertFalse(kingLegalMoves.contains(c1));
     }
@@ -149,25 +149,25 @@ public class KingTest {
     public void testCantCastleIfBlocked() {
         Square f1 = board2.getSquare(6,1);
         f1.setPiece(new Bishop("white"));
-        List<Square> kingLegalMoves = e1.getPiece().legalMoves(board2);
+        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(g1));
         assertTrue(kingLegalMoves.contains(c1));
 
         f1.removePiece();
         g1.setPiece(new Knight("white"));
         board2.getSquare(2,1).setPiece(new Knight ("white"));
-        kingLegalMoves = e1.getPiece().legalMoves(board2);
+        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(g1));
 
         c1.setPiece(new Bishop("white"));
         g1.removePiece();
-        kingLegalMoves = e1.getPiece().legalMoves(board2);
+        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(c1));
         assertTrue(kingLegalMoves.contains(g1));
 
         board2.getSquare(2,1).setPiece(new Knight("white"));
         c1.removePiece();
-        kingLegalMoves = e1.getPiece().legalMoves(board2);
+        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(c1));
         assertTrue(kingLegalMoves.contains(g1));
     }

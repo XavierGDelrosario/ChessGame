@@ -54,8 +54,8 @@ public class KnightTest {
         Square h8 = board.getSquare(8,8);
         a1.setPiece(new Knight("white"));
         h8.setPiece(new Knight("black"));
-        List<Square> a1PieceSquares = a1.getPiece().squaresCanMoveTo(board);
-        List<Square> h8PieceSquares = h8.getPiece().squaresCanMoveTo(board);
+        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
+        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
         assertEquals(2, a1PieceSquares.size());
         assertEquals(2, h8PieceSquares.size());
     }
@@ -63,14 +63,14 @@ public class KnightTest {
     @Test
     public void testPossibleCaptures() {
         d4.setPiece(new Knight("white"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(8, d4PieceSquares.size());
     }
 
     @Test
     public void testPieceBlocked() {
         d4.setPiece(new Knight("black"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(0, d4PieceSquares.size());
     }
 
@@ -81,8 +81,8 @@ public class KnightTest {
         board.getSquare(4,5).setPiece(new Rook("black"));
         Square d3 = board.getSquare(4,3);
         d3.setPiece(new King("white"));
-        assertEquals(0, knight.legalMoves(board).size());
+        assertEquals(0, knight.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(2,2));
-        assertEquals(8, knight.legalMoves(board).size());
+        assertEquals(8, knight.getLegalMoves(board).size());
     }
 }

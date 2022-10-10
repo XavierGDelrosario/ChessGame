@@ -22,7 +22,7 @@ public class Knight implements Piece {
     //EFFECTS: returns squares 2 units in one direction and 1 unit in the other if square is:
     //        -not occupied by a piece of same color
     //        -on the board. 0<x<9, 0<y<9
-    public List<Square> squaresCanMoveTo(Board board) {
+    public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         List<Square> squaresToCheck = new ArrayList<>();
         int currentX = this.getSquare().getXCoordinate();
@@ -50,8 +50,8 @@ public class Knight implements Piece {
     @Override
     //REQUIRES: board != null, this piece exists on the board
     //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
-    public List<Square> legalMoves(Board board) {
-        List<Square> movesToCheck = this.squaresCanMoveTo(board);
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {
             if (board.checkIsLegalMove(this.square, square)) {

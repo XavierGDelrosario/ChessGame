@@ -19,7 +19,7 @@ public class Bishop extends Queen {
     //        -not occupied by piece of the same color
     //        -square is on the board. 0<x<9, 0<y<9
     //        -square is not after a square with a piece of either color
-    public List<Square> squaresCanMoveTo(Board board) {
+    public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         super.checkDiagonally(board, squares, 1, 1);
         super.checkDiagonally(board, squares, 1, -1);

@@ -21,7 +21,7 @@ public class Rook extends Queen {
     //        -not occupied by piece of the same color
     //        -square is on the board. 0<x<9, 0<y<9
     //        -square is not after a square with a piece
-    public List<Square> squaresCanMoveTo(Board board) {
+    public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         super.checkHorizontally(board, squares, 1);
         super.checkHorizontally(board, squares, -1);

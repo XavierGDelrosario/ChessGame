@@ -39,8 +39,8 @@ public class BishopTest {
     public void testPossibleMovesFromCorners(){
         a1.setPiece(new Bishop("white"));
         h8.setPiece(new Bishop("white"));
-        List<Square> a1PieceSquares = a1.getPiece().squaresCanMoveTo(board);
-        List<Square> h8PieceSquares = h8.getPiece().squaresCanMoveTo(board);
+        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
+        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(6, a1PieceSquares.size());
         assertTrue(a1PieceSquares.contains(board.getSquare(7,7)));
@@ -67,7 +67,7 @@ public class BishopTest {
         d4.setPiece(new Bishop("black"));
         g1.setPiece(new Bishop("white"));
         h8.setPiece(new Bishop("white"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(10, d4PieceSquares.size());
         assertTrue(d4PieceSquares.contains(board.getSquare(3,3)));
@@ -89,7 +89,7 @@ public class BishopTest {
         d4.setPiece(new Bishop("black"));
         e3.setPiece(new Bishop("black"));
         e5.setPiece(new Bishop("black"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(0, d4PieceSquares.size());
     }
 
@@ -100,8 +100,8 @@ public class BishopTest {
         board.getSquare(4,5).setPiece(new Rook("black"));
         Square d3 = board.getSquare(4,3);
         d3.setPiece(new King("white"));
-        assertEquals(0, bishop.legalMoves(board).size());
+        assertEquals(0, bishop.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(10, bishop.legalMoves(board).size());
+        assertEquals(10, bishop.getLegalMoves(board).size());
     }
 }

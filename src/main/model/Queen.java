@@ -23,7 +23,7 @@ public class Queen implements Piece {
     //        -not occupied by piece of the same color
     //        -square is on the board, 0<x<9, 0<y<9
     //        -square is not after a square with a piece
-    public List<Square> squaresCanMoveTo(Board board) {
+    public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         checkHorizontally(board, squares, 1);
         checkHorizontally(board, squares, -1);
@@ -39,8 +39,8 @@ public class Queen implements Piece {
     @Override
     //REQUIRES: board != null, this piece exists on the board
     //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
-    public List<Square> legalMoves(Board board) {
-        List<Square> movesToCheck = this.squaresCanMoveTo(board);
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {
             if (board.checkIsLegalMove(this.square, square)) {

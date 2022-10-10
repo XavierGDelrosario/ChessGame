@@ -3,9 +3,9 @@ package model;
 import java.util.List;
 
 public interface Piece {
-    List<Square> squaresCanMoveTo(Board board);
+    List<Square> getSquaresCanMoveTo(Board board);
 
-    List<Square> legalMoves(Board board);
+    List<Square> getLegalMoves(Board board);
 
     String getColor();
 

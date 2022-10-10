@@ -38,8 +38,8 @@ public class RookTest {
         Square h8 = board.getSquare(8,8);
         a1.setPiece(new Rook("white"));
         h8.setPiece(new Rook("white"));
-        List<Square> a1PieceSquares = a1.getPiece().squaresCanMoveTo(board);
-        List<Square> h8PieceSquares = h8.getPiece().squaresCanMoveTo(board);
+        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
+        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(14, a1PieceSquares.size());
         assertEquals(14, h8PieceSquares.size());
@@ -60,7 +60,7 @@ public class RookTest {
         d8.setPiece(new Rook("black"));
         g4.setPiece(new Rook("black"));
         d4.setPiece(new Rook("white"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(10, d4PieceSquares.size());
     }
 
@@ -75,7 +75,7 @@ public class RookTest {
         d5.setPiece(new Rook("black"));
         e4.setPiece(new Rook("black"));
         d4.setPiece(new Rook("black"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(0, d4PieceSquares.size());
     }
 
@@ -95,8 +95,8 @@ public class RookTest {
         board.getSquare(4,5).setPiece(new Rook("black"));
         Square d3 = board.getSquare(4,3);
         d3.setPiece(new King("white"));
-        assertEquals(1, rook.legalMoves(board).size());
+        assertEquals(1, rook.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(11, rook.legalMoves(board).size());
+        assertEquals(11, rook.getLegalMoves(board).size());
     }
 }

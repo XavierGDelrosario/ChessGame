@@ -3,6 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -267,5 +268,28 @@ class BoardTest {
         assertFalse(board.checkIsLegalMove(a1, board.getSquare(1,2)));
         assertFalse(board.checkIsLegalMove(b1, board.getSquare(1,2)));
         assertFalse(board.checkIsLegalMove(b1, board.getSquare(8,1)));
+    }
+
+    @Test
+    public void testGetLegalMoves() {
+        King king = new King("white");
+        king.setHasMovedTrue();
+        Square a1 =board.getSquare(1,1);
+        Square b1 = board.getSquare(2,1);
+        Square h1 = board.getSquare(8,1);
+        board.getSquare(2,2).setPiece(new Pawn("white"));
+        a1.setPiece(king);
+        b1.setPiece(new Rook("white"));
+        h1.setPiece(new Rook("black"));
+        List<Square> fromSquares = new ArrayList<>();
+        List<Square> toSquares = new ArrayList<>();
+        board.getLegalMoves(fromSquares, toSquares, "white");
+
+        assertEquals(9, fromSquares.size());
+        assertEquals(9, toSquares.size());
+        assertEquals(a1, fromSquares.get(0));
+        assertEquals(b1, fromSquares.get(3));
+        assertEquals(b1, fromSquares.get(6));
+        assertTrue(toSquares.contains(board.getSquare(8,1)));
     }
 }

@@ -4,21 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Represents the pawn piece in chess
-public class Pawn implements Piece {
-    private final String color;
-    private final String name;
-    private Square square;
-    private boolean hasMoved;
+public class Pawn extends SpecialMovesPiece {
     private boolean canEnPassantLeft;
     private boolean canEnPassantRight;
 
     //REQUIRES:color = "white" or "black"
     //EFFECTS: creates a pawn that has not moved, with given color and with name "pawn", not on board
     public Pawn(String color) {
-        this.color = color;
-        square = null;
+        super(color);
         this.name = "pawn";
-        hasMoved = false;
+        canEnPassantRight = false;
+        canEnPassantLeft = false;
     }
 
     @Override
@@ -28,7 +24,7 @@ public class Pawn implements Piece {
     //       - 1 square diagonally(up if white, down if black) and square is occupied by piece of different color or
     //         can perform en passant in that direction
     //       - 2 squares (up if white, down if black) if pawn has not moved and not occupied by a piece
-    public List<Square> squaresCanMoveTo(Board board) {
+    public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         checkForward(board, squares);
         checkDiagonally(board, squares);
@@ -38,8 +34,8 @@ public class Pawn implements Piece {
     @Override
     //REQUIRES: board != null, this piece exists on the board
     //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
-    public List<Square> legalMoves(Board board) {
-        List<Square> movesToCheck = this.squaresCanMoveTo(board);
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {
             if (board.checkIsLegalMove(this.square, square)) {
@@ -85,6 +81,7 @@ public class Pawn implements Piece {
     //          -diagonally up if white, down if black
     //          -occupied with a piece of different color than this
     //          -on the board
+    //          -optional: if pawn can perform En passant in that direction
     private void checkDiagonally(Board board, List<Square> squares) {
         int currentX = this.getSquare().getXCoordinate();
         int currentY = this.getSquare().getYCoordinate();
@@ -102,26 +99,27 @@ public class Pawn implements Piece {
     //EFFECTS: adds squares to list if one of the following conditions are met:
     //         -given square is occupied by a piece of different color from this
     //         -this can perform En Passant on the square, when an opposing pawn moves two squares in its first move
-    //          and lands adjacent to this pawn, this can capture as if it only moved one square
+    //          and lands adjacent to this pawn, this can capture as if it only moved one square. Has this privilege
+    //          for only one turn
     private void pawnCanCapture(List<Square> squares, Square rightSquare, Square leftSquare) {
         if ((rightSquare != null && rightSquare.getPiece() != null
-                && !rightSquare.getPiece().getColor().equals(this.color)) || canEnPassantRight) {
+                && !rightSquare.getPiece().getColor().equals(this.color))
+                || (canEnPassantRight && rightSquare != null && rightSquare.getPiece() == null)) {
             squares.add(rightSquare);
         }
-        if ((leftSquare != null && leftSquare.getPiece() != null
-                && !leftSquare.getPiece().getColor().equals(this.color))
-                || canEnPassantLeft) {
+        if ((leftSquare != null && leftSquare.getPiece() != null)
+                && (!leftSquare.getPiece().getColor().equals(this.color))
+                || (canEnPassantLeft && rightSquare != null && leftSquare.getPiece() == null)) {
             squares.add(leftSquare);
         }
     }
 
-    public boolean getHasMoved() {
-        return hasMoved;
+    public boolean getCanEnPassantLeft() {
+        return canEnPassantLeft;
     }
 
-    //EFFECTS: sets has moved to true
-    public void setHasMovedTrue() {
-        hasMoved = true;
+    public boolean getCanEnPassantRight() {
+        return canEnPassantRight;
     }
 
     public void setCanEnPassantLeft(boolean b) {
@@ -130,25 +128,5 @@ public class Pawn implements Piece {
 
     public void setCanEnPassantRight(boolean b) {
         canEnPassantRight = b;
-    }
-
-    @Override
-    public String getColor() {
-        return color;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Square getSquare() {
-        return square;
-    }
-
-    @Override
-    public void setSquare(Square square) {
-        this.square = square;
     }
 }

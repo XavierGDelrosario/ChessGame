@@ -36,8 +36,8 @@ public class QueenTest {
         Square h8 = board.getSquare(8,8);
         a1.setPiece(new Queen("white"));
         h8.setPiece(new Queen("white"));
-        List<Square> a1PieceSquares = a1.getPiece().squaresCanMoveTo(board);
-        List<Square> h8PieceSquares = h8.getPiece().squaresCanMoveTo(board);
+        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
+        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
         assertEquals(20, a1PieceSquares.size());
         assertEquals(20, h8PieceSquares.size());
     }
@@ -53,7 +53,7 @@ public class QueenTest {
         d4.setPiece(new Queen("black"));
         g1.setPiece(new Queen("white"));
         h8.setPiece(new Queen("white"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(24, d4PieceSquares.size());
         assertTrue(d4PieceSquares.contains(board.getSquare(3,3)));
@@ -75,7 +75,7 @@ public class QueenTest {
         d8.setPiece(new Queen("black"));
         g4.setPiece(new Queen("black"));
         d4.setPiece(new Queen("white"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(23, d4PieceSquares.size());
     }
 
@@ -99,7 +99,7 @@ public class QueenTest {
         e4.setPiece(new Queen("black"));
         e5.setPiece(new Queen("black"));
         d4.setPiece(new Queen("black"));
-        List<Square> d4PieceSquares = d4.getPiece().squaresCanMoveTo(board);
+        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(0, d4PieceSquares.size());
     }
 
@@ -110,8 +110,8 @@ public class QueenTest {
         board.getSquare(4,5).setPiece(new Rook("black"));
         Square d3 = board.getSquare(4,3);
         d3.setPiece(new King("white"));
-        assertEquals(1, queen.legalMoves(board).size());
+        assertEquals(1, queen.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(21, queen.legalMoves(board).size());
+        assertEquals(21, queen.getLegalMoves(board).size());
     }
 }

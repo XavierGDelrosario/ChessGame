@@ -4,19 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Represents the king piece in chess
-public class King implements Piece {
-    private final String color;
-    private final String name;
-    private Square square;
-    private boolean hasMoved;
+public class King extends SpecialMovesPiece {
 
     //REQUIRES:color = "white" or "black"
     //EFFECTS: creates a king with given color with name "king", not on the board
     public King(String color) {
-        this.color = color;
-        square = null;
+        super(color);
         this.name = "king";
-        hasMoved = false;
     }
 
     @Override
@@ -24,7 +18,7 @@ public class King implements Piece {
     //EFFECTS: returns all squares adjacent to king if square is:
     //        -not occupied by piece of the same color
     //        -on the board. 0<x<9, 0<y<9
-    public List<Square> squaresCanMoveTo(Board board) {
+    public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         List<Square> squaresToCheck = new ArrayList<>();
         int currentX = this.getSquare().getXCoordinate();
@@ -59,8 +53,8 @@ public class King implements Piece {
     //               -king is not in check
     //               -squares between rook and king are empty
 
-    public List<Square> legalMoves(Board board) {
-        List<Square> movesToCheck = this.squaresCanMoveTo(board);
+    public List<Square> getLegalMoves(Board board) {
+        List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {
             if (board.checkIsLegalMove(this.square, square)) {
@@ -127,34 +121,5 @@ public class King implements Piece {
             }
         }
         return !rookHasMoved;
-    }
-
-    public boolean getHasMoved() {
-        return hasMoved;
-    }
-
-    //EFFECTS: sets has moved to true
-    public void setHasMovedTrue() {
-        hasMoved = true;
-    }
-
-    @Override
-    public String getColor() {
-        return color;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Square getSquare() {
-        return square;
-    }
-
-    @Override
-    public void setSquare(Square square) {
-        this.square = square;
     }
 }
