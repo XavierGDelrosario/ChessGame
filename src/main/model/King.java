@@ -46,7 +46,7 @@ public class King extends SpecialMovesPiece {
     //REQUIRES: board != null, this piece exists on the boar
     //EFFECTS: returns all the squares that:
     //         -this piece can move to and not be in check
-    //         -this piece can "castle" to the square 2 squares to the right or left direction if:
+    //         -this piece can castle(move) to the square 2 squares to the right or left direction if:
     //               -this has not moved
     //               -rook in that direction has not moved
     //               -first square in the direction is a legal move
@@ -72,7 +72,7 @@ public class King extends SpecialMovesPiece {
     //conditions are met:
     //               -rook in that direction has not moved
     //               -first square in the direction is a legal move
-    //               -squares between rook are empty
+    //               -squares between rook and kin are empty
     private void checkCanCastle(Board board, List<Square> legalMoves) {
         int currentX = square.getXCoordinate();
         int currentY = square.getYCoordinate();
@@ -97,11 +97,11 @@ public class King extends SpecialMovesPiece {
         }
     }
 
-    //REQUIRES: board != null, king has not moved and king not in check
+    //REQUIRES: board != null, king has not moved and king is not in check
     //EFFECTS: returns true if:
     //               -rook in that direction has not moved
     //               -first square in the direction is a legal move
-    //               -squares between rook are empty
+    //               -squares between rook and king are empty
     private boolean checkCastlingConditions(Board board, List<Square> squaresToCheck) {
         Square rookSquare = squaresToCheck.get(squaresToCheck.size() - 1);
         boolean rookHasMoved = true;

@@ -19,10 +19,12 @@ public class ChessGame {
 
     //REQUIRES:fromSquare piece != null, both squares != null
     //MODIFIES:fromSquare, toSquare, fromSquare piece
-    //EFFECTS: return true if legal, else false, make move if legal
+    //EFFECTS: return true if legal, else false. Make move if legal, move is legal if:
+    //          -piece that is moving is the same color as the player turn
+    //          -piece can move to that square
     public boolean movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
-        if (piece.getColor().equals(playerTurn)) {
+        if (piece != null && piece.getColor().equals(playerTurn)) {
             List<Square> fromSquares = new ArrayList<>();
             List<Square> toSquares = new ArrayList<>();
             board.getLegalMoves(fromSquares, toSquares, piece.getColor());
@@ -36,6 +38,7 @@ public class ChessGame {
             }
         }
         return false;
+
     }
 
     //region SpecialMoves
@@ -97,7 +100,7 @@ public class ChessGame {
     }
 
     //REQUIRES: both squares != null, fromSquare has a pawn
-    //MODIFIES: square
+    //MODIFIES: square, pawn, pawns that moving pawn lands adjacent to
     //EFFECTS: if pawn moves forward two squares, set pawns of opposite color adjacent to toSquare to be able to
     //perform en passant
     private void checkPawnMovedTwice(Square fromSquare, Square toSquare) {
@@ -106,25 +109,30 @@ public class ChessGame {
         int toSquareY = toSquare.getYCoordinate();
         int toSquareX = toSquare.getXCoordinate();
         if ((toSquareY - fromSquareY) == 2 || (toSquareY - fromSquareY) == -2) {
-            Piece adjacentPieceRight = board.getSquare(toSquareX + 1, toSquareY).getPiece();
-            Piece adjacentPieceLeft = board.getSquare(toSquareX - 1, toSquareY).getPiece();
-            if (adjacentPieceRight != null && adjacentPieceRight.getName().equals("pawn")
-                    && !adjacentPieceRight.getColor().equals(pawn.getColor())) {
-                Pawn adjacentRightPawn = (Pawn) adjacentPieceRight;
-                adjacentRightPawn.setCanEnPassantLeft(true);
+            if (board.getSquare(toSquareX + 1, toSquareY) != null) {
+                Piece adjacentPieceRight = board.getSquare(toSquareX + 1, toSquareY).getPiece();
+                if (adjacentPieceRight != null && adjacentPieceRight.getName().equals("pawn")
+                        && !adjacentPieceRight.getColor().equals(pawn.getColor())) {
+                    Pawn adjacentRightPawn = (Pawn) adjacentPieceRight;
+                    adjacentRightPawn.setCanEnPassantLeft(true);
+                }
             }
-            if (adjacentPieceLeft != null && adjacentPieceLeft.getName().equals("pawn")
-                    && !adjacentPieceLeft.getColor().equals(pawn.getColor())) {
-                Pawn adjacentLeftPawn = (Pawn) adjacentPieceLeft;
-                adjacentLeftPawn.setCanEnPassantRight(true);
+            if (board.getSquare(toSquareX - 1, toSquareY) != null) {
+                Piece adjacentPieceLeft = board.getSquare(toSquareX - 1, toSquareY).getPiece();
+                if (adjacentPieceLeft != null && adjacentPieceLeft.getName().equals("pawn")
+                        && !adjacentPieceLeft.getColor().equals(pawn.getColor())) {
+                    Pawn adjacentLeftPawn = (Pawn) adjacentPieceLeft;
+                    adjacentLeftPawn.setCanEnPassantRight(true);
+                }
             }
         }
     }
+
     //endregion
 
     //EFFECTS: returns square with given coordinates
     public Square getSquare(int x, int y) {
-        return board.getSquare(x,y);
+        return board.getSquare(x, y);
     }
 
     //MODIFIES: this, the pawns of the player whose turn it is

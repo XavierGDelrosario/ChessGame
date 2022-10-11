@@ -49,6 +49,8 @@ public class ChessGameTest {
         chessGame.movePiece(chessGame.getSquare(5,1), chessGame.getSquare(3,1));
         assertEquals("rook", chessGame.getSquare(6,8).getPiece().getName());
         assertEquals("rook", chessGame.getSquare(4,1).getPiece().getName());
+        chessGame.movePiece(chessGame.getSquare(7,8), chessGame.getSquare(8,8));
+        chessGame.movePiece(chessGame.getSquare(3,1), chessGame.getSquare(2,1));
     }
 
     @Test
@@ -71,6 +73,18 @@ public class ChessGameTest {
         Pawn e5Pawn = (Pawn) chessGame.getSquare(5,5).getPiece();
         assertTrue(d4Pawn.getHasMoved());
         assertTrue(e5Pawn.getHasMoved());
+    }
+
+    @Test
+    public void testRookMoving() {
+        chessGame.movePiece(chessGame.getSquare(8,7), chessGame.getSquare(8,6));
+        chessGame.movePiece(chessGame.getSquare(1,2), chessGame.getSquare(1,3));
+        chessGame.movePiece(chessGame.getSquare(8,8), chessGame.getSquare(8,7));
+        chessGame.movePiece(chessGame.getSquare(1,1), chessGame.getSquare(1,2));
+        Rook a2Rook = (Rook) chessGame.getSquare(1,2).getPiece();
+        Rook h7Rook = (Rook) chessGame.getSquare(8,7).getPiece();
+        assertTrue(a2Rook.getHasMoved());
+        assertTrue(h7Rook.getHasMoved());
     }
 
     @Test

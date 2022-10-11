@@ -61,7 +61,7 @@ public class Board {
     }
 
     //MODIFIES: fromSquares, toSquares
-    //EFFECTS: adds legal moves to given list, each fromSquare has the same index as the corresponding toSquare;
+    //EFFECTS: adds legal moves to given list, each fromSquare has the same index as the corresponding toSquare
     public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
         List<Piece> pieces = getPieces(color);
         for (Piece piece : pieces) {
@@ -74,7 +74,8 @@ public class Board {
     }
 
     //REQUIRES: fromSquare and toSquare exist on the board
-    //EFFECTS: tests given move, if the king is not in check return true, else return false
+    //EFFECTS: tests given move, if the king with the same color as the piece moving is not in check return true,
+    // else return false
     public boolean checkIsLegalMove(Square fromSquare, Square toSquare) {
         int fromSquareIndex = squares.indexOf(fromSquare);
         int toSquareIndex = squares.indexOf(toSquare);

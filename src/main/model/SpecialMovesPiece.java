@@ -19,7 +19,8 @@ public abstract class SpecialMovesPiece implements Piece {
         return hasMoved;
     }
 
-    //EFFECTS: sets has moved to true
+    //MODIFIES: this
+    //EFFECTS: sets hasMoved to true
     protected void setHasMovedTrue() {
         hasMoved = true;
     }

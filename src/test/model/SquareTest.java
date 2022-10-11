@@ -3,8 +3,7 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.*;
 
 public class SquareTest {
     private Square a1;
@@ -51,5 +50,24 @@ public class SquareTest {
         assertEquals(rook, a1.getPiece());
         a1.removePiece();
         assertNull(a1.getPiece());
+    }
+
+    @Test
+    public void testIcons() {
+        Board board = new Board();
+        board.setupBoard();
+        assertTrue(board.getSquare(1,1).getIcon().equals("r"));
+        assertTrue(board.getSquare(2,1).getIcon().equals("n"));
+        assertTrue(board.getSquare(3,1).getIcon().equals("b"));
+        assertTrue(board.getSquare(4,1).getIcon().equals("q"));
+        assertTrue(board.getSquare(5,1).getIcon().equals("k"));
+        assertTrue(board.getSquare(1,2).getIcon().equals("p"));
+        assertTrue(board.getSquare(1,8).getIcon().equals("R"));
+        assertTrue(board.getSquare(2,8).getIcon().equals("N"));
+        assertTrue(board.getSquare(3,8).getIcon().equals("B"));
+        assertTrue(board.getSquare(4,8).getIcon().equals("Q"));
+        assertTrue(board.getSquare(5,8).getIcon().equals("K"));
+        assertTrue(board.getSquare(1,7).getIcon().equals("P"));
+        assertTrue(board.getSquare(1,5).getIcon().equals(" "));
     }
 }

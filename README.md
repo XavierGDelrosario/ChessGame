@@ -46,3 +46,9 @@ closer to the center as long as the following conditions are met:
 - As a user I want to be able to make a move and have it added to a list of moves made in the game.
 - As a user I want to be able to move a piece, remove it from one square and add it to another.
 - As a user I want to be restricted to make moves that puts my king out of check.
+
+## User Stories P2
+- As a user I want to be able to win the game by checkmate
+- As a user I want to be able to load multiple previously played games from files
+- As a user I want to be able to start and end multiple chess games from main.
+- As a user I want to be able to draw the game by stalemate.
