@@ -7,7 +7,7 @@ import java.util.List;
 public class King extends SpecialMovesPiece {
 
     //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a king with given color with name "king", not on the board
+    //EFFECTS: creates a king with given color
     public King(String color) {
         super(color);
         this.name = "king";

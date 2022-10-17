@@ -9,7 +9,7 @@ public class Pawn extends SpecialMovesPiece {
     private boolean canEnPassantRight;
 
     //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a pawn that has not moved, with given color and with name "pawn", not on board
+    //EFFECTS: creates a pawn with given color
     public Pawn(String color) {
         super(color);
         this.name = "pawn";
@@ -45,10 +45,10 @@ public class Pawn extends SpecialMovesPiece {
         return legalMoves;
     }
 
-    //REQUIRES:board != null
+    //REQUIRES:board != null, this piece exists on the board
     //EFFECTS: adds squares to list if square is:
     //       - 1 square up if white, down if black, if that square does not have a piece of either color
-    //       - 2 squares up if white, down if black if:
+    //       - 2 squares up if white or 2 down if black if the following conditions are met:
     //         -pawn has not moved
     //         -can move to previous square
     //         -square does not have a piece of either color
@@ -57,7 +57,7 @@ public class Pawn extends SpecialMovesPiece {
         int currentY = this.getSquare().getYCoordinate();
         if (this.color.equals("white")) {
             Square upwardSquare = board.getSquare(currentX, currentY + 1);
-            if (upwardSquare.getPiece() == null) {
+            if (upwardSquare != null && upwardSquare.getPiece() == null) {
                 squares.add(upwardSquare);
                 Square nextUpwardSquare = board.getSquare(currentX, currentY + 2);
                 if (nextUpwardSquare != null && !this.hasMoved && nextUpwardSquare.getPiece() == null) {
@@ -66,7 +66,7 @@ public class Pawn extends SpecialMovesPiece {
             }
         } else {
             Square downwardSquare = board.getSquare(currentX, currentY - 1);
-            if (downwardSquare.getPiece() == null) {
+            if (downwardSquare != null && downwardSquare.getPiece() == null) {
                 squares.add(downwardSquare);
                 Square nextDownwardSquare = board.getSquare(currentX, currentY - 2);
                 if (nextDownwardSquare != null && !this.hasMoved && nextDownwardSquare.getPiece() == null) {

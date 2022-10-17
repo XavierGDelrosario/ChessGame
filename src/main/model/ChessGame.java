@@ -38,7 +38,6 @@ public class ChessGame {
             }
         }
         return false;
-
     }
 
     //region SpecialMoves
@@ -140,7 +139,6 @@ public class ChessGame {
     //          -changes player turn from white to black and vice versa
     //          -adds a copy of the board to savedBoards
     public void endTurn() {
-        //remove en passant privileges
         List<Piece> pieces = board.getPieces(playerTurn);
         pieces.removeIf(piece -> (!piece.getName().equals("pawn")));
         for (Piece piece : pieces) {

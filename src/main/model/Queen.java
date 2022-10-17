@@ -10,16 +10,16 @@ public class Queen implements Piece {
     protected Square square;
 
     //REQUIRES:color = "white" or "black", square != null
-    //EFFECTS: creates a queen with given color and with name "queen", not on board
+    //EFFECTS: creates a queen with given color
     public Queen(String color) {
         this.color = color;
         square = null;
-        this.name = "queen";
+        name = "queen";
     }
 
     @Override
     //REQUIRES: board != null, this piece exists on the board
-    //EFFECTS:returns all squares horizontally and vertically of rook if square is:
+    //EFFECTS:returns all squares horizontally, vertically, and diagonally of piece if square is:
     //        -not occupied by piece of the same color
     //        -square is on the board, 0<x<9, 0<y<9
     //        -square is not after a square with a piece

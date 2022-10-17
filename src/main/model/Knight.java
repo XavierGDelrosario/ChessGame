@@ -10,7 +10,7 @@ public class Knight implements Piece {
     private Square square;
 
     //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a knight with given color and with name "knight", not on the board
+    //EFFECTS: creates a knight with given color
     public Knight(String color) {
         this.color = color;
         square = null;

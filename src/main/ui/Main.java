@@ -134,7 +134,7 @@ public class Main extends JFrame {
         }
 
         //REQUIRES: board != null
-        //EFFECTS: displays chess board with pieces, changes orientation depending on player turn
+        //EFFECTS: displays chess board with pieces in that console, changes orientation depending on player turn
         private void displayBoard(Board board) {
             List<Square> squares = board.getSquares();
             if (chessGame.getPlayerTurn().equals("black")) {

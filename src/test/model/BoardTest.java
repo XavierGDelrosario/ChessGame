@@ -158,6 +158,14 @@ class BoardTest {
     }
 
     @Test
+    public void testNotInCheck() {
+        a1.setPiece(new King("white"));
+        a8.setPiece(new King("black"));
+        assertFalse(board.isKingInCheck("white"));
+        assertFalse(board.isKingInCheck("black"));
+    }
+
+    @Test
     public void testInCheckFromQueen() {
         a1.setPiece(new King("white"));
         a8.setPiece(new King("black"));

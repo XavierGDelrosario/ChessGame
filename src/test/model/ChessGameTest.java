@@ -38,23 +38,41 @@ public class ChessGameTest {
         assertNull(board.getSquare(3,3).getPiece());
     }
     @Test
-    public void testCastling() {
+    public void testCastlingShort() {
         chessGame.movePiece(chessGame.getSquare(5,7), chessGame.getSquare(5,5));
-        chessGame.movePiece(chessGame.getSquare(3,1), chessGame.getSquare(5,3));
+        chessGame.movePiece(chessGame.getSquare(5,2), chessGame.getSquare(5,3));
         chessGame.movePiece(chessGame.getSquare(6,8), chessGame.getSquare(5,7));
-        chessGame.movePiece(chessGame.getSquare(4,1), chessGame.getSquare(4,2));
+        chessGame.movePiece(chessGame.getSquare(6,1), chessGame.getSquare(4,3));
         chessGame.movePiece(chessGame.getSquare(7,8), chessGame.getSquare(6,6));
-        chessGame.movePiece(chessGame.getSquare(2,1), chessGame.getSquare(3,3));
+        chessGame.movePiece(chessGame.getSquare(7,1), chessGame.getSquare(6,3));
         chessGame.movePiece(chessGame.getSquare(5,8), chessGame.getSquare(7,8));
-        chessGame.movePiece(chessGame.getSquare(5,1), chessGame.getSquare(3,1));
+        chessGame.movePiece(chessGame.getSquare(5,1), chessGame.getSquare(7,1));
         assertEquals("rook", chessGame.getSquare(6,8).getPiece().getName());
-        assertEquals("rook", chessGame.getSquare(4,1).getPiece().getName());
+        assertEquals("rook", chessGame.getSquare(6,1).getPiece().getName());
         chessGame.movePiece(chessGame.getSquare(7,8), chessGame.getSquare(8,8));
+        chessGame.movePiece(chessGame.getSquare(7,1), chessGame.getSquare(8,1));
+    }
+
+    @Test
+    public void testCastlingLong() {
+        chessGame.movePiece(chessGame.getSquare(4,7), chessGame.getSquare(4,5));
+        chessGame.movePiece(chessGame.getSquare(3,1), chessGame.getSquare(5,3));
+        chessGame.movePiece(chessGame.getSquare(4,8), chessGame.getSquare(4,6));
+        chessGame.movePiece(chessGame.getSquare(4,1), chessGame.getSquare(4,2));
+        chessGame.movePiece(chessGame.getSquare(3,8), chessGame.getSquare(5,6));
+        chessGame.movePiece(chessGame.getSquare(2,1), chessGame.getSquare(3,3));
+        chessGame.movePiece(chessGame.getSquare(2,8), chessGame.getSquare(3,6));
+        chessGame.movePiece(chessGame.getSquare(1,2), chessGame.getSquare(1,3));
+        chessGame.movePiece(chessGame.getSquare(5,8), chessGame.getSquare(3,8));
+        chessGame.movePiece(chessGame.getSquare(5,1), chessGame.getSquare(3,1));
+        assertEquals("rook", chessGame.getSquare(4,8).getPiece().getName());
+        assertEquals("rook", chessGame.getSquare(4,1).getPiece().getName());
+        chessGame.movePiece(chessGame.getSquare(3,8), chessGame.getSquare(2,8));
         chessGame.movePiece(chessGame.getSquare(3,1), chessGame.getSquare(2,1));
     }
 
     @Test
-    public void testEnPassant() {
+    public void testEnPassantLeft() {
         chessGame.movePiece(chessGame.getSquare(5,7), chessGame.getSquare(5,5));
         chessGame.movePiece(chessGame.getSquare(4,4), chessGame.getSquare(4,5));
         chessGame.movePiece(chessGame.getSquare(5,5), chessGame.getSquare(5,4));
@@ -66,6 +84,20 @@ public class ChessGameTest {
         assertFalse(madeMove);
     }
 
+    @Test
+    public void testEnPassantRight() {
+        chessGame.movePiece(chessGame.getSquare(5,7), chessGame.getSquare(5,5));
+        chessGame.movePiece(chessGame.getSquare(4,4), chessGame.getSquare(4,5));
+        chessGame.movePiece(chessGame.getSquare(5,5), chessGame.getSquare(5,4));
+        chessGame.movePiece(chessGame.getSquare(6,2), chessGame.getSquare(6,4));
+        chessGame.movePiece(chessGame.getSquare(5,4), chessGame.getSquare(6,3));
+        assertNull(chessGame.getSquare(3,4).getPiece());
+        chessGame.movePiece(chessGame.getSquare(1,2), chessGame.getSquare(1,3));
+        chessGame.movePiece(chessGame.getSquare(3,7), chessGame.getSquare(3,5));
+        chessGame.movePiece(chessGame.getSquare(1,3), chessGame.getSquare(1,4));
+        boolean madeMove = chessGame.movePiece(chessGame.getSquare(4,5), chessGame.getSquare(3,6));
+        assertFalse(madeMove);
+    }
     @Test
     public void testPawnMoving() {
         chessGame.movePiece(chessGame.getSquare(5,7), chessGame.getSquare(5,5));

@@ -20,7 +20,7 @@ public class Square {
         piece = null;
     }
 
-    //EFFECTS: returns the symbol of a piece. Symbol is first letter of the piece name (except knight which
+    //EFFECTS: returns the icon of a piece. Icon is first letter of the piece name (except knight which
     // is changed to n). Capitalize if piece is black. Return " " if no piece.
     public String getIcon() {
         String icon = " ";
@@ -44,11 +44,10 @@ public class Square {
             return icon;
         }
         return icon;
-
     }
 
     //REQUIRES: piece != null
-    //MODIFIES:this, piece, piece's square
+    //MODIFIES:this, piece
     //EFFECTS: -Sets piece to given piece
     //         -Set piece's square to this
     public void setPiece(Piece piece) {

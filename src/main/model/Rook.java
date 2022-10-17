@@ -8,7 +8,7 @@ public class Rook extends Queen {
     private boolean hasMoved;
 
     //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a rook that has not moved, with given color and with name "rook", not on board
+    //EFFECTS: creates a rook with given color
     public Rook(String color) {
         super(color);
         this.name = "rook";

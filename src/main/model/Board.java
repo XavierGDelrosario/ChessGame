@@ -19,6 +19,7 @@ public class Board {
         }
     }
 
+    //region Setup
     //MODIFIES:squares that will have pieces, and the pieces themselves
     //EFFECTS: places pieces on their starting square based on chess rules
     public void setupBoard() {
@@ -59,19 +60,7 @@ public class Board {
             square.setPiece(new Pawn("black"));
         }
     }
-
-    //MODIFIES: fromSquares, toSquares
-    //EFFECTS: adds legal moves to given list, each fromSquare has the same index as the corresponding toSquare
-    public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
-        List<Piece> pieces = getPieces(color);
-        for (Piece piece : pieces) {
-            List<Square> squares = piece.getLegalMoves(this);
-            for (Square square : squares) {
-                fromSquares.add(piece.getSquare());
-                toSquares.add(square);
-            }
-        }
-    }
+    //endregion
 
     //REQUIRES: fromSquare and toSquare exist on the board
     //EFFECTS: tests given move, if the king with the same color as the piece moving is not in check return true,
@@ -89,7 +78,7 @@ public class Board {
     }
 
     //REQUIRES:color = "white" or "black", a king piece with given color exists on the board
-    //EFFECTS: returns true if given color's king can be captured, else false
+    //EFFECTS: returns true if given color's king can be captured by an opponent piece, else false
     public boolean isKingInCheck(String color) {
         List<Piece> pieces;
         Square kingSquare = null;
@@ -117,8 +106,7 @@ public class Board {
 
     //REQUIRES:fromSquare piece != null, both squares != null
     //MODIFIES:fromSquare, toSquare, fromSquare piece
-    //EFFECTS:removes piece reference from one square and adds reference to that piece to the other square.
-    // The piece's square reference is the toSquare.
+    //EFFECTS: moves piece from one square to another
     public void movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
         fromSquare.removePiece();
@@ -149,8 +137,21 @@ public class Board {
         }
     }
 
-    //REQUIRES:color = "white" or "black"
-    //EFFECTS: returns all pieces of given color from board
+    //MODIFIES: fromSquares, toSquares
+    //EFFECTS: adds legal moves to given lists, each fromSquare has the same index as the corresponding toSquare
+    public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
+        List<Piece> pieces = getPieces(color);
+        for (Piece piece : pieces) {
+            List<Square> squares = piece.getLegalMoves(this);
+            for (Square square : squares) {
+                fromSquares.add(piece.getSquare());
+                toSquares.add(square);
+            }
+        }
+    }
+
+    //REQUIRES: color = "white" or "black"
+    //EFFECTS: returns all pieces of given color from board in no guaranteed order
     public List<Piece> getPieces(String color) {
         List<Piece> pieces = new ArrayList<>();
         for (Square square : squares) {

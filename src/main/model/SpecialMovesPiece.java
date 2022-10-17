@@ -8,9 +8,9 @@ public abstract class SpecialMovesPiece implements Piece {
     protected Square square;
 
     //REQUIRES: color = "white" or "black"
+    //EFFECTS: creates a piece with given color and has not moved
     public SpecialMovesPiece(String color) {
         this.color = color;
-        name = "";
         square = null;
         hasMoved = false;
     }
