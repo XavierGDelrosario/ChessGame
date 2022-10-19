@@ -1,10 +1,14 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //Represents a chess board with 64 squares.
-public class Board {
+public class Board implements Writable {
     private final List<Square> squares;
 
     //EFFECTS:Creates a 8x8 board and list of squares with the correct coordinates
@@ -137,6 +141,53 @@ public class Board {
         }
     }
 
+    //REQUIRES: board != null
+    //EFFECTS: returns true if both board and this have the same pieces in the same places
+    public boolean isIdentical(Board board) {
+        for (int i = 0; i < squares.size(); i++) {
+            Piece thisPiece = squares.get(i).getPiece();
+            Piece otherPiece = board.getSquares().get(i).getPiece();
+            if (thisPiece != null && otherPiece != null) {
+                if (!thisPiece.getName().equals(otherPiece.getName())
+                        || !thisPiece.getColor().equals(otherPiece.getColor())) {
+                    return false;
+                }
+            } else if ((thisPiece == null && otherPiece != null) || (thisPiece != null)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    //MODIFIES: squares with pieces
+    //EFFECTS: removes all pieces from the board
+    public void clear() {
+        for (Square square : squares) {
+            square.removePiece();
+        }
+    }
+
+    @Override
+    // EFFECTS: returns this as JSON object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("pieces", piecesToJson());
+        return json;
+    }
+
+    // EFFECTS: returns pieces as a JSON array
+    private JSONArray piecesToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Piece piece : this.getPieces("white")) {
+            jsonArray.put(piece.toJson());
+        }
+        for (Piece piece : this.getPieces("black")) {
+            jsonArray.put(piece.toJson());
+        }
+
+        return jsonArray;
+    }
+
     //MODIFIES: fromSquares, toSquares
     //EFFECTS: adds legal moves to given lists, each fromSquare has the same index as the corresponding toSquare
     public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
@@ -176,4 +227,6 @@ public class Board {
     public List<Square> getSquares() {
         return squares;
     }
+
+
 }

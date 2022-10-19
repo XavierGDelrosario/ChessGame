@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,7 +21,7 @@ public class Knight implements Piece {
 
     @Override
     //REQUIRES:board != null, this piece exists on the board
-    //EFFECTS: returns squares 2 units in one direction and 1 unit in the other if square is:
+    //EFFECTS: returns squares 2 units in one direction and 1 unit in the other from this piece's square if square is:
     //        -not occupied by a piece of same color
     //        -on the board. 0<x<9, 0<y<9
     public List<Square> getSquaresCanMoveTo(Board board) {
@@ -59,6 +61,17 @@ public class Knight implements Piece {
             }
         }
         return legalMoves;
+    }
+
+    @Override
+    //EFFECTS: returns this as JSONObject
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("currentX", square.getXCoordinate());
+        json.put("currentY", square.getYCoordinate());
+        json.put("color", color);
+        return json;
     }
 
     @Override

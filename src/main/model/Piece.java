@@ -1,8 +1,10 @@
 package model;
 
+import persistence.Writable;
+
 import java.util.List;
 
-public interface Piece {
+public interface Piece extends Writable {
     List<Square> getSquaresCanMoveTo(Board board);
 
     List<Square> getLegalMoves(Board board);

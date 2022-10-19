@@ -12,7 +12,7 @@
 - **Rook:** Moves and captures horizontally and vertically any number of squares away as long as it is not blocked
 - **Queen:** Moves and captures in any direction any number of squares away as long as it is not blocked.
 - **Pawn:** Moves 1 square forward or 2 squares forward on it's first move. Captures diagonally in the direction 
-            it moves forward. If a pawn reaches the end of the board it becomes any piece the player wants.
+            it moves forward. If a pawn reaches the end of the board it becomes a queen.
 
 ## Special Moves
 - **En Passant:** If a pawn moves two squares forward and lands adjacent to an opposing pawn the opposing pawn can 
@@ -41,14 +41,15 @@ closer to the center as long as the following conditions are met:
     One reason is that I can play and test at the same time. It makes it less frustrating when bugs occur. I chose 
     chess because I enjoy playing it and it has the right amount of complexity for my knowledge in programming.
 
-## User Stories
+## User Stories P1
 - As a user I want to be able to capture and piece and remove it from the board.
 - As a user I want to be able to make a move and have it added to a list of moves made in the game.
 - As a user I want to be able to move a piece, remove it from one square and add it to another.
 - As a user I want to be restricted to make moves that puts my king out of check.
 
 ## User Stories P2
+- As a user I want to be able to save a game I played.
+- As a user I want to be able to load a game I saved and display any turn that was played.
 - As a user I want to be able to win the game by checkmate
-- As a user I want to be able to load multiple previously played games from files
 - As a user I want to be able to start and end multiple chess games from main.
 - As a user I want to be able to draw the game by stalemate.

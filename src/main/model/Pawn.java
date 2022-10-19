@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,18 +83,18 @@ public class Pawn extends SpecialMovesPiece {
     //          -diagonally up if white, down if black
     //          -occupied with a piece of different color than this
     //          -on the board
-    //          -optional: if pawn can perform En passant in that direction
+    //           or if pawn can perform En passant in that direction
     private void checkDiagonally(Board board, List<Square> squares) {
         int currentX = this.getSquare().getXCoordinate();
         int currentY = this.getSquare().getYCoordinate();
         if (this.color.equals("white")) {
             Square upwardRightSquare = board.getSquare(currentX + 1, currentY + 1);
             Square upwardLeftSquare = board.getSquare(currentX - 1, currentY + 1);
-            pawnCanCapture(squares, upwardRightSquare, upwardLeftSquare);
+            checkCanCapture(squares, upwardRightSquare, upwardLeftSquare);
         } else {
             Square downwardRightSquare = board.getSquare(currentX + 1, currentY - 1);
             Square downwardLeftSquare = board.getSquare(currentX - 1, currentY - 1);
-            pawnCanCapture(squares, downwardRightSquare, downwardLeftSquare);
+            checkCanCapture(squares, downwardRightSquare, downwardLeftSquare);
         }
     }
 
@@ -101,7 +103,7 @@ public class Pawn extends SpecialMovesPiece {
     //         -this can perform En Passant on the square, when an opposing pawn moves two squares in its first move
     //          and lands adjacent to this pawn, this can capture as if it only moved one square. Has this privilege
     //          for only one turn
-    private void pawnCanCapture(List<Square> squares, Square rightSquare, Square leftSquare) {
+    private void checkCanCapture(List<Square> squares, Square rightSquare, Square leftSquare) {
         if ((rightSquare != null && rightSquare.getPiece() != null
                 && !rightSquare.getPiece().getColor().equals(this.color))
                 || (canEnPassantRight && rightSquare != null && rightSquare.getPiece() == null)) {
@@ -112,6 +114,18 @@ public class Pawn extends SpecialMovesPiece {
                 || (canEnPassantLeft && rightSquare != null && leftSquare.getPiece() == null)) {
             squares.add(leftSquare);
         }
+    }
+
+
+    @Override
+    //EFFECTS: returns this as JSONObject
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("currentX", square.getXCoordinate());
+        json.put("currentY", square.getYCoordinate());
+        json.put("color", color);
+        return json;
     }
 
     public boolean getCanEnPassantLeft() {

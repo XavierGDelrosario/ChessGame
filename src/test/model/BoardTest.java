@@ -300,4 +300,21 @@ class BoardTest {
         assertEquals(b1, fromSquares.get(6));
         assertTrue(toSquares.contains(board.getSquare(8,1)));
     }
+
+    @Test
+    public void testClear() {
+        board.setupBoard();
+        board.clear();
+        assertEquals(0, board.getPieces("white").size());
+        assertEquals(0, board.getPieces("black").size());
+    }
+
+    @Test
+    public void testSameBoard() {
+        board.setupBoard();
+        Board newBoard = new Board();
+        assertFalse(board.isIdentical(newBoard));
+        newBoard.setupBoard();
+        assertTrue(board.isIdentical(newBoard));
+    }
 }

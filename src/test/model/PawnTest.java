@@ -123,14 +123,6 @@ public class PawnTest {
         assertEquals(2, f7PieceSquares.size());
     }
 
-    @Test
-    public void testChangeHasMoved() {
-        Pawn pawn = (Pawn) b2.getPiece();
-        assertFalse(pawn.getHasMoved());
-        pawn.setHasMovedTrue();
-        assertTrue(pawn.getHasMoved());
-        assertEquals(1, pawn.getSquaresCanMoveTo(board).size());
-    }
 
     @Test
     public void testEnPassant() {
@@ -173,5 +165,14 @@ public class PawnTest {
         assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
         assertFalse(pawn.getLegalMoves(board).contains(c5));
 
+    }
+
+    @Test
+    public void testChangeHasMoved() {
+        Pawn pawn = (Pawn) b2.getPiece();
+        assertFalse(pawn.getHasMoved());
+        pawn.setHasMovedTrue();
+        assertTrue(pawn.getHasMoved());
+        assertEquals(1, pawn.getSquaresCanMoveTo(board).size());
     }
 }

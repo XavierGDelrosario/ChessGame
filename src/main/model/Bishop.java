@@ -21,10 +21,10 @@ public class Bishop extends Queen {
     //        -square is not after a square with a piece of either color
     public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
-        super.checkDiagonally(board, squares, 1, 1);
-        super.checkDiagonally(board, squares, 1, -1);
-        super.checkDiagonally(board, squares, -1, 1);
-        super.checkDiagonally(board, squares, -1, -1);
+        super.checkDirection(board, squares, 1, 1);
+        super.checkDirection(board, squares, 1, -1);
+        super.checkDirection(board, squares, -1, 1);
+        super.checkDirection(board, squares, -1, -1);
         return squares;
     }
 }

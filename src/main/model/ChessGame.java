@@ -1,11 +1,15 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Writable;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //Represents a chess game
-public class ChessGame {
-    private final Board board;
+public class ChessGame implements Writable {
+    private Board board;
     private List<Board> savedBoards;
     private String playerTurn;
 
@@ -17,11 +21,13 @@ public class ChessGame {
         savedBoards = new ArrayList<>();
     }
 
+    //region PlayingGame
     //REQUIRES:fromSquare piece != null, both squares != null
     //MODIFIES:fromSquare, toSquare, fromSquare piece
     //EFFECTS: return true if legal, else false. Make move if legal, move is legal if:
     //          -piece that is moving is the same color as the player turn
     //          -piece can move to that square
+    //      if made move end turn
     public boolean movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
         if (piece != null && piece.getColor().equals(playerTurn)) {
@@ -39,6 +45,48 @@ public class ChessGame {
         }
         return false;
     }
+
+    //MODIFIES: this, the pawns of the player whose turn it is
+    //EFFECTS:  -removes en passant privileges from pawns of player whose turn it is
+    //          -changes player turn from white to black and vice versa
+    //          -turns pawns to queen if they made it to end of board
+    //          -adds a copy of the board to savedBoards
+    private void endTurn() {
+        List<Piece> pieces = board.getPieces(playerTurn);
+        pieces.removeIf(piece -> (!piece.getName().equals("pawn")));
+        for (Piece piece : pieces) {
+            Pawn pawn = (Pawn) piece;
+            pawn.setCanEnPassantRight(false);
+            pawn.setCanEnPassantLeft(false);
+            promote(pawn);
+        }
+        changePlayerTurn();
+        Board boardToSave = new Board();
+        boardToSave.copyBoard(board);
+        this.saveBoard(boardToSave);
+    }
+
+    //MODIFIES:square with pawn
+    //EFFECTS: if pawn is has y = 8 replace it with a white queen, if y = 1 replace it with a black queen
+    private void promote(Pawn pawn) {
+        int currentY = pawn.getSquare().getYCoordinate();
+        if (currentY == 1) {
+            pawn.getSquare().setPiece(new Queen("black"));
+        } else if (currentY == 8) {
+            pawn.getSquare().setPiece(new Queen("white"));
+        }
+    }
+
+    //MODIFIES: this
+    //EFFECTS: changes player turn from "white" to "black" and vice versa
+    private void changePlayerTurn() {
+        if (playerTurn.equals("white")) {
+            playerTurn = "black";
+        } else {
+            playerTurn = "white";
+        }
+    }
+    //endregion
 
     //region SpecialMoves
     //REQUIRES: both squares != null, fromSquare piece != null
@@ -129,37 +177,107 @@ public class ChessGame {
 
     //endregion
 
+    //region CheckIsOver
+    //EFFECTS: returns " " if game has not ended or if the game is over
+    //          -checkmate
+    //          -draw by repetition
+    //          -draw by insufficient material
+    //          -draw by stalemate
+    public String checkIsGameOver() {
+        if (isCheckMate()) {
+            return "checkmate";
+        } else if (isStalemate()) {
+            return "draw by stalemate";
+        } else if (isDrawByRepetition()) {
+            return "draw by repetition";
+        } else if (isInsufficientMaterial()) {
+            return "draw by insufficient material";
+        }
+        return " ";
+    }
+
+    //EFFECTS: returns true if player currently playing has their king in check and has no legal moves, else false
+    private boolean isCheckMate() {
+        List<Square> fromSquares = new ArrayList<>();
+        List<Square> toSquares = new ArrayList<>();
+        board.getLegalMoves(fromSquares, toSquares, playerTurn);
+        return (board.isKingInCheck(playerTurn) && fromSquares.size() == 0);
+    }
+
+    //EFFECTS: returns true if player currently playing has their king not in check and has no legal moves else false
+    private boolean isStalemate() {
+        List<Square> fromSquares = new ArrayList<>();
+        List<Square> toSquares = new ArrayList<>();
+        board.getLegalMoves(fromSquares, toSquares, playerTurn);
+        return (!board.isKingInCheck(playerTurn) && fromSquares.size() == 0);
+    }
+
+    //REQUIRES: both players have a king
+    //EFFECTS: returns true if both players don't have enough pieces to checkmate the other player, combinations are:
+    //         -king
+    //         -king and 1 knight
+    //         -king and 1 bishop
+    //       else return false
+    private boolean isInsufficientMaterial() {
+        List<Piece> whitePieces = board.getPieces("white");
+        List<Piece> blackPieces = board.getPieces("black");
+        boolean whiteInsufficientMaterial = false;
+        boolean blackInsufficientMaterial = false;
+        if (whitePieces.size() <= 2 && blackPieces.size() <= 2) {
+            for (int i = 0; i < 2; i++) {
+                if (whitePieces.get(i).getName().equals("knight")
+                        || whitePieces.get(i).getName().equals("bishop")) {
+                    whiteInsufficientMaterial = true;
+                }
+                if (blackPieces.get(i).getName().equals("knight")
+                        || blackPieces.get(i).getName().equals("bishop")) {
+                    blackInsufficientMaterial = true;
+                }
+            }
+        }
+        return whiteInsufficientMaterial && blackInsufficientMaterial;
+    }
+
+    //EFFECTS: return true if that last 3 turns with the same player turn have the same board position, else false
+    private boolean isDrawByRepetition() {
+
+        if (savedBoards.size() >= 10) {
+            Board currentBoard = savedBoards.get(savedBoards.size() - 1);
+            Board previousBoard = savedBoards.get(savedBoards.size() - 5);
+            Board secondPreviousBoard = savedBoards.get(savedBoards.size() - 9);
+            return currentBoard.isIdentical(previousBoard) && currentBoard.isIdentical(secondPreviousBoard);
+        }
+        return false;
+    }
+    //endregion
+
+    @Override
+    // EFFECTS: returns this as JSON object
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("boards", boardsToJson());
+        return json;
+    }
+
+    // EFFECTS: returns saved boards as a JSON array
+    private JSONArray boardsToJson() {
+        JSONArray jsonArray = new JSONArray();
+        for (Board board : savedBoards) {
+            jsonArray.put(board.toJson());
+        }
+        return jsonArray;
+    }
+
+    //REQUIRES: board != null
+    //MODIFIES: this
+    //EFFECTS: adds board to saved board
+    public void saveBoard(Board board) {
+        savedBoards.add(board);
+    }
+
     //EFFECTS: returns square with given coordinates
     public Square getSquare(int x, int y) {
         return board.getSquare(x, y);
-    }
-
-    //MODIFIES: this, the pawns of the player whose turn it is
-    //EFFECTS:  -removes en passant privileges from pawns of player whose turn it is
-    //          -changes player turn from white to black and vice versa
-    //          -adds a copy of the board to savedBoards
-    public void endTurn() {
-        List<Piece> pieces = board.getPieces(playerTurn);
-        pieces.removeIf(piece -> (!piece.getName().equals("pawn")));
-        for (Piece piece : pieces) {
-            Pawn pawn = (Pawn) piece;
-            pawn.setCanEnPassantRight(false);
-            pawn.setCanEnPassantLeft(false);
-        }
-        changePlayerTurn();
-        Board boardToSave = new Board();
-        boardToSave.copyBoard(board);
-        savedBoards.add(boardToSave);
-    }
-
-    //MODIFIES: this
-    //EFFECTS: changes player turn from "white" to "black" and vice versa
-    public void changePlayerTurn() {
-        if (playerTurn.equals("white")) {
-            playerTurn = "black";
-        } else {
-            playerTurn = "white";
-        }
     }
 
     public String getPlayerTurn() {
@@ -168,6 +286,11 @@ public class ChessGame {
 
     public Board getBoard() {
         return board;
+    }
+
+    public void newBoard() {
+        board = new Board();
+        board.setupBoard();
     }
 
     public List<Board> getSavedBoards() {

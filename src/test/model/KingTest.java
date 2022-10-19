@@ -91,15 +91,7 @@ public class KingTest {
         assertEquals(0, d4PieceSquares.size());
     }
 
-    @Test
-    public void testChangeHasMoved() {
-        d4.setPiece(new King("white"));
-        King king = (King) d4.getPiece();
-        assertFalse(king.getHasMoved());
-        king.setHasMovedTrue();
-        assertTrue(king.getHasMoved());
-    }
-
+    //region CastlingTests
     @Test
     public void testCantCastleFromCheck() {
         board2.getSquare(5,8).setPiece(new Rook("black"));
@@ -170,5 +162,15 @@ public class KingTest {
         kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertFalse(kingLegalMoves.contains(c1));
         assertTrue(kingLegalMoves.contains(g1));
+    }
+    //endregion
+
+    @Test
+    public void testChangeHasMoved() {
+        d4.setPiece(new King("white"));
+        King king = (King) d4.getPiece();
+        assertFalse(king.getHasMoved());
+        king.setHasMovedTrue();
+        assertTrue(king.getHasMoved());
     }
 }

@@ -1,5 +1,7 @@
 package model;
 
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +54,6 @@ public class King extends SpecialMovesPiece {
     //               -first square in the direction is a legal move
     //               -king is not in check
     //               -squares between rook and king are empty
-
     public List<Square> getLegalMoves(Board board) {
         List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
@@ -121,5 +122,16 @@ public class King extends SpecialMovesPiece {
             }
         }
         return !rookHasMoved;
+    }
+
+    @Override
+    //EFFECTS: returns this as JSONObject
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("name", name);
+        json.put("currentX", square.getXCoordinate());
+        json.put("currentY", square.getYCoordinate());
+        json.put("color", color);
+        return json;
     }
 }
