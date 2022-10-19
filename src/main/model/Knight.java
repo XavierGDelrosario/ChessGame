@@ -41,7 +41,7 @@ public class Knight implements Piece {
 
         for (Square square : squaresToCheck) {
             if (square != null) {
-                if (square.getPiece() == null || !square.getPiece().getColor().equals(this.getColor())) {
+                if (!square.containsPiece() || !square.getPiece().getColor().equals(this.getColor())) {
                     squares.add(square);
                 }
             }

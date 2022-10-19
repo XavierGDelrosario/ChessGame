@@ -55,6 +55,11 @@ public class Square {
         this.piece = piece;
     }
 
+    //EFFECTS: returns true if square has a piece, else false
+    public boolean containsPiece() {
+        return piece != null;
+    }
+
     public int getXCoordinate() {
         return positionX;
     }

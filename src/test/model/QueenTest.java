@@ -1,4 +1,5 @@
 package model;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -113,5 +114,17 @@ public class QueenTest {
         assertEquals(1, queen.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(3,3));
         assertEquals(21, queen.getLegalMoves(board).size());
+    }
+
+    @Test
+    public void testWritingQueenInfo() {
+        Queen queen = new Queen("white");
+        board.getSquare(1,1).setPiece(queen);
+        JSONObject jsonQueen= queen.toJson();
+        assertEquals("queen", jsonQueen.getString("name"));
+        assertEquals("white", jsonQueen.getString("color"));
+        assertEquals(1, jsonQueen.getInt("currentX"));
+        assertEquals(1, jsonQueen.getInt("currentY"));
+
     }
 }

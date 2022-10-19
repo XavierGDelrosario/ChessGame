@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+// Represents a reader that reads chess game from JSON data stored in file
 public class JsonReader {
     private String source;
 

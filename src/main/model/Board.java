@@ -89,7 +89,7 @@ public class Board implements Writable {
 
         for (Square square : squares) {
             Piece piece = square.getPiece();
-            if (piece != null && piece.getName().equals("king") && piece.getColor().equals(color)) {
+            if (square.containsPiece() && piece.getName().equals("king") && piece.getColor().equals(color)) {
                 kingSquare = square;
                 break;
             }

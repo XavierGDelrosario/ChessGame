@@ -59,19 +59,19 @@ public class Pawn extends SpecialMovesPiece {
         int currentY = this.getSquare().getYCoordinate();
         if (this.color.equals("white")) {
             Square upwardSquare = board.getSquare(currentX, currentY + 1);
-            if (upwardSquare != null && upwardSquare.getPiece() == null) {
+            if (upwardSquare != null && !upwardSquare.containsPiece()) {
                 squares.add(upwardSquare);
                 Square nextUpwardSquare = board.getSquare(currentX, currentY + 2);
-                if (nextUpwardSquare != null && !this.hasMoved && nextUpwardSquare.getPiece() == null) {
+                if (nextUpwardSquare != null && !this.hasMoved && !nextUpwardSquare.containsPiece()) {
                     squares.add(nextUpwardSquare);
                 }
             }
         } else {
             Square downwardSquare = board.getSquare(currentX, currentY - 1);
-            if (downwardSquare != null && downwardSquare.getPiece() == null) {
+            if (downwardSquare != null && !downwardSquare.containsPiece()) {
                 squares.add(downwardSquare);
                 Square nextDownwardSquare = board.getSquare(currentX, currentY - 2);
-                if (nextDownwardSquare != null && !this.hasMoved && nextDownwardSquare.getPiece() == null) {
+                if (nextDownwardSquare != null && !this.hasMoved && !nextDownwardSquare.containsPiece()) {
                     squares.add(nextDownwardSquare);
                 }
             }
@@ -104,14 +104,14 @@ public class Pawn extends SpecialMovesPiece {
     //          and lands adjacent to this pawn, this can capture as if it only moved one square. Has this privilege
     //          for only one turn
     private void checkCanCapture(List<Square> squares, Square rightSquare, Square leftSquare) {
-        if ((rightSquare != null && rightSquare.getPiece() != null
+        if ((rightSquare != null && rightSquare.containsPiece()
                 && !rightSquare.getPiece().getColor().equals(this.color))
-                || (canEnPassantRight && rightSquare != null && rightSquare.getPiece() == null)) {
+                || (canEnPassantRight && rightSquare != null && !rightSquare.containsPiece())) {
             squares.add(rightSquare);
         }
-        if ((leftSquare != null && leftSquare.getPiece() != null)
+        if ((leftSquare != null && leftSquare.containsPiece())
                 && (!leftSquare.getPiece().getColor().equals(this.color))
-                || (canEnPassantLeft && rightSquare != null && leftSquare.getPiece() == null)) {
+                || (canEnPassantLeft && rightSquare != null && !leftSquare.containsPiece())) {
             squares.add(leftSquare);
         }
     }

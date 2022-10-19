@@ -70,4 +70,16 @@ public class SquareTest {
         assertTrue(board.getSquare(1,7).getIcon().equals("P"));
         assertTrue(board.getSquare(1,5).getIcon().equals(" "));
     }
+
+    @Test
+    public void testDoesNotHavePiece() {
+        assertFalse(a1.containsPiece());
+    }
+
+    @Test
+    public void testHasPiece() {
+        a1.setPiece(new Queen("white"));
+        assertTrue(a1.containsPiece());
+    }
+
 }

@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -174,5 +175,17 @@ public class PawnTest {
         pawn.setHasMovedTrue();
         assertTrue(pawn.getHasMoved());
         assertEquals(1, pawn.getSquaresCanMoveTo(board).size());
+    }
+
+    @Test
+    public void testWritingPawnInfo() {
+        Pawn pawn = new Pawn("white");
+        board.getSquare(1,1).setPiece(pawn);
+        JSONObject jsonQueen= pawn.toJson();
+        assertEquals("pawn", jsonQueen.getString("name"));
+        assertEquals("white", jsonQueen.getString("color"));
+        assertEquals(1, jsonQueen.getInt("currentX"));
+        assertEquals(1, jsonQueen.getInt("currentY"));
+
     }
 }

@@ -54,7 +54,7 @@ public class Queen implements Piece {
 
     //REQUIRES:directionX = 1 (right) or -1 (left) or 0 not moving horizontally
     //         directionY = 1 (up) or -1 (down) or 0 not moving vertically , board != null
-    //EFFECTS: adds all squares to list that are diagonal to this in a certain direction if square is:
+    //EFFECTS: adds all squares to list that are in direction if square is:
     //        -not occupied by piece of the same color
     //        -square is on the board. 0<x<9, 0<y<9
     //        -square is not after a square with a piece of either color
@@ -64,7 +64,7 @@ public class Queen implements Piece {
             int newY = this.square.getYCoordinate() + i * directionY;
             Square square = board.getSquare(newX, newY);
             if (square != null) {
-                if (square.getPiece() == null) {
+                if (!square.containsPiece()) {
                     squares.add(square);
                 } else if (!square.getPiece().getColor().equals(this.color)) {
                     squares.add(square);

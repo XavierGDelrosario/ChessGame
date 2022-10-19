@@ -36,7 +36,7 @@ public class King extends SpecialMovesPiece {
         squaresToCheck.add(board.getSquare(currentX - 1, currentY - 1));
         for (Square square : squaresToCheck) {
             if (square != null) {
-                if (square.getPiece() == null || !square.getPiece().getColor().equals(this.getColor())) {
+                if (!square.containsPiece() || !square.getPiece().getColor().equals(this.getColor())) {
                     squares.add(square);
                 }
             }
@@ -106,18 +106,18 @@ public class King extends SpecialMovesPiece {
     private boolean checkCastlingConditions(Board board, List<Square> squaresToCheck) {
         Square rookSquare = squaresToCheck.get(squaresToCheck.size() - 1);
         boolean rookHasMoved = true;
-        if (rookSquare.getPiece() != null && rookSquare.getPiece().getName().equals("rook")) {
+        if (rookSquare.containsPiece() && rookSquare.getPiece().getName().equals("rook")) {
             Rook rook = (Rook) rookSquare.getPiece();
             rookHasMoved = rook.getHasMoved();
         }
         for (int i = 0; i < 2; i++) {
             Square square = squaresToCheck.get(i);
-            if (square.getPiece() != null || !board.checkIsLegalMove(this.square, square)) {
+            if (square.containsPiece() || !board.checkIsLegalMove(this.square, square)) {
                 return false;
             }
         }
         if (squaresToCheck.size() == 4) {
-            if (squaresToCheck.get(2).getPiece() != null) {
+            if (squaresToCheck.get(2).containsPiece()) {
                 return false;
             }
         }

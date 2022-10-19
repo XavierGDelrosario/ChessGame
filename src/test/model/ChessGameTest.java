@@ -212,4 +212,5 @@ public class ChessGameTest {
         chessGame.movePiece(e2, e1);
         assertTrue(chessGame.checkIsGameOver().equals("draw by repetition"));
     }
+
 }

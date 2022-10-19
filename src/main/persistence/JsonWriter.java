@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 import model.ChessGame;
 
+// Represents a writer that writes JSON representation of a chess game to file
 public class JsonWriter {
     private static final int TAB = 4;
     private PrintWriter writer;

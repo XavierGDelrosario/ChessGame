@@ -1,4 +1,5 @@
 package model;
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -172,5 +173,17 @@ public class KingTest {
         assertFalse(king.getHasMoved());
         king.setHasMovedTrue();
         assertTrue(king.getHasMoved());
+    }
+
+    @Test
+    public void testWritingKingInfo() {
+        King king = new King("white");
+        board1.getSquare(1,1).setPiece(king);
+        JSONObject jsonQueen= king.toJson();
+        assertEquals("king", jsonQueen.getString("name"));
+        assertEquals("white", jsonQueen.getString("color"));
+        assertEquals(1, jsonQueen.getInt("currentX"));
+        assertEquals(1, jsonQueen.getInt("currentY"));
+
     }
 }

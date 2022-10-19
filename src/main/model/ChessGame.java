@@ -30,7 +30,7 @@ public class ChessGame implements Writable {
     //      if made move end turn
     public boolean movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
-        if (piece != null && piece.getColor().equals(playerTurn)) {
+        if (fromSquare.containsPiece() && piece.getColor().equals(playerTurn)) {
             List<Square> fromSquares = new ArrayList<>();
             List<Square> toSquares = new ArrayList<>();
             board.getLegalMoves(fromSquares, toSquares, piece.getColor());
@@ -286,11 +286,6 @@ public class ChessGame implements Writable {
 
     public Board getBoard() {
         return board;
-    }
-
-    public void newBoard() {
-        board = new Board();
-        board.setupBoard();
     }
 
     public List<Board> getSavedBoards() {

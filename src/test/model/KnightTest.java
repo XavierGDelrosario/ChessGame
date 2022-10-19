@@ -1,5 +1,6 @@
 package model;
 
+import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -84,5 +85,17 @@ public class KnightTest {
         assertEquals(0, knight.getLegalMoves(board).size());
         board.movePiece(d3, board.getSquare(2,2));
         assertEquals(8, knight.getLegalMoves(board).size());
+    }
+
+    @Test
+    public void testWritingKnightInfo() {
+        Knight knight = new Knight("white");
+        board.getSquare(1,1).setPiece(knight);
+        JSONObject jsonQueen= knight.toJson();
+        assertEquals("knight", jsonQueen.getString("name"));
+        assertEquals("white", jsonQueen.getString("color"));
+        assertEquals(1, jsonQueen.getInt("currentX"));
+        assertEquals(1, jsonQueen.getInt("currentY"));
+
     }
 }
