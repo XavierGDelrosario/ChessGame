@@ -152,7 +152,7 @@ public class Board implements Writable {
                         || !thisPiece.getColor().equals(otherPiece.getColor())) {
                     return false;
                 }
-            } else if ((thisPiece == null && otherPiece != null) || (thisPiece != null)) {
+            } else if (thisPiece != null || otherPiece != null) {
                 return false;
             }
         }
@@ -184,7 +184,6 @@ public class Board implements Writable {
         for (Piece piece : this.getPieces("black")) {
             jsonArray.put(piece.toJson());
         }
-
         return jsonArray;
     }
 
@@ -227,6 +226,4 @@ public class Board implements Writable {
     public List<Square> getSquares() {
         return squares;
     }
-
-
 }

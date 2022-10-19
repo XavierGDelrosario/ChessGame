@@ -47,21 +47,26 @@ public class JsonReader {
     // MODIFIES: chessGame
     // EFFECTS: parses boards from JSON object and adds them to savedBoards
     private void addBoards(ChessGame chessGame, JSONObject jsonObject) {
-        JSONArray jsonArray = jsonObject.getJSONArray("boards");
-        Board board = new Board();
-        for (Object json : jsonArray) {
-            JSONObject piece = (JSONObject) json;
-            addPieces(board, piece);
+        JSONArray boardsJsonArray = jsonObject.getJSONArray("boards");
+        for (Object board : boardsJsonArray) {
+            Board boardToSave = new Board();
+            JSONObject boardJson = (JSONObject) board;
+            JSONArray piecesJsonArray = boardJson.getJSONArray("pieces");
+            for (Object piece : piecesJsonArray) {
+                JSONObject jsonPiece = (JSONObject) piece;
+                addPieces(boardToSave, jsonPiece);
+            }
+            chessGame.saveBoard(boardToSave);
         }
-        chessGame.saveBoard(board);
+
     }
 
     // MODIFIES: board
     // EFFECTS: parses pieces from JSON object and adds it to board
     private void addPieces(Board board, JSONObject jsonObject) {
         String name = jsonObject.getString("name");
-        int x = Integer.parseInt(jsonObject.getString("currentX"));
-        int y = Integer.parseInt(jsonObject.getString("currentX"));
+        int x = jsonObject.getInt("currentX");
+        int y = jsonObject.getInt("currentY");
         String color = jsonObject.getString("color");
         Square square = board.getSquare(x, y);
         if (name.equals("king")) {

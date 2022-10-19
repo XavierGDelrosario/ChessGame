@@ -17,7 +17,7 @@ public class ChessConsoleUI {
     private final Scanner scanner;
     private final JsonWriter jsonWriter;
     private final JsonReader jsonReader;
-    private final ChessGame chessGame;
+    private ChessGame chessGame;
     private ChessGame loadedChessGame;
 
     //EFFECTS: starts a new chess game in console
@@ -33,16 +33,14 @@ public class ChessConsoleUI {
 
     //EFFECTS: performs corresponding methods depending on user input
     private void processCommand(String command) {
-        if (command.equals("c")) {
-            displayCommands();
-        } else if (command.equals("p")) {
-            chessGame.newBoard();
+        if (command.equals("p")) {
+            chessGame = new ChessGame();
             runGame();
         } else if (command.equals("r")) {
             runGame();
         } else if (command.equals("h")) {
             loadPreviousBoard(chessGame);
-        }  else if (command.equals("v")) {
+        } else if (command.equals("v")) {
             if (loadedChessGame != null) {
                 loadPreviousBoard(loadedChessGame);
             } else {
@@ -54,16 +52,20 @@ public class ChessConsoleUI {
             loadChessGame();
         } else if (command.equals("q")) {
             runApplication();
+        } else {
+            System.err.println("Invalid command");
         }
     }
 
     //EFFECTS: runs application and asks for user input to perform methods
     private void runApplication() {
         while (true) {
-            System.out.println("Enter command or q to quit");
+            System.out.println("Enter command or c to view commands or q to quit");
             String command = scanner.nextLine();
             if (command.equals("q")) {
                 break;
+            } else if (command.equals("c")) {
+                this.displayCommands();
             }
             processCommand(command);
         }
@@ -81,7 +83,7 @@ public class ChessConsoleUI {
                 System.out.println("Game ended by " + chessGame.checkIsGameOver());
                 break;
             }
-            System.out.println("Enter square coordinate with piece to move");
+            System.out.println("Enter square coordinate with piece to move or command");
             String fromSquareInput = scanner.nextLine();
             while (fromSquareInput.length() == 1) {
                 processCommand(fromSquareInput);
@@ -101,17 +103,22 @@ public class ChessConsoleUI {
     //EFFECTS: displays board at given turn from user input. If user inputs "return" go back and run game
     private void loadPreviousBoard(ChessGame chessGame) {
         while (true) {
-            System.out.println("Enter the index number of the move played");
+            System.out.println("Enter the index number of the move played or q");
             String input = scanner.nextLine();
-            if (input.equals("return")) {
-                displayBoard(chessGame.getBoard());
-                System.out.println("Enter square coordinate with the piece to move");
+            if (input.equals("q")) {
+                runApplication();
             }
-            int index = Integer.parseInt(input);
+            int index = 0;
+            try {
+                index = Integer.parseInt(input);
+            } catch (NumberFormatException e) {
+                return;
+            }
             if (index != 0 && index - 1 < chessGame.getSavedBoards().size() && index - 1 >= 0) {
                 displayBoard(chessGame.getSavedBoards().get(index - 1));
             } else {
-                System.out.println("That number of moves has not been played yet");
+                System.err.println("That number of moves has not been played yet");
+                System.err.println(chessGame.getSavedBoards().size() + " moves have been played");
             }
         }
     }
@@ -126,6 +133,27 @@ public class ChessConsoleUI {
         System.out.println("Enter s to save chess game");
         System.out.println("Enter l to load chess game");
         System.out.println("Enter q to quit application");
+    }
+
+    //REQUIRES: board != null
+    //EFFECTS: displays chess board with pieces in that console, changes orientation depending on player turn
+    private void displayBoard(Board board) {
+        List<Square> squares = board.getSquares();
+        if (chessGame.getPlayerTurn().equals("black")) {
+            for (int i = 0; i < 8; i++) {
+                System.out.println("|" + squares.get(i + 56).getIcon() + "|" + squares.get(i + 48).getIcon() + "|"
+                        + squares.get(i + 40).getIcon() + "|" + squares.get(i + 32).getIcon() + "|"
+                        + squares.get(i + 24).getIcon() + "|" + squares.get(i + 16).getIcon() + "|"
+                        + squares.get(i + 8).getIcon() + "|" + squares.get(i).getIcon() + "|");
+            }
+        } else {
+            for (int i = 63; i > 55; i--) {
+                System.out.println("|" + squares.get(i - 56).getIcon() + "|" + squares.get(i - 48).getIcon() + "|"
+                        + squares.get(i - 40).getIcon() + "|" + squares.get(i - 32).getIcon()
+                        + "|" + squares.get(i - 24).getIcon() + "|" + squares.get(i - 16).getIcon()
+                        + "|" + squares.get(i - 8).getIcon() + "|" + squares.get(i).getIcon() + "|");
+            }
+        }
     }
 
     //region GetSquareInput
@@ -194,28 +222,6 @@ public class ChessConsoleUI {
         return squareX;
     }
     //endregion
-
-    //REQUIRES: board != null
-    //EFFECTS: displays chess board with pieces in that console, changes orientation depending on player turn
-    private void displayBoard(Board board) {
-        List<Square> squares = board.getSquares();
-        if (chessGame.getPlayerTurn().equals("black")) {
-            for (int i = 0; i < 8; i++) {
-                System.out.println("|" + squares.get(i + 56).getIcon() + "|" + squares.get(i + 48).getIcon() + "|"
-                        + squares.get(i + 40).getIcon() + "|" + squares.get(i + 32).getIcon() + "|"
-                        + squares.get(i + 24).getIcon() + "|" + squares.get(i + 16).getIcon() + "|"
-                        + squares.get(i + 8).getIcon() + "|" + squares.get(i).getIcon() + "|");
-            }
-        } else {
-            for (int i = 63; i > 55; i--) {
-                System.out.println("|" + squares.get(i - 56).getIcon() + "|" + squares.get(i - 48).getIcon() + "|"
-                        + squares.get(i - 40).getIcon() + "|" + squares.get(i - 32).getIcon()
-                        + "|" + squares.get(i - 24).getIcon() + "|" + squares.get(i - 16).getIcon()
-                        + "|" + squares.get(i - 8).getIcon() + "|" + squares.get(i).getIcon() + "|");
-            }
-        }
-    }
-
 
     // EFFECTS: saves the workroom to file
     private void saveChessGame() {
