@@ -1,9 +1,11 @@
 package model;
 
+import exceptions.ColorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class ChessGameTest {
     ChessGame chessGame;
@@ -129,8 +131,13 @@ public class ChessGameTest {
         assertFalse(pawn.getCanEnPassantRight());
         Square a1 =  chessGame.getBoard().getSquare(1,1);
         Square a8 =  chessGame.getBoard().getSquare(1,8);
-        a1.setPiece(new Pawn("black"));
-        a8.setPiece(new Pawn("white"));
+        try {
+            a1.setPiece(new Pawn("black"));
+            a8.setPiece(new Pawn("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         chessGame.movePiece(chessGame.getSquare(8,7), chessGame.getSquare(8,6));
         assertTrue(a1.getPiece().getName().equals("queen"));
         assertTrue(a1.getPiece().getColor().equals("black"));
@@ -143,47 +150,66 @@ public class ChessGameTest {
     @Test
     public void testCheckmate() {
         board.clear();
-        board.getSquare(1,1).setPiece(new King("white"));
-        board.getSquare(1,2).setPiece(new Queen("black"));
-        board.getSquare(2,1).setPiece(new Queen("black"));
+        try {
+            board.getSquare(1,1).setPiece(new King("white"));
+            board.getSquare(1,2).setPiece(new Queen("black"));
+            board.getSquare(2,1).setPiece(new Queen("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(chessGame.checkIsGameOver().equals("checkmate"));
     }
 
     @Test
     public void testStalemate() {
         board.clear();
-        King king = new King("white");
-        king.setHasMovedTrue();
-        board.getSquare(1,1).setPiece(king);
-        board.getSquare(2,3).setPiece(new Queen("black"));
+        try {
+            King king = new King("white");
+            king.setHasMovedTrue();
+            board.getSquare(1,1).setPiece(king);
+            board.getSquare(2,3).setPiece(new Queen("black"));
+
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(chessGame.checkIsGameOver().equals("draw by stalemate"));
     }
 
     @Test
     public void testInsufficientMaterial() {
         board.clear();
-        King kingWhite = new King("white");
-        King kingBlack = new King("black");
-        kingWhite.setHasMovedTrue();
-        kingBlack.setHasMovedTrue();
-        board.getSquare(1,1).setPiece(kingWhite);
-        board.getSquare(1,2).setPiece(new Knight("white"));
-        board.getSquare(1,3).setPiece(kingBlack);
-        board.getSquare(1,4).setPiece(new Bishop("black"));
+        try {
+            King kingWhite = new King("white");
+            King kingBlack = new King("black");
+            kingWhite.setHasMovedTrue();
+            kingBlack.setHasMovedTrue();
+            board.getSquare(1,1).setPiece(kingWhite);
+            board.getSquare(1,2).setPiece(new Knight("white"));
+            board.getSquare(1,3).setPiece(kingBlack);
+            board.getSquare(1,4).setPiece(new Bishop("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         assertTrue(chessGame.checkIsGameOver().equals("draw by insufficient material"));
     }
 
     @Test
     public void testOnePlayerInsufficientMaterial() {
         board.clear();
-        King kingWhite = new King("white");
-        King kingBlack = new King("black");
-        kingWhite.setHasMovedTrue();
-        kingBlack.setHasMovedTrue();
-        board.getSquare(1,1).setPiece(kingWhite);
-        board.getSquare(1,2).setPiece(new Queen("white"));
-        board.getSquare(1,3).setPiece(kingBlack);
-        board.getSquare(1,4).setPiece(new Bishop("black"));
+        try {
+            King kingWhite = new King("white");
+            King kingBlack = new King("black");
+            kingWhite.setHasMovedTrue();
+            kingBlack.setHasMovedTrue();
+            board.getSquare(1,1).setPiece(kingWhite);
+            board.getSquare(1,2).setPiece(new Queen("white"));
+            board.getSquare(1,3).setPiece(kingBlack);
+            board.getSquare(1,4).setPiece(new Bishop("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         assertTrue(chessGame.checkIsGameOver().equals(" "));
     }
 

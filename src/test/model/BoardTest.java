@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -132,17 +133,21 @@ class BoardTest {
 
     @Test
     public void testMovingMultipleTimes() {
-        Queen queen = new Queen("white");
-        Knight knight = new Knight("black");
-        a8.setPiece(queen);
-        b3.setPiece(knight);
-        assertNull(a1.getPiece());
-        board.movePiece(b3, a1);
-        assertNull(b3.getPiece());
-        assertEquals(knight,a1.getPiece());
-        board.movePiece(a8, a1);
-        assertNull(a8.getPiece());
-        assertEquals(queen, a1.getPiece());
+        try {
+            Queen queen = new Queen("white");
+            Knight knight = new Knight("black");
+            a8.setPiece(queen);
+            b3.setPiece(knight);
+            assertNull(a1.getPiece());
+            board.movePiece(b3, a1);
+            assertNull(b3.getPiece());
+            assertEquals(knight,a1.getPiece());
+            board.movePiece(a8, a1);
+            assertNull(a8.getPiece());
+            assertEquals(queen, a1.getPiece());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
@@ -152,25 +157,37 @@ class BoardTest {
         assertEquals(16, board.getPieces("black").size());
         board.getSquare(1,1).removePiece();
         board.getSquare(1,2).removePiece();
-        board.getSquare(1,1).setPiece(new Rook("black"));
+        try {
+            board.getSquare(1,1).setPiece(new Rook("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertEquals(14, board.getPieces("white").size());
         assertEquals(17, board.getPieces("black").size());
     }
 
     @Test
     public void testNotInCheck() {
-        a1.setPiece(new King("white"));
-        a8.setPiece(new King("black"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new King("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertFalse(board.isKingInCheck("white"));
         assertFalse(board.isKingInCheck("black"));
     }
 
     @Test
     public void testInCheckFromQueen() {
-        a1.setPiece(new King("white"));
-        a8.setPiece(new King("black"));
-        h1.setPiece(new Queen("black"));
-        h8.setPiece(new Queen("white"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new King("black"));
+            h1.setPiece(new Queen("black"));
+            h8.setPiece(new Queen("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(board.isKingInCheck("white"));
         assertTrue(board.isKingInCheck("black"));
         h1.removePiece();
@@ -183,10 +200,14 @@ class BoardTest {
 
     @Test
     public void testInCheckFromRook() {
-        a1.setPiece(new King("white"));
-        a8.setPiece(new King("black"));
-        h1.setPiece(new Rook("black"));
-        h8.setPiece(new Rook("white"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new King("black"));
+            h1.setPiece(new Rook("black"));
+            h8.setPiece(new Rook("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(board.isKingInCheck("white"));
         assertTrue(board.isKingInCheck("black"));
         h1.removePiece();
@@ -199,10 +220,14 @@ class BoardTest {
 
     @Test
     public void testInCheckFromBishop() {
-        a1.setPiece(new King("white"));
-        a8.setPiece(new King("black"));
-        h1.setPiece(new Bishop("white"));
-        h8.setPiece(new Bishop("black"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new King("black"));
+            h1.setPiece(new Bishop("white"));
+            h8.setPiece(new Bishop("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(board.isKingInCheck("white"));
         assertTrue(board.isKingInCheck("black"));
         h8.removePiece();
@@ -215,12 +240,17 @@ class BoardTest {
 
     @Test
     public void testInCheckFromKnight() {
+
         Square b3 = board.getSquare(2,3);
         Square b6 = board.getSquare(2,6);
-        a1.setPiece(new King("white"));
-        a8.setPiece(new King("black"));
-        b6.setPiece(new Knight("white"));
-        b3.setPiece(new Knight("black"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new King("black"));
+            b6.setPiece(new Knight("white"));
+            b3.setPiece(new Knight("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(board.isKingInCheck("white"));
         assertTrue(board.isKingInCheck("black"));
         b3.removePiece();
@@ -235,10 +265,14 @@ class BoardTest {
     public void testInCheckFromPawn() {
         Square b2 = board.getSquare(2,2);
         Square b7 = board.getSquare(2,7);
-        a1.setPiece(new King("white"));
-        a8.setPiece(new King("black"));
-        b7.setPiece(new Pawn("white"));
-        b2.setPiece(new Pawn("black"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new King("black"));
+            b7.setPiece(new Pawn("white"));
+            b2.setPiece(new Pawn("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(board.isKingInCheck("white"));
         assertTrue(board.isKingInCheck("black"));
         b2.removePiece();
@@ -267,11 +301,16 @@ class BoardTest {
 
     @Test
     public void testCheckLegalMove() {
-        a1.setPiece(new King("white"));
-        a8.setPiece(new Queen("black"));
-        h1.setPiece(new Queen("black"));
         Square b1 = board.getSquare(2,1);
-        b1.setPiece(new Queen("white"));
+        try {
+            a1.setPiece(new King("white"));
+            a8.setPiece(new Queen("black"));
+            h1.setPiece(new Queen("black"));
+            b1.setPiece(new Queen("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         assertTrue(board.checkIsLegalMove(a1, board.getSquare(2,2)));
         assertFalse(board.checkIsLegalMove(a1, board.getSquare(1,2)));
         assertFalse(board.checkIsLegalMove(b1, board.getSquare(1,2)));
@@ -280,15 +319,19 @@ class BoardTest {
 
     @Test
     public void testGetLegalMoves() {
-        King king = new King("white");
-        king.setHasMovedTrue();
         Square a1 =board.getSquare(1,1);
         Square b1 = board.getSquare(2,1);
         Square h1 = board.getSquare(8,1);
-        board.getSquare(2,2).setPiece(new Pawn("white"));
-        a1.setPiece(king);
-        b1.setPiece(new Rook("white"));
-        h1.setPiece(new Rook("black"));
+        try {
+            King king = new King("white");
+            king.setHasMovedTrue();
+            board.getSquare(2,2).setPiece(new Pawn("white"));
+            a1.setPiece(king);
+            b1.setPiece(new Rook("white"));
+            h1.setPiece(new Rook("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> fromSquares = new ArrayList<>();
         List<Square> toSquares = new ArrayList<>();
         board.getLegalMoves(fromSquares, toSquares, "white");

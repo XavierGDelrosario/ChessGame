@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -22,34 +23,45 @@ public class SquareTest {
 
     @Test
     public void testSetPiece() {
-        Bishop bishop = new Bishop("black");
-
         assertNull(a1.getPiece());
-        a1.setPiece(bishop);
-        assertEquals(bishop, a1.getPiece());
+        try {
+            Bishop bishop = new Bishop("black");
+            a1.setPiece(bishop);
+            assertEquals(bishop, a1.getPiece());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testSetPieces(){
-        Rook rook = new Rook("black");
-        Queen queen = new Queen("white");
+        try {
+            Rook rook = new Rook("black");
+            Queen queen = new Queen("white");
 
-        a1.setPiece(rook);
-        assertEquals(rook, a1.getPiece());
-        assertEquals(a1, rook.getSquare());
+            a1.setPiece(rook);
+            assertEquals(rook, a1.getPiece());
+            assertEquals(a1, rook.getSquare());
 
-        a1.setPiece(queen);
-        assertEquals(queen, a1.getPiece());
-        assertEquals(a1, queen.getSquare());
+            a1.setPiece(queen);
+            assertEquals(queen, a1.getPiece());
+            assertEquals(a1, queen.getSquare());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testRemovePiece() {
-        Piece rook = new Rook("black");
-        a1.setPiece(rook);
-        assertEquals(rook, a1.getPiece());
-        a1.removePiece();
-        assertNull(a1.getPiece());
+        try {
+            Piece rook = new Rook("black");
+            a1.setPiece(rook);
+            assertEquals(rook, a1.getPiece());
+            a1.removePiece();
+            assertNull(a1.getPiece());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
@@ -78,7 +90,11 @@ public class SquareTest {
 
     @Test
     public void testHasPiece() {
-        a1.setPiece(new Queen("white"));
+        try {
+            a1.setPiece(new Queen("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         assertTrue(a1.containsPiece());
     }
 

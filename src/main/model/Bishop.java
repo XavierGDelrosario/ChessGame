@@ -1,14 +1,15 @@
 package model;
 
+import exceptions.ColorException;
+
 import java.util.ArrayList;
 import java.util.List;
 
 //Represents bishop piece in chess
 public class Bishop extends Queen {
 
-    //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a bishop with given color
-    public Bishop(String color) {
+    //EFFECTS: creates a bishop with given color, throws color exception if not black or white
+    public Bishop(String color) throws ColorException {
         super(color);
         this.name = "bishop";
     }

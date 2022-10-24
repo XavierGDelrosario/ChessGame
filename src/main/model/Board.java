@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -34,35 +35,45 @@ public class Board implements Writable {
     //MODIFIES:squares that will have pieces, and the pieces themselves
     //EFFECTS: places white pieces on their starting square based on chess rules
     private void setupWhitePieces() {
-        this.getSquare(1, 1).setPiece(new Rook("white"));
-        this.getSquare(2, 1).setPiece(new Knight("white"));
-        this.getSquare(3, 1).setPiece(new Bishop("white"));
-        this.getSquare(4, 1).setPiece(new Queen("white"));
-        this.getSquare(5, 1).setPiece(new King("white"));
-        this.getSquare(6, 1).setPiece(new Bishop("white"));
-        this.getSquare(7, 1).setPiece(new Knight("white"));
-        this.getSquare(8, 1).setPiece(new Rook("white"));
-        for (int i = 1; i < 9; i++) {
-            Square square = this.getSquare(i, 2);
-            square.setPiece(new Pawn("white"));
+        try {
+            this.getSquare(1, 1).setPiece(new Rook("white"));
+            this.getSquare(2, 1).setPiece(new Knight("white"));
+            this.getSquare(3, 1).setPiece(new Bishop("white"));
+            this.getSquare(4, 1).setPiece(new Queen("white"));
+            this.getSquare(5, 1).setPiece(new King("white"));
+            this.getSquare(6, 1).setPiece(new Bishop("white"));
+            this.getSquare(7, 1).setPiece(new Knight("white"));
+            this.getSquare(8, 1).setPiece(new Rook("white"));
+            for (int i = 1; i < 9; i++) {
+                Square square = this.getSquare(i, 2);
+                square.setPiece(new Pawn("white"));
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create a piece that is not white or black");
         }
+
     }
 
     //MODIFIES:squares that will have pieces, and the pieces themselves
     //EFFECTS: places black pieces on their starting square based on chess rules
     private void setupBlackPieces() {
-        this.getSquare(1, 8).setPiece(new Rook("black"));
-        this.getSquare(2, 8).setPiece(new Knight("black"));
-        this.getSquare(3, 8).setPiece(new Bishop("black"));
-        this.getSquare(4, 8).setPiece(new Queen("black"));
-        this.getSquare(5, 8).setPiece(new King("black"));
-        this.getSquare(6, 8).setPiece(new Bishop("black"));
-        this.getSquare(7, 8).setPiece(new Knight("black"));
-        this.getSquare(8, 8).setPiece(new Rook("black"));
-        for (int i = 1; i < 9; i++) {
-            Square square = this.getSquare(i, 7);
-            square.setPiece(new Pawn("black"));
+        try {
+            this.getSquare(1, 8).setPiece(new Rook("black"));
+            this.getSquare(2, 8).setPiece(new Knight("black"));
+            this.getSquare(3, 8).setPiece(new Bishop("black"));
+            this.getSquare(4, 8).setPiece(new Queen("black"));
+            this.getSquare(5, 8).setPiece(new King("black"));
+            this.getSquare(6, 8).setPiece(new Bishop("black"));
+            this.getSquare(7, 8).setPiece(new Knight("black"));
+            this.getSquare(8, 8).setPiece(new Rook("black"));
+            for (int i = 1; i < 9; i++) {
+                Square square = this.getSquare(i, 7);
+                square.setPiece(new Pawn("black"));
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create a piece that is not white or black");
         }
+
     }
     //endregion
 
@@ -121,24 +132,29 @@ public class Board implements Writable {
     //MODIFIES:this
     //EFFECTS:copies all piece locations of given board.
     public void copyBoard(Board boardToCopy) {
-        for (int i = 0; i < boardToCopy.squares.size(); i++) {
-            Piece pieceToCopy = boardToCopy.getSquares().get(i).getPiece();
-            if (pieceToCopy != null) {
-                if (pieceToCopy.getName().equals("king")) {
-                    this.squares.get(i).setPiece(new King(pieceToCopy.getColor()));
-                } else if (pieceToCopy.getName().equals("knight")) {
-                    this.squares.get(i).setPiece(new Knight(pieceToCopy.getColor()));
-                } else if (pieceToCopy.getName().equals("bishop")) {
-                    this.squares.get(i).setPiece(new Bishop(pieceToCopy.getColor()));
-                } else if (pieceToCopy.getName().equals("queen")) {
-                    this.squares.get(i).setPiece(new Queen(pieceToCopy.getColor()));
-                } else if (pieceToCopy.getName().equals("rook")) {
-                    this.squares.get(i).setPiece(new Rook(pieceToCopy.getColor()));
-                } else {
-                    this.squares.get(i).setPiece(new Pawn(pieceToCopy.getColor()));
+        try {
+            for (int i = 0; i < boardToCopy.squares.size(); i++) {
+                Piece pieceToCopy = boardToCopy.getSquares().get(i).getPiece();
+                if (pieceToCopy != null) {
+                    if (pieceToCopy.getName().equals("king")) {
+                        this.squares.get(i).setPiece(new King(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("knight")) {
+                        this.squares.get(i).setPiece(new Knight(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("bishop")) {
+                        this.squares.get(i).setPiece(new Bishop(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("queen")) {
+                        this.squares.get(i).setPiece(new Queen(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("rook")) {
+                        this.squares.get(i).setPiece(new Rook(pieceToCopy.getColor()));
+                    } else {
+                        this.squares.get(i).setPiece(new Pawn(pieceToCopy.getColor()));
+                    }
                 }
             }
+        } catch (ColorException e) {
+            System.err.println("Tried to create a piece that is not white or black");
         }
+
     }
 
     //REQUIRES: board != null

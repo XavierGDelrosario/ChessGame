@@ -1,5 +1,6 @@
 package persistence;
 
+import exceptions.ColorException;
 import model.*;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -10,6 +11,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
+// Note: some code based off of JSONReader from JSONSerializationDemo
 // Represents a reader that reads chess game from JSON data stored in file
 public class JsonReader {
     private String source;
@@ -34,7 +36,6 @@ public class JsonReader {
         try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s));
         }
-
         return contentBuilder.toString();
     }
 
@@ -59,7 +60,6 @@ public class JsonReader {
             }
             chessGame.saveBoard(boardToSave);
         }
-
     }
 
     // MODIFIES: board
@@ -70,18 +70,23 @@ public class JsonReader {
         int y = jsonObject.getInt("currentY");
         String color = jsonObject.getString("color");
         Square square = board.getSquare(x, y);
-        if (name.equals("king")) {
-            square.setPiece(new King(color));
-        } else if (name.equals("queen")) {
-            square.setPiece(new Queen(color));
-        } else if (name.equals("knight")) {
-            square.setPiece(new Knight(color));
-        } else if (name.equals("bishop")) {
-            square.setPiece(new Bishop(color));
-        } else if (name.equals("rook")) {
-            square.setPiece(new Rook(color));
-        }  else {
-            square.setPiece(new Pawn(color));
+        try {
+            if (name.equals("king")) {
+                square.setPiece(new King(color));
+            } else if (name.equals("queen")) {
+                square.setPiece(new Queen(color));
+            } else if (name.equals("knight")) {
+                square.setPiece(new Knight(color));
+            } else if (name.equals("bishop")) {
+                square.setPiece(new Bishop(color));
+            } else if (name.equals("rook")) {
+                square.setPiece(new Rook(color));
+            }  else {
+                square.setPiece(new Pawn(color));
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create a piece that is not white or black");
         }
+
     }
 }

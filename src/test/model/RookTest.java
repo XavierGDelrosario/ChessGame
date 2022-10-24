@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,27 +18,35 @@ public class RookTest {
     }
 
     @Test
-    public void testConstructor(){
-        Rook whiteRook = new Rook("white");
-        Rook blackRook = new Rook("black");
+    public void testConstructor() {
+        try {
+            Rook whiteRook = new Rook("white");
+            Rook blackRook = new Rook("black");
 
-        assertEquals("white", whiteRook.getColor());
-        assertNull(whiteRook.getSquare());
-        assertEquals("rook", whiteRook.getName());
-        assertFalse(whiteRook.getHasMoved());
+            assertEquals("white", whiteRook.getColor());
+            assertNull(whiteRook.getSquare());
+            assertEquals("rook", whiteRook.getName());
+            assertFalse(whiteRook.getHasMoved());
 
-        assertEquals("black", blackRook.getColor());
-        assertNull(blackRook.getSquare());
-        assertEquals("rook", blackRook .getName());
-        assertFalse(blackRook.getHasMoved());
+            assertEquals("black", blackRook.getColor());
+            assertNull(blackRook.getSquare());
+            assertEquals("rook", blackRook.getName());
+            assertFalse(blackRook.getHasMoved());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testMovesFromCorner() {
         Square a1 = board.getSquare(1,1);
         Square h8 = board.getSquare(8,8);
-        a1.setPiece(new Rook("white"));
-        h8.setPiece(new Rook("white"));
+        try {
+            a1.setPiece(new Rook("white"));
+            h8.setPiece(new Rook("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
         List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
 
@@ -55,11 +64,15 @@ public class RookTest {
         Square d3 = board.getSquare(4,3);
         Square d8 = board.getSquare(4,8);
         Square g4 = board.getSquare(7,4);
-        b4.setPiece(new Rook("black"));
-        d3.setPiece(new Rook("black"));
-        d8.setPiece(new Rook("black"));
-        g4.setPiece(new Rook("black"));
-        d4.setPiece(new Rook("white"));
+        try {
+            b4.setPiece(new Rook("black"));
+            d3.setPiece(new Rook("black"));
+            d8.setPiece(new Rook("black"));
+            g4.setPiece(new Rook("black"));
+            d4.setPiece(new Rook("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(10, d4PieceSquares.size());
     }
@@ -70,18 +83,26 @@ public class RookTest {
         Square d3 = board.getSquare(4,3);
         Square d5 = board.getSquare(4,5);
         Square e4 = board.getSquare(5,4);
-        c4.setPiece(new Rook("black"));
-        d3.setPiece(new Rook("black"));
-        d5.setPiece(new Rook("black"));
-        e4.setPiece(new Rook("black"));
-        d4.setPiece(new Rook("black"));
+        try {
+            c4.setPiece(new Rook("black"));
+            d3.setPiece(new Rook("black"));
+            d5.setPiece(new Rook("black"));
+            e4.setPiece(new Rook("black"));
+            d4.setPiece(new Rook("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(0, d4PieceSquares.size());
     }
 
     @Test
     public void testChangeHasMoved() {
-        d4.setPiece(new Rook("white"));
+        try {
+            d4.setPiece(new Rook("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         Rook rook = (Rook) d4.getPiece();
         assertFalse(rook.getHasMoved());
         rook.setHasMovedTrue();
@@ -90,13 +111,17 @@ public class RookTest {
 
     @Test
     public void testLegalMoves() {
-        Rook rook = new Rook("white");
-        d4.setPiece(rook);
-        board.getSquare(4,5).setPiece(new Rook("black"));
-        Square d3 = board.getSquare(4,3);
-        d3.setPiece(new King("white"));
-        assertEquals(1, rook.getLegalMoves(board).size());
-        board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(11, rook.getLegalMoves(board).size());
+        try {
+            Rook rook = new Rook("white");
+            d4.setPiece(rook);
+            board.getSquare(4,5).setPiece(new Rook("black"));
+            Square d3 = board.getSquare(4,3);
+            d3.setPiece(new King("white"));
+            assertEquals(1, rook.getLegalMoves(board).size());
+            board.movePiece(d3, board.getSquare(3,3));
+            assertEquals(11, rook.getLegalMoves(board).size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 }

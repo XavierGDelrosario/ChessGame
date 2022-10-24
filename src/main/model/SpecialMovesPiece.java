@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.ColorException;
+
 //Represents a piece that can move differently depending on if it has moved or not
 public abstract class SpecialMovesPiece implements Piece {
     protected boolean hasMoved;
@@ -7,9 +9,11 @@ public abstract class SpecialMovesPiece implements Piece {
     protected String name;
     protected Square square;
 
-    //REQUIRES: color = "white" or "black"
-    //EFFECTS: creates a piece with given color and has not moved
-    public SpecialMovesPiece(String color) {
+    //EFFECTS: creates a piece with given color and has not moved,  throws ColorException if not white or black
+    public SpecialMovesPiece(String color) throws ColorException {
+        if (!color.equals("white") && !color.equals("black")) {
+            throw new ColorException();
+        }
         this.color = color;
         square = null;
         hasMoved = false;

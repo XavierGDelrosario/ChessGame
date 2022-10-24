@@ -8,6 +8,7 @@ import java.io.PrintWriter;
 
 import model.ChessGame;
 
+// Note: code mostly based off of JSONWriter from JSONSerializationDemo
 // Represents a writer that writes JSON representation of a chess game to file
 public class JsonWriter {
     private static final int TAB = 4;
@@ -27,7 +28,7 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: writes JSON representation of a played chess game to file
+    // EFFECTS: writes JSON representation of chess game to file
     public void write(ChessGame chessGame) {
         JSONObject json;
         json = chessGame.toJson();

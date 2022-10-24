@@ -1,5 +1,6 @@
 package ui;
 
+import exceptions.InputException;
 import model.Board;
 import model.ChessGame;
 import model.Square;
@@ -11,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+// Note: code loading and saving mostly based off of JSONSerializationDemo
 //Represents the console user interface
 public class ChessConsoleUI {
     private static final String JSON_STORE = "./data/chessGame.txt";
@@ -25,7 +27,6 @@ public class ChessConsoleUI {
         chessGame = new ChessGame();
         scanner = new Scanner(System.in);
         loadedChessGame = null;
-        System.out.println("Enter c to show list of commands");
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
         runApplication();
@@ -44,7 +45,7 @@ public class ChessConsoleUI {
             if (loadedChessGame != null) {
                 loadPreviousBoard(loadedChessGame);
             } else {
-                System.out.println("Have not loaded a chess game yet");
+                System.err.println("Have not loaded a chess game yet");
             }
         } else if (command.equals("s")) {
             saveChessGame();
@@ -60,14 +61,16 @@ public class ChessConsoleUI {
     //EFFECTS: runs application and asks for user input to perform methods
     private void runApplication() {
         while (true) {
-            System.out.println("Enter command or c to view commands or q to quit");
+            System.out.println("Enter command or c to view commands");
             String command = scanner.nextLine();
             if (command.equals("q")) {
                 break;
             } else if (command.equals("c")) {
                 this.displayCommands();
+            } else {
+                processCommand(command);
             }
-            processCommand(command);
+
         }
     }
 
@@ -87,7 +90,7 @@ public class ChessConsoleUI {
             String fromSquareInput = scanner.nextLine();
             while (fromSquareInput.length() == 1) {
                 processCommand(fromSquareInput);
-                System.out.println("Enter square coordinate with piece to move");
+                System.out.println("Enter square coordinate with piece to move or command");
                 fromSquareInput = scanner.nextLine();
             }
             Square fromSquare = getInputSquare(fromSquareInput);
@@ -103,7 +106,8 @@ public class ChessConsoleUI {
     //EFFECTS: displays board at given turn from user input. If user inputs "return" go back and run game
     private void loadPreviousBoard(ChessGame chessGame) {
         while (true) {
-            System.out.println("Enter the index number of the move played or q");
+            System.out.println("Enter the number of the move played or q");
+            System.out.println(chessGame.getSavedBoards().size() + " moves have been played");
             String input = scanner.nextLine();
             if (input.equals("q")) {
                 runApplication();
@@ -112,13 +116,14 @@ public class ChessConsoleUI {
             try {
                 index = Integer.parseInt(input);
             } catch (NumberFormatException e) {
-                return;
+                System.err.println("Input not an integer or q");
+                loadPreviousBoard(chessGame);
             }
             if (index != 0 && index - 1 < chessGame.getSavedBoards().size() && index - 1 >= 0) {
                 displayBoard(chessGame.getSavedBoards().get(index - 1));
             } else {
-                System.err.println("That number of moves has not been played yet");
-                System.err.println(chessGame.getSavedBoards().size() + " moves have been played");
+                System.err.println("That number of moves has not been played yet, " + chessGame.getSavedBoards().size()
+                        + " moves have been played");
             }
         }
     }
@@ -159,71 +164,72 @@ public class ChessConsoleUI {
     //region GetSquareInput
     //EFFECTS: returns the square represented by input
     private Square getInputSquare(String input) {
-        int inputSquareX = this.getInputSquareX(input);
-        int inputSquareY = this.getInputSquareY(input);
-        Square inputSquare = chessGame.getSquare(inputSquareX, inputSquareY);
-        if (inputSquare == null) {
+        Square inputSquare = null;
+        try {
+            int inputSquareX = this.getInputSquareX(input);
+            int inputSquareY = this.getInputSquareY(input);
+            inputSquare = chessGame.getSquare(inputSquareX, inputSquareY);
+        } catch (InputException e) {
             System.err.println("Invalid square, please enter a valid square");
             String newInput = scanner.nextLine();
-            inputSquare = this.getInputSquare(newInput);
+            getInputSquare(newInput);
         }
         return inputSquare;
     }
 
     //REQUIRES: input represents a square that exists on the board
     //EFFECTS: returns y coordinate of given square
-    private int getInputSquareY(String input) {
-        int squareY = 0;
+    private int getInputSquareY(String input) throws InputException {
         if (input.length() == 2) {
             if (input.endsWith("a") || input.endsWith("1")) {
-                squareY = 1;
+                return 1;
             } else if (input.endsWith("b") || input.endsWith("2")) {
-                squareY = 2;
+                return  2;
             } else if (input.endsWith("c") || input.endsWith("3")) {
-                squareY = 3;
+                return  3;
             } else if (input.endsWith("d") || input.endsWith("4")) {
-                squareY = 4;
+                return  4;
             } else if (input.endsWith("e") || input.endsWith("5")) {
-                squareY = 5;
+                return  5;
             } else if (input.endsWith("f") || input.endsWith("6")) {
-                squareY = 6;
+                return  6;
             } else if (input.endsWith("g") || input.endsWith("7")) {
-                squareY = 7;
+                return  7;
             } else if (input.endsWith("h") || input.endsWith("8")) {
-                squareY = 8;
+                return  8;
             }
         }
-        return squareY;
+        throw new InputException();
     }
 
     //REQUIRES: input represents a square that exists on the board
     //EFFECTS: returns x coordinate of given square
-    private int getInputSquareX(String input) {
+    private int getInputSquareX(String input) throws InputException {
         int squareX = 0;
         if (input.length() == 2) {
             if (input.startsWith("a") || input.startsWith("1")) {
-                squareX = 1;
+                return  1;
             } else if (input.startsWith("b") || input.startsWith("2")) {
-                squareX = 2;
+                return  2;
             } else if (input.startsWith("c") || input.startsWith("3")) {
-                squareX = 3;
+                return  3;
             } else if (input.startsWith("d") || input.startsWith("4")) {
-                squareX = 4;
+                return  4;
             } else if (input.startsWith("e") || input.startsWith("5")) {
-                squareX = 5;
+                return  5;
             } else if (input.startsWith("f") || input.startsWith("6")) {
-                squareX = 6;
+                return  6;
             } else if (input.startsWith("g") || input.startsWith("7")) {
-                squareX = 7;
+                return  7;
             } else if (input.startsWith("h") || input.startsWith("8")) {
-                squareX = 8;
+                return  8;
             }
         }
-        return squareX;
+        throw new InputException();
     }
     //endregion
 
-    // EFFECTS: saves the workroom to file
+    // EFFECTS: saves the chessGame to file
     private void saveChessGame() {
         try {
             jsonWriter.open();

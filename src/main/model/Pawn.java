@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -10,9 +11,8 @@ public class Pawn extends SpecialMovesPiece {
     private boolean canEnPassantLeft;
     private boolean canEnPassantRight;
 
-    //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a pawn with given color
-    public Pawn(String color) {
+    //EFFECTS: creates a pawn with given color,  throws ColorException if not white or black
+    public Pawn(String color) throws ColorException {
         super(color);
         this.name = "pawn";
         canEnPassantRight = false;

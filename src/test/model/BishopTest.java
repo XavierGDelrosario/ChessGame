@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,22 +24,30 @@ public class BishopTest {
 
     @Test
     public void testConstructor(){
-        Bishop whiteBishop = new Bishop("white");
-        Bishop blackBishop = new Bishop("black");
+        try {
+            Bishop whiteBishop = new Bishop("white");
+            Bishop blackBishop = new Bishop("black");
+            assertEquals("white", whiteBishop.getColor());
+            assertNull(whiteBishop.getSquare());
+            assertEquals("bishop", whiteBishop.getName());
 
-        assertEquals("white", whiteBishop.getColor());
-        assertNull(whiteBishop.getSquare());
-        assertEquals("bishop", whiteBishop.getName());
-
-        assertEquals("black", blackBishop.getColor());
-        assertNull(blackBishop.getSquare());
-        assertEquals("bishop", blackBishop.getName());
+            assertEquals("black", blackBishop.getColor());
+            assertNull(blackBishop.getSquare());
+            assertEquals("bishop", blackBishop.getName());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testPossibleMovesFromCorners(){
-        a1.setPiece(new Bishop("white"));
-        h8.setPiece(new Bishop("white"));
+        try {
+            a1.setPiece(new Bishop("white"));
+            h8.setPiece(new Bishop("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
         List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
 
@@ -62,11 +71,16 @@ public class BishopTest {
         Square b2 = board.getSquare(2,2);
         Square c5 = board.getSquare(3,5);
         Square g1 = board.getSquare(7,1);
-        b2.setPiece(new Bishop("white"));
-        c5.setPiece(new Bishop("white"));
-        d4.setPiece(new Bishop("black"));
-        g1.setPiece(new Bishop("white"));
-        h8.setPiece(new Bishop("white"));
+        try {
+            b2.setPiece(new Bishop("white"));
+            c5.setPiece(new Bishop("white"));
+            d4.setPiece(new Bishop("black"));
+            g1.setPiece(new Bishop("white"));
+            h8.setPiece(new Bishop("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
 
         assertEquals(10, d4PieceSquares.size());
@@ -84,24 +98,32 @@ public class BishopTest {
         Square c5 = board.getSquare(3,5);
         Square e3 = board.getSquare(5,3);
         Square e5 = board.getSquare(5,5);
-        c3.setPiece(new Bishop("black"));
-        c5.setPiece(new Bishop("black"));
-        d4.setPiece(new Bishop("black"));
-        e3.setPiece(new Bishop("black"));
-        e5.setPiece(new Bishop("black"));
+        try {
+            c3.setPiece(new Bishop("black"));
+            c5.setPiece(new Bishop("black"));
+            d4.setPiece(new Bishop("black"));
+            e3.setPiece(new Bishop("black"));
+            e5.setPiece(new Bishop("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
         assertEquals(0, d4PieceSquares.size());
     }
 
     @Test
     public void testLegalMoves() {
-        Bishop bishop = new Bishop("white");
-        d4.setPiece(bishop);
-        board.getSquare(4,5).setPiece(new Rook("black"));
-        Square d3 = board.getSquare(4,3);
-        d3.setPiece(new King("white"));
-        assertEquals(0, bishop.getLegalMoves(board).size());
-        board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(10, bishop.getLegalMoves(board).size());
+        try {
+            Bishop bishop = new Bishop("white");
+            d4.setPiece(bishop);
+            board.getSquare(4,5).setPiece(new Rook("black"));
+            Square d3 = board.getSquare(4,3);
+            d3.setPiece(new King("white"));
+            assertEquals(0, bishop.getLegalMoves(board).size());
+            board.movePiece(d3, board.getSquare(3,3));
+            assertEquals(10, bishop.getLegalMoves(board).size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 }

@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -70,11 +71,16 @@ public class ChessGame implements Writable {
     //EFFECTS: if pawn is has y = 8 replace it with a white queen, if y = 1 replace it with a black queen
     private void promote(Pawn pawn) {
         int currentY = pawn.getSquare().getYCoordinate();
-        if (currentY == 1) {
-            pawn.getSquare().setPiece(new Queen("black"));
-        } else if (currentY == 8) {
-            pawn.getSquare().setPiece(new Queen("white"));
+        try {
+            if (currentY == 1) {
+                pawn.getSquare().setPiece(new Queen("black"));
+            } else if (currentY == 8) {
+                pawn.getSquare().setPiece(new Queen("white"));
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create a piece that is not white or black");
         }
+
     }
 
     //MODIFIES: this

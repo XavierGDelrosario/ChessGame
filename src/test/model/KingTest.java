@@ -1,4 +1,5 @@
 package model;
+import exceptions.ColorException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -30,14 +31,6 @@ public class KingTest {
         Square e3 = board1.getSquare(5,3);
         Square e4 = board1.getSquare(5,4);
         Square e5 = board1.getSquare(5,5);
-        c3.setPiece(new King("black"));
-        c4.setPiece(new King("black"));
-        c5.setPiece(new King("black"));
-        d3.setPiece(new King("black"));
-        d5.setPiece(new King("black"));
-        e3.setPiece(new King("black"));
-        e4.setPiece(new King("black"));
-        e5.setPiece(new King("black"));
 
         board2 = new Board();
         a1 = board2.getSquare(1,1);
@@ -45,33 +38,58 @@ public class KingTest {
         e1 = board2.getSquare(5,1);
         g1 = board2.getSquare(7,1);
         h1 = board2.getSquare(8,1);
-        a1.setPiece(new Rook("white"));
-        e1.setPiece(new King("white"));
-        h1.setPiece(new Rook("white"));
+
+        try {
+            c3.setPiece(new King("black"));
+            c4.setPiece(new King("black"));
+            c5.setPiece(new King("black"));
+            d3.setPiece(new King("black"));
+            d5.setPiece(new King("black"));
+            e3.setPiece(new King("black"));
+            e4.setPiece(new King("black"));
+            e5.setPiece(new King("black"));
+
+
+            a1.setPiece(new Rook("white"));
+            e1.setPiece(new King("white"));
+            h1.setPiece(new Rook("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
     }
 
     @Test
     public void testConstructor() {
-        King whiteKing = new King("white");
-        King blackKing = new King("black");
+        try {
+            King whiteKing = new King("white");
+            King blackKing = new King("black");
 
-        assertEquals("white", whiteKing.getColor());
-        assertNull(whiteKing.getSquare());
-        assertEquals("king", whiteKing.getName());
-        assertFalse(whiteKing.getHasMoved());
+            assertEquals("white", whiteKing.getColor());
+            assertNull(whiteKing.getSquare());
+            assertEquals("king", whiteKing.getName());
+            assertFalse(whiteKing.getHasMoved());
 
-        assertEquals("black", blackKing.getColor());
-        assertNull(blackKing.getSquare());
-        assertEquals("king", blackKing.getName());
-        assertFalse(blackKing.getHasMoved());
+            assertEquals("black", blackKing.getColor());
+            assertNull(blackKing.getSquare());
+            assertEquals("king", blackKing.getName());
+            assertFalse(blackKing.getHasMoved());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
     }
 
     @Test
     public void testMovesFromCorner() {
         Square a1 = board1.getSquare(1,1);
         Square h8 = board1.getSquare(8,8);
-        a1.setPiece(new King("white"));
-        h8.setPiece(new King("black"));
+        try {
+            a1.setPiece(new King("white"));
+            h8.setPiece(new King("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board1);
         List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board1);
         assertEquals(3, a1PieceSquares.size());
@@ -80,14 +98,24 @@ public class KingTest {
 
     @Test
     public void testPossibleCaptures() {
-        d4.setPiece(new King("white"));
+        try {
+            d4.setPiece(new King("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
         assertEquals(8, d4PieceSquares.size());
     }
 
     @Test
     public void testPieceBlocked() {
-        d4.setPiece(new King("black"));
+        try {
+            d4.setPiece(new King("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
         assertEquals(0, d4PieceSquares.size());
     }
@@ -95,7 +123,12 @@ public class KingTest {
     //region CastlingTests
     @Test
     public void testCantCastleFromCheck() {
-        board2.getSquare(5,8).setPiece(new Rook("black"));
+        try {
+            board2.getSquare(5,8).setPiece(new Rook("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
         List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
         assertEquals(4, kingLegalMoves.size());
         assertFalse(kingLegalMoves.contains(board2.getSquare(7,1)));
@@ -104,19 +137,24 @@ public class KingTest {
 
     @Test
     public void testCantCastlePastSquareInCheck() {
-        board2.getSquare(6,8).setPiece(new Rook("black"));
-        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertEquals(4, kingLegalMoves.size());
-        assertFalse(kingLegalMoves.contains(g1));
-        assertTrue(kingLegalMoves.contains(c1));
+        try {
+            board2.getSquare(6,8).setPiece(new Rook("black"));
+            List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertEquals(4, kingLegalMoves.size());
+            assertFalse(kingLegalMoves.contains(g1));
+            assertTrue(kingLegalMoves.contains(c1));
 
-        board2.getSquare(2,8).setPiece(new Rook ("black"));
-        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertTrue(kingLegalMoves.contains(c1));
+            board2.getSquare(2,8).setPiece(new Rook ("black"));
+            kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertTrue(kingLegalMoves.contains(c1));
 
-        board2.getSquare(4,8).setPiece(new Rook ("black"));
-        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(c1));
+            board2.getSquare(4,8).setPiece(new Rook ("black"));
+            kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(c1));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
     }
 
     @Test
@@ -141,49 +179,64 @@ public class KingTest {
     @Test
     public void testCantCastleIfBlocked() {
         Square f1 = board2.getSquare(6,1);
-        f1.setPiece(new Bishop("white"));
-        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(g1));
-        assertTrue(kingLegalMoves.contains(c1));
+        try {
+            f1.setPiece(new Bishop("white"));
+            List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(g1));
+            assertTrue(kingLegalMoves.contains(c1));
 
-        f1.removePiece();
-        g1.setPiece(new Knight("white"));
-        board2.getSquare(2,1).setPiece(new Knight ("white"));
-        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(g1));
+            f1.removePiece();
+            g1.setPiece(new Knight("white"));
+            board2.getSquare(2,1).setPiece(new Knight ("white"));
+            kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(g1));
 
-        c1.setPiece(new Bishop("white"));
-        g1.removePiece();
-        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(c1));
-        assertTrue(kingLegalMoves.contains(g1));
+            c1.setPiece(new Bishop("white"));
+            g1.removePiece();
+            kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(c1));
+            assertTrue(kingLegalMoves.contains(g1));
 
-        board2.getSquare(2,1).setPiece(new Knight("white"));
-        c1.removePiece();
-        kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(c1));
-        assertTrue(kingLegalMoves.contains(g1));
+            board2.getSquare(2,1).setPiece(new Knight("white"));
+            c1.removePiece();
+            kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(c1));
+            assertTrue(kingLegalMoves.contains(g1));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
     }
     //endregion
 
     @Test
     public void testChangeHasMoved() {
-        d4.setPiece(new King("white"));
-        King king = (King) d4.getPiece();
-        assertFalse(king.getHasMoved());
-        king.setHasMovedTrue();
-        assertTrue(king.getHasMoved());
+        try {
+            d4.setPiece(new King("white"));
+            King king = (King) d4.getPiece();
+            assertFalse(king.getHasMoved());
+            king.setHasMovedTrue();
+            assertTrue(king.getHasMoved());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
     }
 
     @Test
     public void testWritingKingInfo() {
-        King king = new King("white");
-        board1.getSquare(1,1).setPiece(king);
-        JSONObject jsonQueen= king.toJson();
-        assertEquals("king", jsonQueen.getString("name"));
-        assertEquals("white", jsonQueen.getString("color"));
-        assertEquals(1, jsonQueen.getInt("currentX"));
-        assertEquals(1, jsonQueen.getInt("currentY"));
+        try {
+            King king = new King("white");
+            board1.getSquare(1,1).setPiece(king);
+            JSONObject jsonQueen= king.toJson();
+            assertEquals("king", jsonQueen.getString("name"));
+            assertEquals("white", jsonQueen.getString("color"));
+            assertEquals(1, jsonQueen.getInt("currentX"));
+            assertEquals(1, jsonQueen.getInt("currentY"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
+
 
     }
 }

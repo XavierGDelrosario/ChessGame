@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -11,9 +12,11 @@ public class Knight implements Piece {
     private final String name;
     private Square square;
 
-    //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a knight with given color
-    public Knight(String color) {
+    //EFFECTS: creates a knight with given color, throws ColorException if not white or black
+    public Knight(String color) throws ColorException {
+        if (!color.equals("white") && !color.equals("black")) {
+            throw new ColorException();
+        }
         this.color = color;
         square = null;
         this.name = "knight";

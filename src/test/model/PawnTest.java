@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,28 +26,36 @@ public class PawnTest {
         d7 = board.getSquare(4, 7);
         f2 = board.getSquare(6,2);
         f7 = board.getSquare(6,7);
-        b2.setPiece(new Pawn("white"));
-        b7.setPiece(new Pawn("black"));
-        d2.setPiece(new Pawn("white"));
-        d7.setPiece(new Pawn("black"));
-        f2.setPiece(new Pawn("white"));
-        f7.setPiece(new Pawn("black"));
+        try {
+            b2.setPiece(new Pawn("white"));
+            b7.setPiece(new Pawn("black"));
+            d2.setPiece(new Pawn("white"));
+            d7.setPiece(new Pawn("black"));
+            f2.setPiece(new Pawn("white"));
+            f7.setPiece(new Pawn("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testConstructor(){
-        Pawn whitePawn = new Pawn("white");
-        Pawn blackPawn = new Pawn("black");
+        try {
+            Pawn whitePawn = new Pawn("white");
+            Pawn blackPawn = new Pawn("black");
 
-        assertEquals("white", whitePawn.getColor());
-        assertNull(whitePawn.getSquare());
-        assertEquals("pawn", whitePawn.getName());
-        assertFalse(whitePawn.getHasMoved());
+            assertEquals("white", whitePawn.getColor());
+            assertNull(whitePawn.getSquare());
+            assertEquals("pawn", whitePawn.getName());
+            assertFalse(whitePawn.getHasMoved());
 
-        assertEquals("black", blackPawn.getColor());
-        assertNull(blackPawn.getSquare());
-        assertEquals("pawn", blackPawn.getName());
-        assertFalse(whitePawn.getHasMoved());
+            assertEquals("black", blackPawn.getColor());
+            assertNull(blackPawn.getSquare());
+            assertEquals("pawn", blackPawn.getName());
+            assertFalse(whitePawn.getHasMoved());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
@@ -55,10 +64,14 @@ public class PawnTest {
         Square b6 = board.getSquare(2,6);
         Square d4 = board.getSquare(4,4);
         Square d5 = board.getSquare(4,5);
-        b3.setPiece(new Pawn("black"));
-        d4.setPiece(new Pawn("black"));
-        b6.setPiece(new Pawn("white"));
-        d5.setPiece(new Pawn("white"));
+        try {
+            b3.setPiece(new Pawn("black"));
+            d4.setPiece(new Pawn("black"));
+            b6.setPiece(new Pawn("white"));
+            d5.setPiece(new Pawn("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
         List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
         List<Square> b7PieceSquares = b7.getPiece().getSquaresCanMoveTo(board);
@@ -80,10 +93,14 @@ public class PawnTest {
         Square b6 = board.getSquare(2,6);
         Square d4 = board.getSquare(4,4);
         Square d5 = board.getSquare(4,5);
-        b3.setPiece(new Pawn("black"));
-        d4.setPiece(new Pawn("black"));
-        b6.setPiece(new Pawn("white"));
-        d5.setPiece(new Pawn("white"));
+        try {
+            b3.setPiece(new Pawn("black"));
+            d4.setPiece(new Pawn("black"));
+            b6.setPiece(new Pawn("white"));
+            d5.setPiece(new Pawn("white"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
         List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
         List<Square> b7PieceSquares =b7.getPiece().getSquaresCanMoveTo(board);
@@ -105,10 +122,14 @@ public class PawnTest {
         Square b6 = board.getSquare(2,6);
         Square d4 = board.getSquare(4,4);
         Square d5 = board.getSquare(4,5);
-        b3.setPiece(new Pawn("white"));
-        d4.setPiece(new Pawn("white"));
-        b6.setPiece(new Pawn("black"));
-        d5.setPiece(new Pawn("black"));
+        try {
+            b3.setPiece(new Pawn("white"));
+            d4.setPiece(new Pawn("white"));
+            b6.setPiece(new Pawn("black"));
+            d5.setPiece(new Pawn("black"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
         List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
         List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
         List<Square> b7PieceSquares =b7.getPiece().getSquaresCanMoveTo(board);
@@ -124,47 +145,58 @@ public class PawnTest {
         assertEquals(2, f7PieceSquares.size());
     }
 
-
     @Test
     public void testEnPassant() {
-        Pawn c4Pawn = new Pawn("black");
-        board.getSquare(3,4).setPiece(c4Pawn);
-        board.movePiece(b2,board.getSquare(2,4));
-        c4Pawn.setCanEnPassantLeft(true);
-        c4Pawn.setHasMovedTrue();
-        assertEquals(2, c4Pawn.getSquaresCanMoveTo(board).size());
-        c4Pawn.setCanEnPassantRight(true);
-        assertEquals(3, c4Pawn.getSquaresCanMoveTo(board).size());
-        c4Pawn.setCanEnPassantRight(false);
-        c4Pawn.setCanEnPassantLeft(false);
-        assertEquals(1, c4Pawn.getSquaresCanMoveTo(board).size());
+        try {
+            Pawn c4Pawn = new Pawn("black");
+            board.getSquare(3, 4).setPiece(c4Pawn);
+            board.movePiece(b2, board.getSquare(2, 4));
+            c4Pawn.setCanEnPassantLeft(true);
+            c4Pawn.setHasMovedTrue();
+            assertEquals(2, c4Pawn.getSquaresCanMoveTo(board).size());
+            c4Pawn.setCanEnPassantRight(true);
+            assertEquals(3, c4Pawn.getSquaresCanMoveTo(board).size());
+            c4Pawn.setCanEnPassantRight(false);
+            c4Pawn.setCanEnPassantLeft(false);
+            assertEquals(1, c4Pawn.getSquaresCanMoveTo(board).size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
 
     }
 
     @Test
     public void testLegalMoves() {
-        Pawn pawn = new Pawn("white");
-        board.getSquare(4,4).setPiece(pawn);
-        board.getSquare(4,5).setPiece(new Rook("black"));
-        board.getSquare(5,5).setPiece(new Rook("black"));
-        Square d3 = board.getSquare(4,3);
-        d3.setPiece(new King("white"));
-        assertEquals(0, pawn.getLegalMoves(board).size());
-        board.movePiece(d3, board.getSquare(3,3));
-        assertEquals(1, pawn.getLegalMoves(board).size());
+        try {
+            Pawn pawn = new Pawn("white");
+            board.getSquare(4, 4).setPiece(pawn);
+            board.getSquare(4, 5).setPiece(new Rook("black"));
+            board.getSquare(5, 5).setPiece(new Rook("black"));
+            Square d3 = board.getSquare(4, 3);
+            d3.setPiece(new King("white"));
+            assertEquals(0, pawn.getLegalMoves(board).size());
+            board.movePiece(d3, board.getSquare(3, 3));
+            assertEquals(1, pawn.getLegalMoves(board).size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testCantCaptureOwnPieces() {
-        Pawn pawn = new Pawn("white");
-        board.getSquare(4,4).setPiece(pawn);
-        Square c5 = board.getSquare(3,5);
-        c5.setPiece(new Rook("white"));
-        assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
-        assertFalse(pawn.getLegalMoves(board).contains(c5));
-        pawn.setCanEnPassantLeft(true);
-        assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
-        assertFalse(pawn.getLegalMoves(board).contains(c5));
+        try {
+            Pawn pawn = new Pawn("white");
+            board.getSquare(4, 4).setPiece(pawn);
+            Square c5 = board.getSquare(3, 5);
+            c5.setPiece(new Rook("white"));
+            assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
+            assertFalse(pawn.getLegalMoves(board).contains(c5));
+            pawn.setCanEnPassantLeft(true);
+            assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
+            assertFalse(pawn.getLegalMoves(board).contains(c5));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
 
     }
 
@@ -179,13 +211,17 @@ public class PawnTest {
 
     @Test
     public void testWritingPawnInfo() {
-        Pawn pawn = new Pawn("white");
-        board.getSquare(1,1).setPiece(pawn);
-        JSONObject jsonQueen= pawn.toJson();
-        assertEquals("pawn", jsonQueen.getString("name"));
-        assertEquals("white", jsonQueen.getString("color"));
-        assertEquals(1, jsonQueen.getInt("currentX"));
-        assertEquals(1, jsonQueen.getInt("currentY"));
+        try {
+            Pawn pawn = new Pawn("white");
+            board.getSquare(1, 1).setPiece(pawn);
+            JSONObject jsonQueen = pawn.toJson();
+            assertEquals("pawn", jsonQueen.getString("name"));
+            assertEquals("white", jsonQueen.getString("color"));
+            assertEquals(1, jsonQueen.getInt("currentX"));
+            assertEquals(1, jsonQueen.getInt("currentY"));
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        }
 
     }
 }

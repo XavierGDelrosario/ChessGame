@@ -1,5 +1,6 @@
 package model;
 
+import exceptions.ColorException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -8,9 +9,8 @@ import java.util.List;
 //Represents the king piece in chess
 public class King extends SpecialMovesPiece {
 
-    //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a king with given color
-    public King(String color) {
+    //EFFECTS: creates a king with given color, throws ColorException if not white or black
+    public King(String color) throws ColorException {
         super(color);
         this.name = "king";
     }

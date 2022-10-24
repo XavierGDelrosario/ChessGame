@@ -1,5 +1,7 @@
 package model;
 
+import exceptions.ColorException;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,9 +9,8 @@ import java.util.List;
 public class Rook extends Queen {
     private boolean hasMoved;
 
-    //REQUIRES:color = "white" or "black"
-    //EFFECTS: creates a rook with given color
-    public Rook(String color) {
+    //EFFECTS: creates a rook with given color,  throws ColorException if not white or black
+    public Rook(String color) throws ColorException {
         super(color);
         this.name = "rook";
         hasMoved = false;
