@@ -32,7 +32,8 @@ public class ChessConsoleUI {
         runApplication();
     }
 
-    //EFFECTS: performs corresponding methods depending on user input
+    //EFFECTS: performs corresponding methods depending on user input, prints error if user gives a command that
+    // does not exist
     private void processCommand(String command) {
         if (command.equals("p")) {
             chessGame = new ChessGame();
@@ -58,7 +59,12 @@ public class ChessConsoleUI {
         }
     }
 
-    //EFFECTS: runs application and asks for user input to perform methods
+    //EFFECTS: runs application and asks for user input to perform any of the following functions:
+    //      - save and load game
+    //      - start a new game
+    //      - view played moves
+    //      - quit application
+    //      - showing commands
     private void runApplication() {
         while (true) {
             System.out.println("Enter command or c to view commands");
@@ -75,10 +81,8 @@ public class ChessConsoleUI {
     }
 
     //MODIFIES: chessGame
-    //EFFECTS: runs a playable two-player chess game, gets input from player to perform the following functions:
-    //         -ending the application
-    //         -loading previous moves
-    //         -playing a move
+    //EFFECTS: runs a playable two-player chess game, gets input from player to perform command or play a move,
+    //         -prints an error if move is not legal
     private void runGame() {
         while (true) {
             displayBoard(chessGame.getBoard());
@@ -103,7 +107,9 @@ public class ChessConsoleUI {
         }
     }
 
-    //EFFECTS: displays board at given turn from user input. If user inputs "return" go back and run game
+    //EFFECTS: displays board at given turn from user input,
+    //         if user inputs q ask for a command,
+    //         if user gives input that is not a number in range or not q print an error, then ask for a command again
     private void loadPreviousBoard(ChessGame chessGame) {
         while (true) {
             System.out.println("Enter the number of the move played or q");
@@ -141,7 +147,8 @@ public class ChessConsoleUI {
     }
 
     //REQUIRES: board != null
-    //EFFECTS: displays chess board with pieces in that console, changes orientation depending on player turn
+    //EFFECTS: displays chess board with pieces in that console, player who is playing has their piece starting
+    // locations displayed at the bottom of the board
     private void displayBoard(Board board) {
         List<Square> squares = board.getSquares();
         if (chessGame.getPlayerTurn().equals("black")) {
@@ -162,7 +169,8 @@ public class ChessConsoleUI {
     }
 
     //region GetSquareInput
-    //EFFECTS: returns the square represented by input
+    //EFFECTS: returns the square represented by input, throws InputException if given a square that does not exist then
+    // ask for new input
     private Square getInputSquare(String input) {
         Square inputSquare = null;
         try {

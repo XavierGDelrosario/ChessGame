@@ -59,6 +59,16 @@ public class KnightTest {
     }
 
     @Test
+    public void testException(){
+        try {
+            new Knight("Not A Color");
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            //pass
+        }
+    }
+
+    @Test
     public void testMovesFromCorners() {
         Square a1 = board.getSquare(1,1);
         Square h8 = board.getSquare(8,8);

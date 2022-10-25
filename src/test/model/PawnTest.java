@@ -59,6 +59,16 @@ public class PawnTest {
     }
 
     @Test
+    public void testException(){
+        try {
+            new Pawn("Not A Color");
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            //pass
+        }
+    }
+
+    @Test
     public void testPossibleCaptures() {
         Square b3 = board.getSquare(2,3);
         Square b6 = board.getSquare(2,6);

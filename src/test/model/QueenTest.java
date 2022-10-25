@@ -37,6 +37,16 @@ public class QueenTest {
     }
 
     @Test
+    public void testException(){
+        try {
+            new Queen("Not A Color");
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            //pass
+        }
+    }
+
+    @Test
     public void testMovesFromCorner() {
         Square a1 = board.getSquare(1,1);
         Square h8 = board.getSquare(8,8);

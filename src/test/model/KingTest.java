@@ -81,6 +81,16 @@ public class KingTest {
     }
 
     @Test
+    public void testException(){
+        try {
+            new King("Not A Color");
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            //pass
+        }
+    }
+
+    @Test
     public void testMovesFromCorner() {
         Square a1 = board1.getSquare(1,1);
         Square h8 = board1.getSquare(8,8);

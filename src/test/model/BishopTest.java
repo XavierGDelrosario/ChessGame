@@ -40,6 +40,16 @@ public class BishopTest {
     }
 
     @Test
+    public void testException(){
+        try {
+            new Bishop("Not A Color");
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            //pass
+        }
+    }
+
+    @Test
     public void testPossibleMovesFromCorners(){
         try {
             a1.setPiece(new Bishop("white"));
