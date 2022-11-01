@@ -1,10 +1,12 @@
 package ui;
 
+import exceptions.NullBoardException;
+import model.Board;
 import model.ChessGame;
+import model.Square;
 import persistence.JsonReader;
 import persistence.JsonWriter;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -14,64 +16,143 @@ public class ChessGUI {
     private static final String JSON_STORE = "./data/chessGame.txt";
     private final JsonWriter jsonWriter;
     private final JsonReader jsonReader;
-    private JFrame currentFrame;
+    private ApplicationFrame currentFrame;
     private ChessGame chessGame;
     private ChessGame loadedChessGame;
+    private Label userNotification;
+    private boolean isPlaying;
+    private Square fromSquare;
+    private Square toSquare;
 
     //EFFECTS: creates chess application graphics
     public ChessGUI() {
-        chessGame = new ChessGame();
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
-        currentFrame = new ApplicationFrame(new CommandsPanel(this));
+
+        chessGame = new ChessGame();
+        loadedChessGame = null;
+        userNotification = null;
+        fromSquare = null;
+        toSquare = null;
+        isPlaying = true;
+        currentFrame = new ApplicationFrame(new CommandsPanel(this), this);
         displayCurrentGame();
     }
 
-    //EFFECTS: displays current chess board with command panel
+    //region DisplayingFrames
+    //MODIFIES:this, userNotification
+    //EFFECTS: displays current chess board with command panel and closes previous frame
     public void displayCurrentGame() {
-        JFrame newFrame = new ApplicationFrame(new CommandsPanel(this));
+        isPlaying = true;
+        ApplicationFrame newFrame = new ApplicationFrame(new CommandsPanel(this), this);
         currentFrame.dispose();
         currentFrame = newFrame;
     }
 
-    //EFFECTS: displays current chess board with review panel
+    //MODIFIES:this, userNotification
+    //EFFECTS: displays current chess board with review panel and closes previous frame
     public void displayPreviousMoves() {
-        JFrame newFrame = new ApplicationFrame(new ReviewPanel(this, chessGame.getSavedBoards()));
-        currentFrame.dispose();
-        currentFrame = newFrame;
-    }
-
-    //EFFECTS: displays loaded chess board with review panel
-    public void displayLoadedPreviousMoves() {
-        JFrame newFrame = new ApplicationFrame(new ReviewPanel(this, loadedChessGame.getSavedBoards()));
-        currentFrame.dispose();
-        currentFrame = newFrame;
-    }
-
-    //EFFECTS: displays on given label whether successfully loaded game or not
-    public void loadGame(Label label) {
+        isPlaying = false;
         try {
-            loadedChessGame = jsonReader.read();
-            label.setText("Loaded Chess Game from: " + JSON_STORE);
-        } catch (IOException e) {
-            label.setText("Unable to read file from: " + JSON_STORE);
+            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this, chessGame.getSavedBoards()),
+                    this);
+            currentFrame.dispose();
+            currentFrame = newFrame;
+        } catch (NullBoardException e) {
+            userNotification.setText("ERROR: User has played a move yet, no moves to view");
         }
     }
 
-    //EFFECTS: displays on given label whether successfully saved game or not
-    public void saveGame(Label label) {
+    //MODIFIES:this, userNotification
+    //EFFECTS: displays loaded chess board with review panel
+    public void displayLoadedPreviousMoves() {
+        isPlaying = false;
+        try {
+            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this,
+                    loadedChessGame.getSavedBoards()),
+                    this);
+            currentFrame.dispose();
+            currentFrame = newFrame;
+        } catch (NullPointerException e) {
+            userNotification.setText("ERROR: User has not loaded a board yet");
+        } catch (NullBoardException e) {
+            userNotification.setText("ERROR: User has loaded a board that has not made any moves");
+        }
+
+    }
+    //endregion
+
+    //REQUIRES: fromSquare and toSquare != null
+    //MODIFIES: this, gamePanel, userNotification
+    //EFFECTS: tries to make a move on board, reset the stored move inputs, and display the following messages
+    //          -invalid move
+    //          -which player turn it is
+    //          -how the game ended
+    public void makeMove() {
+        if (isPlaying) {
+            if (!chessGame.movePiece(fromSquare, toSquare)) {
+                userNotification.setText("Invalid move");
+            } else {
+                updateBoard(chessGame.getBoard());
+                userNotification.setText("Player " + chessGame.getPlayerTurn() + " to move");
+            }
+            fromSquare = null;
+            toSquare = null;
+            if (!chessGame.checkIsGameOver().equals(" ")) {
+                userNotification.setText("Game ended by " + chessGame.checkIsGameOver());
+            }
+        }
+    }
+
+    public void updateBoard(Board board) {
+        currentFrame.getGamePanel().drawBoard(board);
+    }
+
+    //MODIFIES: this
+    //EFFECTS: displays on label whether successfully loaded game or not
+    public void loadGame() {
+        try {
+            loadedChessGame = jsonReader.read();
+            userNotification.setText("Loaded Chess Game from: " + JSON_STORE);
+        } catch (IOException e) {
+            userNotification.setText("ERROR: Unable to read file from: " + JSON_STORE);
+        }
+    }
+
+    //EFFECTS: displays on label whether successfully saved game or not
+    public void saveGame() {
         try {
             jsonWriter.open();
             jsonWriter.write(chessGame);
             jsonWriter.close();
-            label.setText("Saved Chess Game to:" + JSON_STORE);
+            userNotification.setText("Saved Chess Game to:" + JSON_STORE);
         } catch (FileNotFoundException e) {
-            label.setText("Unable to write to file: " + JSON_STORE);
+            userNotification.setText("ERROR: Unable to write to file: " + JSON_STORE);
+        }
+    }
+
+    //REQUIRES:square != null
+    //MODIFIES: this
+    //EFFECTS:if fromSquare is null, set it to given square, else set toSquare to given square.
+    public void setInputSquares(Square square) {
+        if (fromSquare == null) {
+            fromSquare = square;
+        } else if (fromSquare != square) {
+            toSquare = square;
+            makeMove();
         }
     }
 
     //EFFECTS: sets current chess game to new chess game
     public void setChessGame() {
         chessGame = new ChessGame();
+    }
+
+    public ChessGame getChessGame() {
+        return chessGame;
+    }
+
+    public void setUserNotification(Label userNotification) {
+        this.userNotification = userNotification;
     }
 }

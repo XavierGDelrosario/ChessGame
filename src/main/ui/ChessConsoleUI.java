@@ -23,7 +23,7 @@ public class ChessConsoleUI {
     private ChessGame loadedChessGame;
 
     //EFFECTS: starts a new chess game in console
-    public ChessConsoleUI() throws FileNotFoundException {
+    public ChessConsoleUI() {
         chessGame = new ChessGame();
         scanner = new Scanner(System.in);
         loadedChessGame = null;
@@ -186,31 +186,6 @@ public class ChessConsoleUI {
     }
 
     //REQUIRES: input represents a square that exists on the board
-    //EFFECTS: returns y coordinate of given square
-    private int getInputSquareY(String input) throws InputException {
-        if (input.length() == 2) {
-            if (input.endsWith("a") || input.endsWith("1")) {
-                return 1;
-            } else if (input.endsWith("b") || input.endsWith("2")) {
-                return  2;
-            } else if (input.endsWith("c") || input.endsWith("3")) {
-                return  3;
-            } else if (input.endsWith("d") || input.endsWith("4")) {
-                return  4;
-            } else if (input.endsWith("e") || input.endsWith("5")) {
-                return  5;
-            } else if (input.endsWith("f") || input.endsWith("6")) {
-                return  6;
-            } else if (input.endsWith("g") || input.endsWith("7")) {
-                return  7;
-            } else if (input.endsWith("h") || input.endsWith("8")) {
-                return  8;
-            }
-        }
-        throw new InputException();
-    }
-
-    //REQUIRES: input represents a square that exists on the board
     //EFFECTS: returns x coordinate of given square
     private int getInputSquareX(String input) throws InputException {
         int squareX = 0;
@@ -235,9 +210,35 @@ public class ChessConsoleUI {
         }
         throw new InputException();
     }
+
+    //REQUIRES: input represents a square that exists on the board
+    //EFFECTS: returns y coordinate of given square
+    private int getInputSquareY(String input) throws InputException {
+        if (input.length() == 2) {
+            if (input.endsWith("a") || input.endsWith("1")) {
+                return 1;
+            } else if (input.endsWith("b") || input.endsWith("2")) {
+                return  2;
+            } else if (input.endsWith("c") || input.endsWith("3")) {
+                return  3;
+            } else if (input.endsWith("d") || input.endsWith("4")) {
+                return  4;
+            } else if (input.endsWith("e") || input.endsWith("5")) {
+                return  5;
+            } else if (input.endsWith("f") || input.endsWith("6")) {
+                return  6;
+            } else if (input.endsWith("g") || input.endsWith("7")) {
+                return  7;
+            } else if (input.endsWith("h") || input.endsWith("8")) {
+                return  8;
+            }
+        }
+        throw new InputException();
+    }
+
     //endregion
 
-    // EFFECTS: saves the chessGame to file
+    // EFFECTS: saves the chessGame to file, throws FileNotFoundException if unable to find file to write to
     private void saveChessGame() {
         try {
             jsonWriter.open();
@@ -250,7 +251,7 @@ public class ChessConsoleUI {
     }
 
     // MODIFIES: this
-    // EFFECTS: loads chessGame from file
+    // EFFECTS: loads chessGame from file, throws IOException if unable to read file
     private void loadChessGame() {
         try {
             loadedChessGame = jsonReader.read();
