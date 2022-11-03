@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -23,11 +24,15 @@ public class Knight implements Piece {
     }
 
     @Override
-    //REQUIRES:board != null, this piece exists on the board
+    //REQUIRES:this piece exists on the board
     //EFFECTS: returns squares 2 units in one direction and 1 unit in the other from this piece's square if square is:
     //        -not occupied by a piece of same color
     //        -on the board. 0<x<9, 0<y<9
-    public List<Square> getSquaresCanMoveTo(Board board) {
+    //        -throws NullBoardException if board == null
+    public List<Square> getSquaresCanMoveTo(Board board) throws NullBoardException {
+        if (board == null) {
+            throw new NullBoardException();
+        }
         List<Square> squares = new ArrayList<>();
         List<Square> squaresToCheck = new ArrayList<>();
         int currentX = this.getSquare().getXCoordinate();
@@ -53,9 +58,10 @@ public class Knight implements Piece {
     }
 
     @Override
-    //REQUIRES: board != null, this piece exists on the board
+    //REQUIRES:this piece exists on the board
     //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
-    public List<Square> getLegalMoves(Board board) {
+    //         -throws caught NullBoardException
+    public List<Square> getLegalMoves(Board board) throws NullBoardException {
         List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {

@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Writable;
@@ -96,24 +97,20 @@ public class Board implements Writable {
     //EFFECTS: returns true if given color's king can be captured by an opponent piece, else false
     public boolean isKingInCheck(String color) {
         List<Piece> pieces;
-        Square kingSquare = null;
-
-        for (Square square : squares) {
-            Piece piece = square.getPiece();
-            if (square.containsPiece() && piece.getName().equals("king") && piece.getColor().equals(color)) {
-                kingSquare = square;
-                break;
-            }
-        }
+        Square kingSquare = getKingSquare(color);
         if (color.equals("white")) {
             pieces = this.getPieces("black");
         } else {
             pieces = this.getPieces("white");
         }
         for (Piece piece : pieces) {
-            List<Square> squares = piece.getSquaresCanMoveTo(this);
-            if (squares.contains(kingSquare)) {
-                return true;
+            try {
+                List<Square> squares = piece.getSquaresCanMoveTo(this);
+                if (squares.contains(kingSquare)) {
+                    return true;
+                }
+            } catch (NullBoardException e) {
+                System.err.println("Passed in board is null");
             }
         }
         return false;
@@ -137,7 +134,7 @@ public class Board implements Writable {
                 Piece pieceToCopy = boardToCopy.getSquares().get(i).getPiece();
                 if (pieceToCopy != null) {
                     if (pieceToCopy.getName().equals("king")) {
-                        this.squares.get(i).setPiece(new King(pieceToCopy.getColor()));
+                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
                     } else if (pieceToCopy.getName().equals("knight")) {
                         this.squares.get(i).setPiece(new Knight(pieceToCopy.getColor()));
                     } else if (pieceToCopy.getName().equals("bishop")) {
@@ -145,9 +142,9 @@ public class Board implements Writable {
                     } else if (pieceToCopy.getName().equals("queen")) {
                         this.squares.get(i).setPiece(new Queen(pieceToCopy.getColor()));
                     } else if (pieceToCopy.getName().equals("rook")) {
-                        this.squares.get(i).setPiece(new Rook(pieceToCopy.getColor()));
+                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
                     } else {
-                        this.squares.get(i).setPiece(new Pawn(pieceToCopy.getColor()));
+                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
                     }
                 }
             }
@@ -157,8 +154,37 @@ public class Board implements Writable {
 
     }
 
+    //REQUIRES:piece = king, rook, or pawn
+    //EFFECTS: returns copy of piece with extra fields to copy: king, rook, pawn keep track if they have moved, pawn
+    // keeps track of left and right en passant
+    private Piece copyPiece(Piece piece) {
+        try {
+            if (piece.getName().equals("pawn")) {
+                Pawn pawn = new Pawn(piece.getColor());
+                Pawn pawnToCopy = (Pawn) piece;
+                pawn.setCanEnPassantLeft(pawnToCopy.getCanEnPassantLeft());
+                pawn.setCanEnPassantRight(pawnToCopy.getCanEnPassantRight());
+                pawn.setHasMoved(pawnToCopy.getHasMoved());
+                return pawn;
+            } else if (piece.getName().equals("rook")) {
+                Rook rook = new Rook(piece.getColor());
+                Rook rookToCopy = (Rook) piece;
+                rook.setHasMoved(rookToCopy.getHasMoved());
+                return rook;
+            } else {
+                King king = new King(piece.getColor());
+                King kingToCopy = (King) piece;
+                king.setHasMoved(kingToCopy.getHasMoved());
+                return king;
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create piece that is not white or black");
+        }
+        return null;
+    }
+
     //REQUIRES: board != null
-    //EFFECTS: returns true if both board and this have the same pieces in the same places
+    //EFFECTS: returns true if both board and this have the same pieces in the same squares
     public boolean isIdentical(Board board) {
         for (int i = 0; i < squares.size(); i++) {
             Piece thisPiece = squares.get(i).getPiece();
@@ -207,8 +233,13 @@ public class Board implements Writable {
     //EFFECTS: adds legal moves to given lists, each fromSquare has the same index as the corresponding toSquare
     public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
         List<Piece> pieces = getPieces(color);
+        List<Square> squares = null;
         for (Piece piece : pieces) {
-            List<Square> squares = piece.getLegalMoves(this);
+            try {
+                squares = piece.getLegalMoves(this);
+            } catch (NullBoardException e) {
+                System.err.println("Passed null board");
+            }
             for (Square square : squares) {
                 fromSquares.add(piece.getSquare());
                 toSquares.add(square);
@@ -227,6 +258,18 @@ public class Board implements Writable {
             }
         }
         return pieces;
+    }
+
+    //REQUIRES:color = "white" or "black"
+    //EFFECTS: returns square that contains king of given color or null if king does not exist
+    private Square getKingSquare(String color) {
+        for (Square square : squares) {
+            Piece piece = square.getPiece();
+            if (square.containsPiece() && piece.getName().equals("king") && piece.getColor().equals(color)) {
+                return square;
+            }
+        }
+        return null;
     }
 
     //EFFECTS:returns square with given coordinates from board, if square is not in board return null

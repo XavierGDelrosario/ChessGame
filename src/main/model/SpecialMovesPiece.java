@@ -25,8 +25,8 @@ public abstract class SpecialMovesPiece implements Piece {
 
     //MODIFIES: this
     //EFFECTS: sets hasMoved to true
-    protected void setHasMovedTrue() {
-        hasMoved = true;
+    public void setHasMoved(boolean b) {
+        hasMoved = b;
     }
 
     @Override

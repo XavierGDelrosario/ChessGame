@@ -72,7 +72,7 @@ public class JsonReader {
         Square square = board.getSquare(x, y);
         try {
             if (name.equals("king")) {
-                square.setPiece(new King(color));
+                square.setPiece(createSpecialPiece("king", color, jsonObject));
             } else if (name.equals("queen")) {
                 square.setPiece(new Queen(color));
             } else if (name.equals("knight")) {
@@ -80,13 +80,38 @@ public class JsonReader {
             } else if (name.equals("bishop")) {
                 square.setPiece(new Bishop(color));
             } else if (name.equals("rook")) {
-                square.setPiece(new Rook(color));
+                square.setPiece(createSpecialPiece("rook", color, jsonObject));
             }  else {
-                square.setPiece(new Pawn(color));
+                square.setPiece(createSpecialPiece("pawn", color, jsonObject));
             }
         } catch (ColorException e) {
             System.err.println("Tried to create a piece that is not white or black");
         }
+    }
 
+    //REQUIRES: piece = king, rook, pawn, jsonObject represents piece
+    //EFFECTS: returns piece with extra fields to copy: king, rook, pawn keep track if they have moved, pawn
+    // keeps track of left and right en passant
+    private Piece createSpecialPiece(String name, String color, JSONObject jsonObject) {
+        try {
+            if (name.equals("pawn")) {
+                Pawn pawn = new Pawn(color);
+                pawn.setCanEnPassantLeft(jsonObject.getBoolean("enPassantLeft"));
+                pawn.setCanEnPassantRight(jsonObject.getBoolean("enPassantRight"));
+                pawn.setHasMoved(jsonObject.getBoolean("moved"));
+                return pawn;
+            } else if (name.equals("rook")) {
+                Rook rook = new Rook(color);
+                rook.setHasMoved(jsonObject.getBoolean("moved"));
+                return rook;
+            } else {
+                King king = new King(color);
+                king.setHasMoved(jsonObject.getBoolean("moved"));
+                return king;
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create piece that is not white or black");
+        }
+        return null;
     }
 }

@@ -10,6 +10,7 @@ import persistence.JsonWriter;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 
 //Represents manager for which graphics to display
 public class ChessGUI {
@@ -50,6 +51,24 @@ public class ChessGUI {
     }
 
     //MODIFIES:this, userNotification
+    //EFFECTS: displays playable version of loaded game
+    public void displayLoadedGame() {
+        if (loadedChessGame != null) {
+            chessGame = loadedChessGame;
+            if (chessGame.getSavedBoards().size() % 2 == 1) {
+                chessGame.changePlayerTurn();
+            }
+            int lastIndex = chessGame.getSavedBoards().size() - 1;
+            Board newCurrentBoard = chessGame.getSavedBoards().get(lastIndex);
+            chessGame.setBoard(newCurrentBoard);
+            updateBoard(newCurrentBoard);
+            displayCurrentGame();
+        } else {
+            userNotification.setText("ERROR: User has not loaded a game yet");
+        }
+    }
+
+    //MODIFIES:this, userNotification
     //EFFECTS: displays current chess board with review panel and closes previous frame
     public void displayPreviousMoves() {
         isPlaying = false;
@@ -74,9 +93,9 @@ public class ChessGUI {
             currentFrame.dispose();
             currentFrame = newFrame;
         } catch (NullPointerException e) {
-            userNotification.setText("ERROR: User has not loaded a board yet");
+            userNotification.setText("ERROR: User has not loaded a game yet");
         } catch (NullBoardException e) {
-            userNotification.setText("ERROR: User has loaded a board that has not made any moves");
+            userNotification.setText("ERROR: User has loaded a game that has not made any moves");
         }
 
     }

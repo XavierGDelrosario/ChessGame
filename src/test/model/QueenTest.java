@@ -1,5 +1,6 @@
 package model;
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -36,8 +37,9 @@ public class QueenTest {
         }
     }
 
+    //region Exceptions
     @Test
-    public void testException(){
+    public void testColorException(){
         try {
             new Queen("Not A Color");
             fail("Expected to throw exception");
@@ -47,19 +49,37 @@ public class QueenTest {
     }
 
     @Test
+    public void testNullBoardException(){
+        try {
+            Piece piece = new Queen("white");
+            piece.getLegalMoves(null);
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        } catch (NullBoardException e) {
+            //pass
+        }
+    }
+    //endregion
+
+    //region Moves
+    @Test
     public void testMovesFromCorner() {
         Square a1 = board.getSquare(1,1);
         Square h8 = board.getSquare(8,8);
         try {
             a1.setPiece(new Queen("white"));
             h8.setPiece(new Queen("white"));
+
+            List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
+            List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
+            assertEquals(20, a1PieceSquares.size());
+            assertEquals(20, h8PieceSquares.size());
         } catch (ColorException e) {
-        fail("Did not expect to catch exception");
-    }
-        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
-        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
-        assertEquals(20, a1PieceSquares.size());
-        assertEquals(20, h8PieceSquares.size());
+        fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
+        }
     }
 
     @Test
@@ -74,18 +94,21 @@ public class QueenTest {
             d4.setPiece(new Queen("black"));
             g1.setPiece(new Queen("white"));
             h8.setPiece(new Queen("white"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
 
-        assertEquals(24, d4PieceSquares.size());
-        assertTrue(d4PieceSquares.contains(board.getSquare(3,3)));
-        assertTrue(d4PieceSquares.contains(c5));
-        assertTrue(d4PieceSquares.contains(g1));
-        assertTrue(d4PieceSquares.contains(b2));
-        assertFalse(d4PieceSquares.contains(board.getSquare(2,6)));
-        assertFalse(d4PieceSquares.contains(board.getSquare(1,1)));
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
+
+            assertEquals(24, d4PieceSquares.size());
+            assertTrue(d4PieceSquares.contains(board.getSquare(3,3)));
+            assertTrue(d4PieceSquares.contains(c5));
+            assertTrue(d4PieceSquares.contains(g1));
+            assertTrue(d4PieceSquares.contains(b2));
+            assertFalse(d4PieceSquares.contains(board.getSquare(2,6)));
+            assertFalse(d4PieceSquares.contains(board.getSquare(1,1)));
+        } catch (ColorException e) {
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
+        }
     }
 
     @Test
@@ -100,11 +123,14 @@ public class QueenTest {
             d8.setPiece(new Queen("black"));
             g4.setPiece(new Queen("black"));
             d4.setPiece(new Queen("white"));
+
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
+            assertEquals(23, d4PieceSquares.size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
-        assertEquals(23, d4PieceSquares.size());
     }
 
     @Test
@@ -128,11 +154,14 @@ public class QueenTest {
             e4.setPiece(new Queen("black"));
             e5.setPiece(new Queen("black"));
             d4.setPiece(new Queen("black"));
+
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
+            assertEquals(0, d4PieceSquares.size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
-        assertEquals(0, d4PieceSquares.size());
     }
 
     @Test
@@ -147,9 +176,12 @@ public class QueenTest {
             board.movePiece(d3, board.getSquare(3, 3));
             assertEquals(21, queen.getLegalMoves(board).size());
         } catch (ColorException e) {
-                fail("Did not expect to catch exception");
-            }
+                fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
+        }
     }
+    //endregion
 
     @Test
     public void testWritingQueenInfo() {

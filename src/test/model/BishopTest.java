@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -39,8 +40,9 @@ public class BishopTest {
         }
     }
 
+    //region Exceptions
     @Test
-    public void testException(){
+    public void testColorException(){
         try {
             new Bishop("Not A Color");
             fail("Expected to throw exception");
@@ -50,30 +52,46 @@ public class BishopTest {
     }
 
     @Test
+    public void testNullBoardException(){
+        try {
+            Piece piece = new Bishop("white");
+            piece.getLegalMoves(null);
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        } catch (NullBoardException e) {
+            //pass
+        }
+    }
+    //endregion
+
+    //region Moves
+    @Test
     public void testPossibleMovesFromCorners(){
         try {
             a1.setPiece(new Bishop("white"));
             h8.setPiece(new Bishop("white"));
+            List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
+            List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
+
+            assertEquals(6, a1PieceSquares.size());
+            assertTrue(a1PieceSquares.contains(board.getSquare(7,7)));
+            assertTrue(a1PieceSquares.contains(board.getSquare(5,5)));
+            assertTrue(a1PieceSquares.contains(board.getSquare(2,2)));
+            assertFalse(a1PieceSquares.contains(a1));
+            assertFalse(a1PieceSquares.contains(h8));
+
+            assertEquals(6, h8PieceSquares.size());
+            assertTrue(h8PieceSquares.contains(board.getSquare(7,7)));
+            assertTrue(h8PieceSquares.contains(board.getSquare(5,5)));
+            assertTrue(h8PieceSquares.contains(board.getSquare(2,2)));
+            assertFalse(h8PieceSquares.contains(a1));
+            assertFalse(h8PieceSquares.contains(h8));
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-
-        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board);
-        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board);
-
-        assertEquals(6, a1PieceSquares.size());
-        assertTrue(a1PieceSquares.contains(board.getSquare(7,7)));
-        assertTrue(a1PieceSquares.contains(board.getSquare(5,5)));
-        assertTrue(a1PieceSquares.contains(board.getSquare(2,2)));
-        assertFalse(a1PieceSquares.contains(a1));
-        assertFalse(a1PieceSquares.contains(h8));
-
-        assertEquals(6, h8PieceSquares.size());
-        assertTrue(h8PieceSquares.contains(board.getSquare(7,7)));
-        assertTrue(h8PieceSquares.contains(board.getSquare(5,5)));
-        assertTrue(h8PieceSquares.contains(board.getSquare(2,2)));
-        assertFalse(h8PieceSquares.contains(a1));
-        assertFalse(h8PieceSquares.contains(h8));
     }
 
     @Test
@@ -87,19 +105,21 @@ public class BishopTest {
             d4.setPiece(new Bishop("black"));
             g1.setPiece(new Bishop("white"));
             h8.setPiece(new Bishop("white"));
+
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
+
+            assertEquals(10, d4PieceSquares.size());
+            assertTrue(d4PieceSquares.contains(board.getSquare(3,3)));
+            assertTrue(d4PieceSquares.contains(c5));
+            assertTrue(d4PieceSquares.contains(g1));
+            assertTrue(d4PieceSquares.contains(b2));
+            assertFalse(d4PieceSquares.contains(board.getSquare(2,6)));
+            assertFalse(d4PieceSquares.contains(a1));
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
-
-        assertEquals(10, d4PieceSquares.size());
-        assertTrue(d4PieceSquares.contains(board.getSquare(3,3)));
-        assertTrue(d4PieceSquares.contains(c5));
-        assertTrue(d4PieceSquares.contains(g1));
-        assertTrue(d4PieceSquares.contains(b2));
-        assertFalse(d4PieceSquares.contains(board.getSquare(2,6)));
-        assertFalse(d4PieceSquares.contains(a1));
     }
 
     @Test
@@ -114,11 +134,13 @@ public class BishopTest {
             d4.setPiece(new Bishop("black"));
             e3.setPiece(new Bishop("black"));
             e5.setPiece(new Bishop("black"));
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
+            assertEquals(0, d4PieceSquares.size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board);
-        assertEquals(0, d4PieceSquares.size());
     }
 
     @Test
@@ -133,7 +155,10 @@ public class BishopTest {
             board.movePiece(d3, board.getSquare(3,3));
             assertEquals(10, bishop.getLegalMoves(board).size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
     }
+    //endregion
 }

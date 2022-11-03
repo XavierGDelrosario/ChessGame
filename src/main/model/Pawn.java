@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -26,6 +27,7 @@ public class Pawn extends SpecialMovesPiece {
     //       - 1 square diagonally(up if white, down if black) and square is occupied by piece of different color or
     //         can perform en passant in that direction
     //       - 2 squares (up if white, down if black) if pawn has not moved and not occupied by a piece
+    //        -throw NullBoardException if board == null
     public List<Square> getSquaresCanMoveTo(Board board) {
         List<Square> squares = new ArrayList<>();
         checkForward(board, squares);
@@ -34,9 +36,14 @@ public class Pawn extends SpecialMovesPiece {
     }
 
     @Override
-    //REQUIRES: board != null, this piece exists on the board
+    //REQUIRES: this piece exists on the board
     //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
-    public List<Square> getLegalMoves(Board board) {
+    //        -throws caught NullBoardException
+
+    public List<Square> getLegalMoves(Board board) throws NullBoardException {
+        if (board == null) {
+            throw new NullBoardException();
+        }
         List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {
@@ -116,7 +123,6 @@ public class Pawn extends SpecialMovesPiece {
         }
     }
 
-
     @Override
     //EFFECTS: returns this as JSONObject
     public JSONObject toJson() {
@@ -125,6 +131,9 @@ public class Pawn extends SpecialMovesPiece {
         json.put("currentX", square.getXCoordinate());
         json.put("currentY", square.getYCoordinate());
         json.put("color", color);
+        json.put("moved", hasMoved);
+        json.put("enPassantRight", canEnPassantRight);
+        json.put("enPassantLeft", canEnPassantLeft);
         return json;
     }
 

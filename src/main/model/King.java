@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -16,11 +17,15 @@ public class King extends SpecialMovesPiece {
     }
 
     @Override
-    //REQUIRES: board != null
+    //REQUIRES: this piece exists on the board
     //EFFECTS: returns all squares adjacent to king if square is:
     //        -not occupied by piece of the same color
     //        -on the board. 0<x<9, 0<y<9
-    public List<Square> getSquaresCanMoveTo(Board board) {
+    //        -throws NullBoardException if board == null
+    public List<Square> getSquaresCanMoveTo(Board board) throws NullBoardException {
+        if (board == null) {
+            throw new NullBoardException();
+        }
         List<Square> squares = new ArrayList<>();
         List<Square> squaresToCheck = new ArrayList<>();
         int currentX = this.getSquare().getXCoordinate();
@@ -45,7 +50,7 @@ public class King extends SpecialMovesPiece {
     }
 
     @Override
-    //REQUIRES: board != null, this piece exists on the boar
+    //REQUIRES: this piece exists on the boar
     //EFFECTS: returns all the squares that:
     //         -this piece can move to and not be in check
     //         -this piece can castle(move) to the square 2 squares to the right or left direction if:
@@ -54,7 +59,8 @@ public class King extends SpecialMovesPiece {
     //               -first square in the direction is a legal move
     //               -king is not in check
     //               -squares between rook and king are empty
-    public List<Square> getLegalMoves(Board board) {
+    //        -throws caught NullBoardException
+    public List<Square> getLegalMoves(Board board) throws NullBoardException {
         List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
         List<Square> legalMoves = new ArrayList<>();
         for (Square square : movesToCheck) {
@@ -106,7 +112,7 @@ public class King extends SpecialMovesPiece {
     private boolean checkCastlingConditions(Board board, List<Square> squaresToCheck) {
         Square rookSquare = squaresToCheck.get(squaresToCheck.size() - 1);
         boolean rookHasMoved = true;
-        if (rookSquare.containsPiece() && rookSquare.getPiece().getName().equals("rook")) {
+        if (rookSquare != null && rookSquare.containsPiece() && rookSquare.getPiece().getName().equals("rook")) {
             Rook rook = (Rook) rookSquare.getPiece();
             rookHasMoved = rook.getHasMoved();
         }
@@ -132,6 +138,7 @@ public class King extends SpecialMovesPiece {
         json.put("currentX", square.getXCoordinate());
         json.put("currentY", square.getYCoordinate());
         json.put("color", color);
+        json.put("moved", hasMoved);
         return json;
     }
 }

@@ -324,7 +324,7 @@ class BoardTest {
         Square h1 = board.getSquare(8,1);
         try {
             King king = new King("white");
-            king.setHasMovedTrue();
+            king.setHasMoved(true);
             board.getSquare(2,2).setPiece(new Pawn("white"));
             a1.setPiece(king);
             b1.setPiece(new Rook("white"));

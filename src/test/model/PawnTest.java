@@ -1,6 +1,7 @@
 package model;
 
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -58,8 +59,9 @@ public class PawnTest {
         }
     }
 
+    //region Exceptions
     @Test
-    public void testException(){
+    public void testColorException(){
         try {
             new Pawn("Not A Color");
             fail("Expected to throw exception");
@@ -68,6 +70,21 @@ public class PawnTest {
         }
     }
 
+    @Test
+    public void testNullBoardException(){
+        try {
+            Piece piece = new Pawn("white");
+            piece.getLegalMoves(null);
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        } catch (NullBoardException e) {
+            //pass
+        }
+    }
+    //endregion
+
+    //region Moves
     @Test
     public void testPossibleCaptures() {
         Square b3 = board.getSquare(2,3);
@@ -79,22 +96,25 @@ public class PawnTest {
             d4.setPiece(new Pawn("black"));
             b6.setPiece(new Pawn("white"));
             d5.setPiece(new Pawn("white"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-        List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> b7PieceSquares = b7.getPiece().getSquaresCanMoveTo(board);
-        List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
-        List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
 
-        assertEquals(0, b2PieceSquares.size());
-        assertEquals(1, d2PieceSquares.size());
-        assertEquals(0, b7PieceSquares.size());
-        assertEquals(1, d7PieceSquares.size());
-        assertEquals(2, f2PieceSquares.size());
-        assertEquals(2, f7PieceSquares.size());
+            List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> b7PieceSquares = b7.getPiece().getSquaresCanMoveTo(board);
+            List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
+            List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
+
+            assertEquals(0, b2PieceSquares.size());
+            assertEquals(1, d2PieceSquares.size());
+            assertEquals(0, b7PieceSquares.size());
+            assertEquals(1, d7PieceSquares.size());
+            assertEquals(2, f2PieceSquares.size());
+            assertEquals(2, f7PieceSquares.size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
+        }
     }
 
     @Test
@@ -108,22 +128,25 @@ public class PawnTest {
             d4.setPiece(new Pawn("black"));
             b6.setPiece(new Pawn("white"));
             d5.setPiece(new Pawn("white"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-        List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> b7PieceSquares =b7.getPiece().getSquaresCanMoveTo(board);
-        List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
-        List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
 
-        assertEquals(0, b2PieceSquares.size());
-        assertEquals(1, d2PieceSquares.size());
-        assertEquals(0, b7PieceSquares.size());
-        assertEquals(1, d7PieceSquares.size());
-        assertEquals(2, f2PieceSquares.size());
-        assertEquals(2, f7PieceSquares.size());
+            List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> b7PieceSquares = b7.getPiece().getSquaresCanMoveTo(board);
+            List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
+            List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
+
+            assertEquals(0, b2PieceSquares.size());
+            assertEquals(1, d2PieceSquares.size());
+            assertEquals(0, b7PieceSquares.size());
+            assertEquals(1, d7PieceSquares.size());
+            assertEquals(2, f2PieceSquares.size());
+            assertEquals(2, f7PieceSquares.size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
+        }
     }
 
     @Test
@@ -137,22 +160,25 @@ public class PawnTest {
             d4.setPiece(new Pawn("white"));
             b6.setPiece(new Pawn("black"));
             d5.setPiece(new Pawn("black"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-        List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> b7PieceSquares =b7.getPiece().getSquaresCanMoveTo(board);
-        List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
-        List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
-        List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
 
-        assertEquals(0, b2PieceSquares.size());
-        assertEquals(1, d2PieceSquares.size());
-        assertEquals(0, b7PieceSquares.size());
-        assertEquals(1, d7PieceSquares.size());
-        assertEquals(2, f2PieceSquares.size());
-        assertEquals(2, f7PieceSquares.size());
+            List<Square> b2PieceSquares = b2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> d2PieceSquares = d2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> b7PieceSquares = b7.getPiece().getSquaresCanMoveTo(board);
+            List<Square> d7PieceSquares = d7.getPiece().getSquaresCanMoveTo(board);
+            List<Square> f2PieceSquares = f2.getPiece().getSquaresCanMoveTo(board);
+            List<Square> f7PieceSquares = f7.getPiece().getSquaresCanMoveTo(board);
+
+            assertEquals(0, b2PieceSquares.size());
+            assertEquals(1, d2PieceSquares.size());
+            assertEquals(0, b7PieceSquares.size());
+            assertEquals(1, d7PieceSquares.size());
+            assertEquals(2, f2PieceSquares.size());
+            assertEquals(2, f7PieceSquares.size());
+        } catch (ColorException e) {
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
+        }
     }
 
     @Test
@@ -162,7 +188,7 @@ public class PawnTest {
             board.getSquare(3, 4).setPiece(c4Pawn);
             board.movePiece(b2, board.getSquare(2, 4));
             c4Pawn.setCanEnPassantLeft(true);
-            c4Pawn.setHasMovedTrue();
+            c4Pawn.setHasMoved(true);
             assertEquals(2, c4Pawn.getSquaresCanMoveTo(board).size());
             c4Pawn.setCanEnPassantRight(true);
             assertEquals(3, c4Pawn.getSquaresCanMoveTo(board).size());
@@ -188,7 +214,9 @@ public class PawnTest {
             board.movePiece(d3, board.getSquare(3, 3));
             assertEquals(1, pawn.getLegalMoves(board).size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
     }
 
@@ -205,16 +233,19 @@ public class PawnTest {
             assertFalse(pawn.getSquaresCanMoveTo(board).contains(c5));
             assertFalse(pawn.getLegalMoves(board).contains(c5));
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
 
     }
+    //endregion
 
     @Test
     public void testChangeHasMoved() {
         Pawn pawn = (Pawn) b2.getPiece();
         assertFalse(pawn.getHasMoved());
-        pawn.setHasMovedTrue();
+        pawn.setHasMoved(true);
         assertTrue(pawn.getHasMoved());
         assertEquals(1, pawn.getSquaresCanMoveTo(board).size());
     }

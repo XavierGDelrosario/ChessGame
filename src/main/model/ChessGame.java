@@ -85,7 +85,7 @@ public class ChessGame implements Writable {
 
     //MODIFIES: this
     //EFFECTS: changes player turn from "white" to "black" and vice versa
-    private void changePlayerTurn() {
+    public void changePlayerTurn() {
         if (playerTurn.equals("white")) {
             playerTurn = "black";
         } else {
@@ -106,14 +106,14 @@ public class ChessGame implements Writable {
         Piece piece = fromSquare.getPiece();
         if (piece.getName().equals("king")) {
             King king = (King) piece;
-            king.setHasMovedTrue();
+            king.setHasMoved(true);
             checkHasCastled(fromSquare, toSquare);
         } else if (piece.getName().equals("rook")) {
             Rook rook = (Rook) piece;
-            rook.setHasMovedTrue();
+            rook.setHasMoved(true);
         } else if (piece.getName().equals("pawn")) {
             Pawn pawn = (Pawn) piece;
-            pawn.setHasMovedTrue();
+            pawn.setHasMoved(true);
             checkEnPassant(fromSquare, toSquare);
             checkPawnMovedTwice(fromSquare, toSquare);
         }
@@ -279,6 +279,10 @@ public class ChessGame implements Writable {
     //EFFECTS: adds board to saved board
     public void saveBoard(Board board) {
         savedBoards.add(board);
+    }
+
+    public void setBoard(Board board) {
+        this.board = board;
     }
 
     //EFFECTS: returns square with given coordinates

@@ -1,5 +1,6 @@
 package model;
 import exceptions.ColorException;
+import exceptions.NullBoardException;
 import org.json.JSONObject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -80,8 +81,9 @@ public class KingTest {
 
     }
 
+    //region Exceptions
     @Test
-    public void testException(){
+    public void testColorException(){
         try {
             new King("Not A Color");
             fail("Expected to throw exception");
@@ -91,46 +93,66 @@ public class KingTest {
     }
 
     @Test
+    public void testNullBoardException(){
+        try {
+            Piece piece = new King("white");
+            piece.getLegalMoves(null);
+            fail("Expected to throw exception");
+        } catch (ColorException e) {
+            fail("Did not expect to catch exception");
+        } catch (NullBoardException e) {
+            //pass
+        }
+    }
+    //endregion
+
+    //region Moves
+    @Test
     public void testMovesFromCorner() {
         Square a1 = board1.getSquare(1,1);
         Square h8 = board1.getSquare(8,8);
         try {
             a1.setPiece(new King("white"));
             h8.setPiece(new King("black"));
+            List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board1);
+            List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board1);
+            assertEquals(3, a1PieceSquares.size());
+            assertEquals(3, h8PieceSquares.size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-        List<Square> a1PieceSquares = a1.getPiece().getSquaresCanMoveTo(board1);
-        List<Square> h8PieceSquares = h8.getPiece().getSquaresCanMoveTo(board1);
-        assertEquals(3, a1PieceSquares.size());
-        assertEquals(3, h8PieceSquares.size());
     }
 
     @Test
     public void testPossibleCaptures() {
         try {
             d4.setPiece(new King("white"));
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
+            assertEquals(8, d4PieceSquares.size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
-        assertEquals(8, d4PieceSquares.size());
     }
 
     @Test
     public void testPieceBlocked() {
         try {
             d4.setPiece(new King("black"));
+            List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
+            assertEquals(0, d4PieceSquares.size());
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
-
-        List<Square> d4PieceSquares = d4.getPiece().getSquaresCanMoveTo(board1);
-        assertEquals(0, d4PieceSquares.size());
     }
+    //endregion
 
-    //region CastlingTests
+    //region Castling
     @Test
     public void testCantCastleFromCheck() {
         try {
@@ -139,10 +161,14 @@ public class KingTest {
             fail("Did not expect to catch exception");
         }
 
-        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertEquals(4, kingLegalMoves.size());
-        assertFalse(kingLegalMoves.contains(board2.getSquare(7,1)));
-        assertFalse(kingLegalMoves.contains(board2.getSquare(3,1)));
+        try {
+            List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertEquals(4, kingLegalMoves.size());
+            assertFalse(kingLegalMoves.contains(board2.getSquare(7, 1)));
+            assertFalse(kingLegalMoves.contains(board2.getSquare(3, 1)));
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
@@ -162,7 +188,9 @@ public class KingTest {
             kingLegalMoves = e1.getPiece().getLegalMoves(board2);
             assertFalse(kingLegalMoves.contains(c1));
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
 
     }
@@ -171,20 +199,28 @@ public class KingTest {
     public void testCantCastleIfRookMoved() {
         Rook rookA1 = (Rook) a1.getPiece();
         Rook rookH1 = (Rook) h1.getPiece();
-        rookA1.setHasMovedTrue();
-        rookH1.setHasMovedTrue();
-        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(g1));
-        assertFalse(kingLegalMoves.contains(c1));
+        rookA1.setHasMoved(true);
+        rookH1.setHasMoved(true);
+        try {
+            List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(g1));
+            assertFalse(kingLegalMoves.contains(c1));
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch exception");
+        }
     }
 
     @Test
     public void testCantCastleIfKingMoved() {
         King king = (King) e1.getPiece();
-        king.setHasMovedTrue();
-        List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
-        assertFalse(kingLegalMoves.contains(g1));
-        assertFalse(kingLegalMoves.contains(c1));
+        king.setHasMoved(true);
+        try {
+            List<Square> kingLegalMoves = e1.getPiece().getLegalMoves(board2);
+            assertFalse(kingLegalMoves.contains(g1));
+            assertFalse(kingLegalMoves.contains(c1));
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch exception");
+        }
     }
     @Test
     public void testCantCastleIfBlocked() {
@@ -213,7 +249,9 @@ public class KingTest {
             assertFalse(kingLegalMoves.contains(c1));
             assertTrue(kingLegalMoves.contains(g1));
         } catch (ColorException e) {
-            fail("Did not expect to catch exception");
+            fail("Did not expect to catch ColorException");
+        } catch (NullBoardException e) {
+            fail("Did not expect to catch NullBoardException");
         }
 
     }
@@ -225,7 +263,7 @@ public class KingTest {
             d4.setPiece(new King("white"));
             King king = (King) d4.getPiece();
             assertFalse(king.getHasMoved());
-            king.setHasMovedTrue();
+            king.setHasMoved(true);
             assertTrue(king.getHasMoved());
         } catch (ColorException e) {
             fail("Did not expect to catch exception");

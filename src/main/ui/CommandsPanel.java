@@ -1,5 +1,7 @@
 package ui;
 
+import model.ChessGame;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -25,9 +27,11 @@ public class CommandsPanel extends JPanel implements ActionListener {
         gui.setUserNotification(label);
         add(panel);
 
+        createButton("Start new game", "start");
         createButton("View current game moves", "viewCurrent");
         createButton("Save game", "save");
-        createButton("Start new game", "start");
+
+        createButton("Resume game", "resume");
         createButton("View loaded game moves", "viewLoaded");
         createButton("Load game", "load");
 
@@ -62,6 +66,8 @@ public class CommandsPanel extends JPanel implements ActionListener {
             gui.displayLoadedPreviousMoves();
         } else if (e.getActionCommand().equals("load")) {
             gui.loadGame();
+        } else if (e.getActionCommand().equals("resume")) {
+            gui.displayLoadedGame();
         }
     }
 }
