@@ -54,6 +54,7 @@ closer to the center as long as the following conditions are met:
 - As a user I want to be able to start and end multiple chess games from main.
 - As a user I want to be able to draw the game by stalemate.
 
+
 # Instructions for Grader
 - You can generate the first required event related to adding a boards to saved boards by clicking on the square with 
   your piece and a square it can move to.
