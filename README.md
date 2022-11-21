@@ -53,3 +53,14 @@ closer to the center as long as the following conditions are met:
 - As a user I want to be able to win the game by checkmate
 - As a user I want to be able to start and end multiple chess games from main.
 - As a user I want to be able to draw the game by stalemate.
+
+# Instructions for Grader
+- You can generate the first required event related to adding a boards to saved boards by clicking on the square with 
+  your piece and a square it can move to.
+- You can generate the second required event related to adding a boards to saved boards by clicking the button
+  "View current game moves" and then enter the number of the move played.
+- You can locate my visual component in the center of the application.
+- You can save the state of my application by clicking "Save game" in the "playing" JFrame (the first JFrame that pops 
+  up when starting application).
+- You can reload the state of my application by clicking "Load game" in the "playing" JFrame (the first 
+  JFrame that pops up when starting application).
