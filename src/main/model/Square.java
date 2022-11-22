@@ -5,6 +5,7 @@ public class Square {
     private final int positionX;
     private final int positionY;
     private Piece piece;
+    private String name;
 
     //REQUIRES: 0<x<9 and 0<y<9
     //EFFECTS:Creates an empty square with given coordinates
@@ -12,6 +13,7 @@ public class Square {
         positionX = x;
         positionY = y;
         piece = null;
+        initializeName();
     }
 
     //MODIFIES:this
@@ -22,7 +24,7 @@ public class Square {
 
     //EFFECTS: returns the icon of a piece. Icon is first letter of the piece name (except knight which
     // is changed to n). Capitalize if piece is black. Return " " if no piece.
-    public String getIcon() {
+    public String getPieceInitial() {
         String icon = " ";
         if (piece != null) {
             if (piece.getName().equals("king")) {
@@ -70,5 +72,30 @@ public class Square {
 
     public Piece getPiece() {
         return piece;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    //EFFECTS: sets name to chess notation, 1,1 = a1, 4,1= d1, 8,1 = h1 etc
+    private void initializeName() {
+        if (positionX == 1) {
+            name = "a" + positionY;
+        } else if (positionX == 2) {
+            name = "a" + positionY;
+        } else if (positionX == 3) {
+            name = "a" + positionY;
+        } else if (positionX == 4) {
+            name = "a" + positionY;
+        } else if (positionX == 5) {
+            name = "a" + positionY;
+        } else if (positionX == 6) {
+            name = "a" + positionY;
+        } else if (positionX == 7) {
+            name = "a" + positionY;
+        } else if (positionX == 8) {
+            name = "a" + positionY;
+        }
     }
 }

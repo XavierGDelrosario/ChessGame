@@ -10,7 +10,6 @@ import persistence.JsonWriter;
 import java.awt.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.ArrayList;
 
 //Represents manager for which graphics to display
 public class ChessGUI {
@@ -68,28 +67,29 @@ public class ChessGUI {
         }
     }
 
+
     //MODIFIES:this, userNotification
     //EFFECTS: displays current chess board with review panel and closes previous frame
     public void displayPreviousMoves() {
-        isPlaying = false;
         try {
             ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this, chessGame.getSavedBoards()),
                     this);
+            isPlaying = false;
             currentFrame.dispose();
             currentFrame = newFrame;
         } catch (NullBoardException e) {
-            userNotification.setText("ERROR: User has played a move yet, no moves to view");
+            userNotification.setText("ERROR: User has not played a move yet, no moves to view");
         }
     }
 
     //MODIFIES:this, userNotification
     //EFFECTS: displays loaded chess board with review panel
     public void displayLoadedPreviousMoves() {
-        isPlaying = false;
         try {
             ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this,
                     loadedChessGame.getSavedBoards()),
                     this);
+            isPlaying = false;
             currentFrame.dispose();
             currentFrame = newFrame;
         } catch (NullPointerException e) {
@@ -108,18 +108,23 @@ public class ChessGUI {
     //          -which player turn it is
     //          -how the game ended
     public void makeMove() {
-        if (isPlaying) {
+        if (isPlaying && !chessGame.checkIsGameOver()) {
             if (!chessGame.movePiece(fromSquare, toSquare)) {
-                userNotification.setText("Invalid move");
+                userNotification.setText("Invalid Move: Player " + chessGame.getPlayerTurn() + " to move");
             } else {
                 updateBoard(chessGame.getBoard());
                 userNotification.setText("Player " + chessGame.getPlayerTurn() + " to move");
             }
             fromSquare = null;
             toSquare = null;
-            if (!chessGame.checkIsGameOver().equals(" ")) {
-                userNotification.setText("Game ended by " + chessGame.checkIsGameOver());
+
+            String gameOverString = chessGame.getGameOverString();
+            if (!gameOverString.equals(" ")) {
+                userNotification.setText("Game ended by " + gameOverString);
             }
+        } else {
+            String gameOverString = chessGame.getGameOverString();
+            userNotification.setText("Game ended by " + gameOverString);
         }
     }
 

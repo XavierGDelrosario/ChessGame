@@ -65,3 +65,7 @@ closer to the center as long as the following conditions are met:
   up when starting application).
 - You can reload the state of my application by clicking "Load game" in the "playing" JFrame (the first 
   JFrame that pops up when starting application).
+
+# Phase 4 Task 2
+
+# Phase 4 Task 3

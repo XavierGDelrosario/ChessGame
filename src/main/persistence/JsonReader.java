@@ -36,6 +36,7 @@ public class JsonReader {
         try (Stream<String> stream = Files.lines(Paths.get(source), StandardCharsets.UTF_8)) {
             stream.forEach(s -> contentBuilder.append(s));
         }
+        EventLog.getInstance().logEvent(new Event("User loaded a chess game"));
         return contentBuilder.toString();
     }
 

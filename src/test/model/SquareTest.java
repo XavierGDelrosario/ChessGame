@@ -68,19 +68,19 @@ public class SquareTest {
     public void testIcons() {
         Board board = new Board();
         board.setupBoard();
-        assertTrue(board.getSquare(1,1).getIcon().equals("r"));
-        assertTrue(board.getSquare(2,1).getIcon().equals("n"));
-        assertTrue(board.getSquare(3,1).getIcon().equals("b"));
-        assertTrue(board.getSquare(4,1).getIcon().equals("q"));
-        assertTrue(board.getSquare(5,1).getIcon().equals("k"));
-        assertTrue(board.getSquare(1,2).getIcon().equals("p"));
-        assertTrue(board.getSquare(1,8).getIcon().equals("R"));
-        assertTrue(board.getSquare(2,8).getIcon().equals("N"));
-        assertTrue(board.getSquare(3,8).getIcon().equals("B"));
-        assertTrue(board.getSquare(4,8).getIcon().equals("Q"));
-        assertTrue(board.getSquare(5,8).getIcon().equals("K"));
-        assertTrue(board.getSquare(1,7).getIcon().equals("P"));
-        assertTrue(board.getSquare(1,5).getIcon().equals(" "));
+        assertTrue(board.getSquare(1,1).getPieceInitial().equals("r"));
+        assertTrue(board.getSquare(2,1).getPieceInitial().equals("n"));
+        assertTrue(board.getSquare(3,1).getPieceInitial().equals("b"));
+        assertTrue(board.getSquare(4,1).getPieceInitial().equals("q"));
+        assertTrue(board.getSquare(5,1).getPieceInitial().equals("k"));
+        assertTrue(board.getSquare(1,2).getPieceInitial().equals("p"));
+        assertTrue(board.getSquare(1,8).getPieceInitial().equals("R"));
+        assertTrue(board.getSquare(2,8).getPieceInitial().equals("N"));
+        assertTrue(board.getSquare(3,8).getPieceInitial().equals("B"));
+        assertTrue(board.getSquare(4,8).getPieceInitial().equals("Q"));
+        assertTrue(board.getSquare(5,8).getPieceInitial().equals("K"));
+        assertTrue(board.getSquare(1,7).getPieceInitial().equals("P"));
+        assertTrue(board.getSquare(1,5).getPieceInitial().equals(" "));
     }
 
     @Test

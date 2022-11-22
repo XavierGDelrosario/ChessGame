@@ -1,7 +1,14 @@
 package ui;
 
+import model.Event;
+import model.EventLog;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
+import java.util.Iterator;
 
 //Represents frame that contains panels for chess application
 public class ApplicationFrame extends JFrame {
@@ -32,6 +39,30 @@ public class ApplicationFrame extends JFrame {
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
+
+        setCloseFunctions();
+    }
+
+    //Note: borrowed from @1566 piazza
+    //EFFECTS: Sets the method to run when application is closed
+    private void setCloseFunctions() {
+        this.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        WindowListener exitListener = new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                displayEventLog();
+                System.exit(0);
+            }
+        };
+        this.addWindowListener(exitListener);
+    }
+
+    public void displayEventLog() {
+        Iterator<Event> iterator = EventLog.getInstance().iterator();
+        while (iterator.hasNext()) {
+            Event event = iterator.next();
+            System.out.println(event.toString());
+        }
     }
 
     public GamePanel getGamePanel() {

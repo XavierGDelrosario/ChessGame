@@ -157,7 +157,7 @@ public class ChessGameTest {
         } catch (ColorException e) {
             fail("Did not expect to catch exception");
         }
-        assertEquals("checkmate", chessGame.checkIsGameOver());
+        assertEquals("checkmate", chessGame.getGameOverString());
     }
 
     @Test
@@ -172,7 +172,7 @@ public class ChessGameTest {
         } catch (ColorException e) {
             fail("Did not expect to catch exception");
         }
-        assertEquals("draw by stalemate", chessGame.checkIsGameOver());
+        assertEquals("draw by stalemate", chessGame.getGameOverString());
     }
 
     @Test
@@ -191,7 +191,7 @@ public class ChessGameTest {
             fail("Did not expect to catch exception");
         }
 
-        assertEquals("draw by insufficient material", chessGame.checkIsGameOver());
+        assertEquals("draw by insufficient material", chessGame.getGameOverString());
     }
 
     @Test
@@ -210,7 +210,7 @@ public class ChessGameTest {
             fail("Did not expect to catch exception");
         }
 
-        assertEquals(" ", chessGame.checkIsGameOver());
+        assertEquals(" ", chessGame.getGameOverString());
     }
 
     @Test
@@ -221,22 +221,22 @@ public class ChessGameTest {
         Square e8 = board.getSquare(5,8);
         chessGame.movePiece(e2, board.getSquare(5,4));
         chessGame.movePiece(e7, board.getSquare(5,5));
-        assertEquals(" ", chessGame.checkIsGameOver());
+        assertEquals(" ", chessGame.getGameOverString());
         chessGame.movePiece(e1, e2);
         chessGame.movePiece(e8, e7);
-        assertEquals(" ", chessGame.checkIsGameOver());
+        assertEquals(" ", chessGame.getGameOverString());
         chessGame.movePiece(e2, e1);
         chessGame.movePiece(e7, e8);
-        assertEquals(" ", chessGame.checkIsGameOver());
+        assertEquals(" ", chessGame.getGameOverString());
         chessGame.movePiece(e1, e2);
         chessGame.movePiece(e8, e7);
-        assertEquals(" ", chessGame.checkIsGameOver());
+        assertEquals(" ", chessGame.getGameOverString());
         chessGame.movePiece(e2, e1);
-        assertEquals(" ", chessGame.checkIsGameOver());
+        assertEquals(" ", chessGame.getGameOverString());
         chessGame.movePiece(e7, e8);
-        assertEquals("draw by repetition", chessGame.checkIsGameOver());
+        assertEquals("draw by repetition", chessGame.getGameOverString());
         chessGame.movePiece(e2, e1);
-        assertEquals("draw by repetition", chessGame.checkIsGameOver());
+        assertEquals("draw by repetition", chessGame.getGameOverString());
     }
 
 }

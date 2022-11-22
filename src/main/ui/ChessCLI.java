@@ -14,7 +14,7 @@ import java.util.Scanner;
 
 // Note: code loading and saving mostly based off of JSONSerializationDemo
 //Represents the console user interface
-public class ChessConsoleUI {
+public class ChessCLI {
     private static final String JSON_STORE = "./data/chessGame.txt";
     private final Scanner scanner;
     private final JsonWriter jsonWriter;
@@ -23,7 +23,7 @@ public class ChessConsoleUI {
     private ChessGame loadedChessGame;
 
     //EFFECTS: starts a new chess game in console
-    public ChessConsoleUI() {
+    public ChessCLI() {
         chessGame = new ChessGame();
         scanner = new Scanner(System.in);
         loadedChessGame = null;
@@ -86,8 +86,8 @@ public class ChessConsoleUI {
     private void runGame() {
         while (true) {
             displayBoard(chessGame.getBoard());
-            if (!chessGame.checkIsGameOver().equals(" ")) {
-                System.out.println("Game ended by " + chessGame.checkIsGameOver());
+            if (!chessGame.getGameOverString().equals(" ")) {
+                System.out.println("Game ended by " + chessGame.getGameOverString());
                 break;
             }
             System.out.println("Enter square coordinate with piece to move or command");
@@ -153,17 +153,19 @@ public class ChessConsoleUI {
         List<Square> squares = board.getSquares();
         if (chessGame.getPlayerTurn().equals("black")) {
             for (int i = 0; i < 8; i++) {
-                System.out.println("|" + squares.get(i + 56).getIcon() + "|" + squares.get(i + 48).getIcon() + "|"
-                        + squares.get(i + 40).getIcon() + "|" + squares.get(i + 32).getIcon() + "|"
-                        + squares.get(i + 24).getIcon() + "|" + squares.get(i + 16).getIcon() + "|"
-                        + squares.get(i + 8).getIcon() + "|" + squares.get(i).getIcon() + "|");
+                System.out.println("|" + squares.get(i + 56).getPieceInitial() + "|"
+                        + squares.get(i + 48).getPieceInitial() + "|"
+                        + squares.get(i + 40).getPieceInitial() + "|" + squares.get(i + 32).getPieceInitial() + "|"
+                        + squares.get(i + 24).getPieceInitial() + "|" + squares.get(i + 16).getPieceInitial() + "|"
+                        + squares.get(i + 8).getPieceInitial() + "|" + squares.get(i).getPieceInitial() + "|");
             }
         } else {
             for (int i = 63; i > 55; i--) {
-                System.out.println("|" + squares.get(i - 56).getIcon() + "|" + squares.get(i - 48).getIcon() + "|"
-                        + squares.get(i - 40).getIcon() + "|" + squares.get(i - 32).getIcon()
-                        + "|" + squares.get(i - 24).getIcon() + "|" + squares.get(i - 16).getIcon()
-                        + "|" + squares.get(i - 8).getIcon() + "|" + squares.get(i).getIcon() + "|");
+                System.out.println("|" + squares.get(i - 56).getPieceInitial() + "|"
+                        + squares.get(i - 48).getPieceInitial() + "|"
+                        + squares.get(i - 40).getPieceInitial() + "|" + squares.get(i - 32).getPieceInitial()
+                        + "|" + squares.get(i - 24).getPieceInitial() + "|" + squares.get(i - 16).getPieceInitial()
+                        + "|" + squares.get(i - 8).getPieceInitial() + "|" + squares.get(i).getPieceInitial() + "|");
             }
         }
     }

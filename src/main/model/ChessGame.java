@@ -13,6 +13,7 @@ public class ChessGame implements Writable {
     private Board board;
     private List<Board> savedBoards;
     private String playerTurn;
+    private boolean isOver;
 
     //EFFECTS: creates a chess game
     public ChessGame() {
@@ -184,22 +185,31 @@ public class ChessGame implements Writable {
     //endregion
 
     //region CheckIsOver
+    //EFFECTS: returns true if game has ended else false
+    public boolean checkIsGameOver() {
+        return isInsufficientMaterial() || isStalemate() || isDrawByRepetition() || isCheckMate();
+    }
+
     //EFFECTS: returns " " if game has not ended or if the game is over
     //          -checkmate
     //          -draw by repetition
     //          -draw by insufficient material
     //          -draw by stalemate
-    public String checkIsGameOver() {
+    public String getGameOverString() {
+        String result = " ";
         if (isCheckMate()) {
-            return "checkmate";
+            result = "checkmate";
         } else if (isStalemate()) {
-            return "draw by stalemate";
+            result = "draw by stalemate";
         } else if (isDrawByRepetition()) {
-            return "draw by repetition";
+            result = "draw by repetition";
         } else if (isInsufficientMaterial()) {
-            return "draw by insufficient material";
+            result = "draw by insufficient material";
+        } else {
+            return result;
         }
-        return " ";
+        EventLog.getInstance().logEvent(new Event("Game ended by " + result));
+        return result;
     }
 
     //EFFECTS: returns true if player currently playing has their king in check and has no legal moves, else false
