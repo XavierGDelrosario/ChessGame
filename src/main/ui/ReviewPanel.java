@@ -2,6 +2,7 @@ package ui;
 
 import exceptions.NullBoardException;
 import model.Board;
+import model.ChessGame;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,23 +14,23 @@ import java.util.List;
 //Represents panel that allows user to input commands to view previously played moves
 public class ReviewPanel extends JPanel implements ActionListener {
     private static final Color backgroundColor = new Color(255, 239, 195);
-    private final List<Board> savedBoards;
     private final JTextField field;
     private final Label userNotification;
     private final ChessGUI gui;
+    private final ChessGame chessGame;
 
 
     //EFFECTS: constructs panel with user interface to allow user to enter a played move
-    public ReviewPanel(ChessGUI gui, List<Board> savedBoards) throws NullBoardException {
-        this.savedBoards = savedBoards;
-        if (savedBoards.size() == 0) {
+    public ReviewPanel(ChessGUI gui, ChessGame chessGame) throws NullBoardException {
+        this.chessGame = chessGame;
+        if (chessGame.getSavedBoardsSize() == 0) {
             throw new NullBoardException();
         }
         this.gui = gui;
         setLayout(new GridBagLayout());
         setBackground(backgroundColor);
 
-        userNotification = new Label(savedBoards.size() + " moves played");
+        userNotification = new Label(chessGame.getSavedBoardsSize() + " moves played");
         Label label = new Label("Enter move number");
         gui.setUserNotification(userNotification);
         field = new JTextField(5);
@@ -74,12 +75,12 @@ public class ReviewPanel extends JPanel implements ActionListener {
         } else if (e.getActionCommand().equals("enter")) {
             try {
                 int index = Integer.parseInt(field.getText());
-                gui.updateBoard(savedBoards.get(index - 1));
-                userNotification.setText(savedBoards.size() + " moves played");
+                gui.updateBoard(chessGame.getSavedBoard(index - 1));
+                userNotification.setText(chessGame.getSavedBoardsSize() + " moves played");
             } catch (NumberFormatException exception) {
-                userNotification.setText("Invalid user input:" + savedBoards.size() + " moves played");
+                userNotification.setText("Invalid user input:" + chessGame.getSavedBoardsSize() + " moves played");
             } catch (IndexOutOfBoundsException exception) {
-                userNotification.setText("Invalid number of move:" + savedBoards.size()
+                userNotification.setText("Invalid number of move:" + chessGame.getSavedBoardsSize()
                         + " moves played");
             }
 

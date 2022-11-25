@@ -76,7 +76,6 @@ public class ChessCLI {
             } else {
                 processCommand(command);
             }
-
         }
     }
 

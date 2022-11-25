@@ -13,7 +13,6 @@ public class ChessGame implements Writable {
     private Board board;
     private List<Board> savedBoards;
     private String playerTurn;
-    private boolean isOver;
 
     //EFFECTS: creates a chess game
     public ChessGame() {
@@ -29,7 +28,7 @@ public class ChessGame implements Writable {
     //EFFECTS: return true if legal, else false. Make move if legal, move is legal if:
     //          -piece that is moving is the same color as the player turn
     //          -piece can move to that square
-    //      if made move end turn
+    //      if made move end turn, log this event
     public boolean movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
         if (fromSquare.containsPiece() && piece.getColor().equals(playerTurn)) {
@@ -41,10 +40,12 @@ public class ChessGame implements Writable {
                     checkSpecialMoves(fromSquare, toSquare);
                     board.movePiece(fromSquare, toSquare);
                     endTurn();
+                    logValidMove(fromSquare, toSquare);
                     return true;
                 }
             }
         }
+        logInvalidMove(fromSquare, toSquare);
         return false;
     }
 
@@ -94,6 +95,18 @@ public class ChessGame implements Writable {
         }
     }
     //endregion
+
+    //EFFECTS: Logs an event that the player made an invalid move
+    private void logInvalidMove(Square fromSquare, Square toSquare) {
+        EventLog.getInstance().logEvent(new Event("Player " + playerTurn + " attempted move "
+                + fromSquare.getName() + " to " + toSquare.getName()));
+    }
+
+    //EFFECTS: Logs an event that the player made a move
+    private void logValidMove(Square fromSquare, Square toSquare) {
+        EventLog.getInstance().logEvent(new Event("Player " + playerTurn + " made move "
+                + fromSquare.getName() + " to " + toSquare.getName()));
+    }
 
     //region SpecialMoves
     //REQUIRES: both squares != null, fromSquare piece != null
@@ -293,6 +306,24 @@ public class ChessGame implements Writable {
 
     public void setBoard(Board board) {
         this.board = board;
+        EventLog.getInstance().logEvent(new Event("User started a new game"));
+    }
+
+    public Board getBoard() {
+        return board;
+    }
+
+    public List<Board> getSavedBoards() {
+        return savedBoards;
+    }
+
+    public int getSavedBoardsSize() {
+        return getSavedBoards().size();
+    }
+
+    public Board getSavedBoard(int index) {
+        EventLog.getInstance().logEvent(new Event("User displaying move " + (index + 1)));
+        return savedBoards.get(index);
     }
 
     //EFFECTS: returns square with given coordinates
@@ -302,13 +333,5 @@ public class ChessGame implements Writable {
 
     public String getPlayerTurn() {
         return playerTurn;
-    }
-
-    public Board getBoard() {
-        return board;
-    }
-
-    public List<Board> getSavedBoards() {
-        return savedBoards;
     }
 }

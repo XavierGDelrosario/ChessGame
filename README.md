@@ -67,5 +67,26 @@ closer to the center as long as the following conditions are met:
   JFrame that pops up when starting application).
 
 # Phase 4 Task 2
-
+- Thu Nov 24 18:47:13 PST 2022
+- Player white attempted move a2 to a2
+- Thu Nov 24 18:47:14 PST 2022
+- Player black made move a2 to a3
+- Thu Nov 24 18:47:16 PST 2022
+- Player white made move a7 to a6
+- Thu Nov 24 18:47:17 PST 2022
+- Player black made move a2 to a4
+- Thu Nov 24 18:47:19 PST 2022
+- Player white made move a8 to a4
+- Thu Nov 24 18:47:19 PST 2022
+- Game ended by checkmate
+- Thu Nov 24 18:47:23 PST 2022
+- User displaying move 1
+- Thu Nov 24 18:47:25 PST 2022
+- User displaying move 4
+- Thu Nov 24 18:47:29 PST 2022
+- User saved a chess game
+- Thu Nov 24 18:47:30 PST 2022
+- User loaded a chess game
+- Thu Nov 24 18:47:31 PST 2022
+- User started a new game
 # Phase 4 Task 3

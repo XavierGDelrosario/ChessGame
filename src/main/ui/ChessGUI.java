@@ -72,7 +72,7 @@ public class ChessGUI {
     //EFFECTS: displays current chess board with review panel and closes previous frame
     public void displayPreviousMoves() {
         try {
-            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this, chessGame.getSavedBoards()),
+            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this, chessGame),
                     this);
             isPlaying = false;
             currentFrame.dispose();
@@ -87,7 +87,7 @@ public class ChessGUI {
     public void displayLoadedPreviousMoves() {
         try {
             ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this,
-                    loadedChessGame.getSavedBoards()),
+                    loadedChessGame),
                     this);
             isPlaying = false;
             currentFrame.dispose();
@@ -123,8 +123,7 @@ public class ChessGUI {
                 userNotification.setText("Game ended by " + gameOverString);
             }
         } else {
-            String gameOverString = chessGame.getGameOverString();
-            userNotification.setText("Game ended by " + gameOverString);
+            userNotification.setText("ERROR: Game ended");
         }
     }
 

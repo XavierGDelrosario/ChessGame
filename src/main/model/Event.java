@@ -37,7 +37,6 @@ public class Event {
             return false;
         }
 
-
         Event otherEvent = (Event) other;
 
         return (this.dateLogged.equals(otherEvent.dateLogged)

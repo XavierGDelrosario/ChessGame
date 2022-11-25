@@ -93,6 +93,24 @@ public class Board implements Writable {
         return !testBoard.isKingInCheck(fromSquare.getPiece().getColor());
     }
 
+    //MODIFIES: fromSquares, toSquares
+    //EFFECTS: adds legal moves to given lists, each fromSquare has the same index as the corresponding toSquare
+    public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
+        List<Piece> pieces = getPieces(color);
+        List<Square> squares = null;
+        for (Piece piece : pieces) {
+            try {
+                squares = piece.getLegalMoves(this);
+            } catch (NullBoardException e) {
+                System.err.println("Passed null board");
+            }
+            for (Square square : squares) {
+                fromSquares.add(piece.getSquare());
+                toSquares.add(square);
+            }
+        }
+    }
+
     //REQUIRES:color = "white" or "black", a king piece with given color exists on the board
     //EFFECTS: returns true if given color's king can be captured by an opponent piece, else false
     public boolean isKingInCheck(String color) {
@@ -227,24 +245,6 @@ public class Board implements Writable {
             jsonArray.put(piece.toJson());
         }
         return jsonArray;
-    }
-
-    //MODIFIES: fromSquares, toSquares
-    //EFFECTS: adds legal moves to given lists, each fromSquare has the same index as the corresponding toSquare
-    public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
-        List<Piece> pieces = getPieces(color);
-        List<Square> squares = null;
-        for (Piece piece : pieces) {
-            try {
-                squares = piece.getLegalMoves(this);
-            } catch (NullBoardException e) {
-                System.err.println("Passed null board");
-            }
-            for (Square square : squares) {
-                fromSquares.add(piece.getSquare());
-                toSquares.add(square);
-            }
-        }
     }
 
     //REQUIRES: color = "white" or "black"

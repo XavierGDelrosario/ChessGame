@@ -57,11 +57,10 @@ public class ApplicationFrame extends JFrame {
         this.addWindowListener(exitListener);
     }
 
+    //EFFECTS: displays all logged events in console
     public void displayEventLog() {
-        Iterator<Event> iterator = EventLog.getInstance().iterator();
-        while (iterator.hasNext()) {
-            Event event = iterator.next();
-            System.out.println(event.toString());
+        for (Event next : EventLog.getInstance()) {
+            System.out.println(next.toString());
         }
     }
 

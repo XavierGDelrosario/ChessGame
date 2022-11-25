@@ -38,13 +38,13 @@ public class JsonWriter {
     }
 
     // MODIFIES: this
-    // EFFECTS: closes writer
+    // EFFECTS: closes writer, logs this event
     public void close() {
         writer.close();
     }
 
     // MODIFIES: this
-    // EFFECTS: writes string to file
+    // EFFECTS: writes string to file, logs this event
     private void saveToFile(String json) {
         writer.print(json);
         EventLog.getInstance().logEvent(new Event("User saved a chess game"));
