@@ -28,7 +28,7 @@ public class GamePanel extends JPanel implements ActionListener {
         drawBoard(gui.getChessGame().getBoard());
     }
 
-    //EFFECTS: creates and adds each square from given board to squares, display square in panel
+    //EFFECTS: creates and adds each squareUI from given board to squares, display square in panel
     public void drawBoard(Board board) {
         for (SquareUI squareUI :squares) {
             remove(squareUI);
