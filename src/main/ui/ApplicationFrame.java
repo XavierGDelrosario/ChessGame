@@ -62,6 +62,7 @@ public class ApplicationFrame extends JFrame {
         for (Event next : EventLog.getInstance()) {
             System.out.println(next.toString());
         }
+        EventLog.getInstance().clear();
     }
 
     public GamePanel getGamePanel() {

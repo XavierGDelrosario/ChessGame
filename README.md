@@ -94,11 +94,11 @@ closer to the center as long as the following conditions are met:
 Things I would change:
 - Change Piece from interface to abstract class. The implemented methods would be the setters and getters. The 
 abstract methods would be getSquaresCanMoveTo() and getLegalMoves(). This will reduce coupling.
-
 - Remove SpecialMovesPiece. Initially I created the abstract class to reduce duplication. I never used it as the 
 Apparent type because it was always necessary to get the specific type of piece. Instead, King and Pawn will extend the 
 now abstract class Piece. Unfortunately there will be duplication of getHasMoved() and setHasMoved()
-
 - Make a new class Move with 2 fields of Square. It would have getters and an overridden equals comparing both 
 fields of squares.
+- Apply the singleton design pattern to ChessGUI. There only needs to be one ChessGUI at any given time. This will also
+remove the associations with CommandsPanel, ReviewPanel, and GamePanel.
 
