@@ -98,4 +98,5 @@ public class Square {
             name = "a" + positionY;
         }
     }
+
 }

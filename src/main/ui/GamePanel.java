@@ -3,6 +3,7 @@ package ui;
 import model.Board;
 import model.Square;
 
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;

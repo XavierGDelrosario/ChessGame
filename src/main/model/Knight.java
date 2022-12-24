@@ -102,4 +102,5 @@ public class Knight implements Piece {
     public void setSquare(Square square) {
         this.square = square;
     }
+
 }

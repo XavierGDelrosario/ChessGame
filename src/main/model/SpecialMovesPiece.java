@@ -48,5 +48,6 @@ public abstract class SpecialMovesPiece implements Piece {
     public void setSquare(Square square) {
         this.square = square;
     }
+
 }
 

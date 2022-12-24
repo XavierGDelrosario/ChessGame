@@ -98,4 +98,5 @@ public class SquareTest {
         assertTrue(a1.containsPiece());
     }
 
+
 }

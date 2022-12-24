@@ -164,4 +164,5 @@ public class RookTest {
             fail("Did not expect to catch NullBoardException");
         }
     }
+
 }

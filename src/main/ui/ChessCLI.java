@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Scanner;
 
+
 // Note: code loading and saving mostly based off of JSONSerializationDemo
 //Represents the console user interface
 public class ChessCLI {

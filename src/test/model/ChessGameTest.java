@@ -239,4 +239,5 @@ public class ChessGameTest {
         assertEquals("draw by repetition", chessGame.getGameOverString());
     }
 
+
 }

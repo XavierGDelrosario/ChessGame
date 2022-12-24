@@ -3,6 +3,7 @@ package model;
 import exceptions.ColorException;
 import exceptions.NullBoardException;
 
+
 import java.util.ArrayList;
 import java.util.List;
 

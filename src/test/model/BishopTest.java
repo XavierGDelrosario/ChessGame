@@ -9,6 +9,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+
 public class BishopTest {
     private Board board;
     private Square a1;

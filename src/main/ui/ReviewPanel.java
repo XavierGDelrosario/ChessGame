@@ -1,7 +1,6 @@
 package ui;
 
 import exceptions.NullBoardException;
-import model.Board;
 import model.ChessGame;
 
 import javax.swing.*;

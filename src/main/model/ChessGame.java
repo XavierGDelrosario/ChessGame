@@ -334,4 +334,5 @@ public class ChessGame implements Writable {
     public String getPlayerTurn() {
         return playerTurn;
     }
+
 }

@@ -141,4 +141,5 @@ public class King extends SpecialMovesPiece {
         json.put("moved", hasMoved);
         return json;
     }
+
 }

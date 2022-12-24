@@ -1,5 +1,6 @@
 package persistence;
 
+
 import org.json.JSONObject;
 
 // Note: code mostly based off of Writable from JSONSerializationDemo

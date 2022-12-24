@@ -57,4 +57,5 @@ public class Rook extends Queen {
     public void setHasMoved(boolean b) {
         hasMoved = b;
     }
+
 }

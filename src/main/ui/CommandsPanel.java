@@ -7,6 +7,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+
 //Represents panel that contains command buttons and a label
 public class CommandsPanel extends JPanel implements ActionListener {
     private static final String TAB_SPACING = "          ";

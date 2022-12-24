@@ -152,4 +152,5 @@ public class Pawn extends SpecialMovesPiece {
     public void setCanEnPassantRight(boolean b) {
         canEnPassantRight = b;
     }
+
 }

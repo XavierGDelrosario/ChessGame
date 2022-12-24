@@ -17,4 +17,5 @@ public interface Piece extends Writable {
     Square getSquare();
 
     void setSquare(Square square);
+
 }
