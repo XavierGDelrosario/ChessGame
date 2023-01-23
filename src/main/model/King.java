@@ -8,12 +8,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Represents the king piece in chess
-public class King extends SpecialMovesPiece {
+public class King extends Piece {
+    private boolean hasMoved;
 
     //EFFECTS: creates a king with given color, throws ColorException if not white or black
     public King(String color) throws ColorException {
-        super(color);
+        super(color, "king");
         this.name = "king";
+        hasMoved = false;
     }
 
     @Override
@@ -140,6 +142,16 @@ public class King extends SpecialMovesPiece {
         json.put("color", color);
         json.put("moved", hasMoved);
         return json;
+    }
+
+    public boolean getHasMoved() {
+        return hasMoved;
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets hasMoved to true
+    public void setHasMoved(boolean b) {
+        hasMoved = b;
     }
 
 }

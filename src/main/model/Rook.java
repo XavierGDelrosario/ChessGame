@@ -14,7 +14,7 @@ public class Rook extends Queen {
     //EFFECTS: creates a rook with given color,  throws ColorException if not white or black
     public Rook(String color) throws ColorException {
         super(color);
-        this.name = "rook";
+        name = "rook";
         hasMoved = false;
     }
 
@@ -28,6 +28,21 @@ public class Rook extends Queen {
         json.put("color", color);
         json.put("moved", hasMoved);
         return json;
+    }
+
+    @Override
+    //REQUIRES:this piece exists on the board
+    //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
+    //         -throws caught NullBoardException
+    public List<Square> getLegalMoves(Board board) throws NullBoardException {
+        List<Square> movesToCheck = this.getSquaresCanMoveTo(board);
+        List<Square> legalMoves = new ArrayList<>();
+        for (Square square : movesToCheck) {
+            if (board.checkIsLegalMove(this.square, square)) {
+                legalMoves.add(square);
+            }
+        }
+        return legalMoves;
     }
 
     @Override
@@ -53,9 +68,9 @@ public class Rook extends Queen {
         return hasMoved;
     }
 
-    //EFFECTS: sets has moved to true
+    //MODIFIES: this
+    //EFFECTS: sets hasMoved to true
     public void setHasMoved(boolean b) {
         hasMoved = b;
     }
-
 }

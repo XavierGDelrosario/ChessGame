@@ -8,16 +8,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Represents the pawn piece in chess
-public class Pawn extends SpecialMovesPiece {
+public class Pawn extends Piece {
+    private boolean hasMoved;
     private boolean canEnPassantLeft;
     private boolean canEnPassantRight;
 
     //EFFECTS: creates a pawn with given color,  throws ColorException if not white or black
     public Pawn(String color) throws ColorException {
-        super(color);
-        this.name = "pawn";
+        super(color, "pawn");
         canEnPassantRight = false;
         canEnPassantLeft = false;
+        hasMoved = false;
     }
 
     @Override
@@ -151,6 +152,16 @@ public class Pawn extends SpecialMovesPiece {
 
     public void setCanEnPassantRight(boolean b) {
         canEnPassantRight = b;
+    }
+
+    public boolean getHasMoved() {
+        return hasMoved;
+    }
+
+    //MODIFIES: this
+    //EFFECTS: sets hasMoved to true
+    public void setHasMoved(boolean b) {
+        hasMoved = b;
     }
 
 }

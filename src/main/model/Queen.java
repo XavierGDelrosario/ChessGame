@@ -8,19 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Represents queen piece in chess
-public class Queen implements Piece {
-    protected final String color;
-    protected String name;
-    protected Square square;
+public class Queen extends Piece {
 
     //EFFECTS: creates a queen with given color, throws ColorException if not white or black
     public Queen(String color) throws ColorException {
-        if (!color.equals("white") && !color.equals("black")) {
-            throw new ColorException();
-        }
-        this.color = color;
-        square = null;
-        name = "queen";
+        super(color, "queen");
     }
 
     @Override
@@ -95,27 +87,4 @@ public class Queen implements Piece {
         json.put("color", color);
         return json;
     }
-
-    @Override
-    public String getColor() {
-        return color;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Square getSquare() {
-        return square;
-    }
-
-    @Override
-    public void setSquare(Square square) {
-        this.square = square;
-    }
-
-
-
 }

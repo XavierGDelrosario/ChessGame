@@ -1,5 +1,7 @@
 package model;
 
+import java.util.Objects;
+
 //Represents one of the 64 squares on the board
 public class Square {
     private final int positionX;
@@ -20,6 +22,19 @@ public class Square {
     //EFFECTS: Sets piece to null
     public void removePiece() {
         piece = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Square square = (Square) o;
+        return positionX == square.positionX && positionY == square.positionY && Objects.equals(piece, square.piece);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(positionX, positionY, piece);
     }
 
     //EFFECTS: returns the icon of a piece. Icon is first letter of the piece name (except knight which

@@ -8,19 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 //Represents a knight piece in chess
-public class Knight implements Piece {
-    private final String color;
-    private final String name;
-    private Square square;
+public class Knight extends Piece {
 
     //EFFECTS: creates a knight with given color, throws ColorException if not white or black
     public Knight(String color) throws ColorException {
-        if (!color.equals("white") && !color.equals("black")) {
-            throw new ColorException();
-        }
-        this.color = color;
-        square = null;
-        this.name = "knight";
+        super(color, "knight");
     }
 
     @Override
@@ -71,36 +63,4 @@ public class Knight implements Piece {
         }
         return legalMoves;
     }
-
-    @Override
-    //EFFECTS: returns this as JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("currentX", square.getXCoordinate());
-        json.put("currentY", square.getYCoordinate());
-        json.put("color", color);
-        return json;
-    }
-
-    @Override
-    public String getColor() {
-        return color;
-    }
-
-    @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
-    public Square getSquare() {
-        return square;
-    }
-
-    @Override
-    public void setSquare(Square square) {
-        this.square = square;
-    }
-
 }

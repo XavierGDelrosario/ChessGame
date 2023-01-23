@@ -287,7 +287,7 @@ class BoardTest {
     public void testCopyBoard() {
         board.setupBoard();
         Board copiedBoard = new Board();
-        copiedBoard.copyBoard(board);
+        copiedBoard.Board(board);
 
         assertEquals(16, copiedBoard.getPieces("white").size());
         assertEquals(16, copiedBoard.getPieces("black").size());
@@ -356,8 +356,8 @@ class BoardTest {
     public void testSameBoard() {
         board.setupBoard();
         Board newBoard = new Board();
-        assertFalse(board.isIdentical(newBoard));
+        assertFalse(board.equals(newBoard));
         newBoard.setupBoard();
-        assertTrue(board.isIdentical(newBoard));
+        assertTrue(board.equals(newBoard));
     }
 }

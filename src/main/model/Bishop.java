@@ -13,7 +13,7 @@ public class Bishop extends Queen {
     //EFFECTS: creates a bishop with given color, throws color exception if not black or white
     public Bishop(String color) throws ColorException {
         super(color);
-        this.name = "bishop";
+        name = "bishop";
     }
 
     @Override

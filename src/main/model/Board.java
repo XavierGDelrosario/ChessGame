@@ -8,6 +8,7 @@ import persistence.Writable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 //Represents a chess board with 64 squares.
 public class Board implements Writable {
@@ -23,6 +24,35 @@ public class Board implements Writable {
                 squares.add(new Square(i / 8 + 1, i % 8));
             }
         }
+    }
+
+    //REQUIRES: board != null
+    //MODIFIES:this
+    //EFFECTS:copies all piece locations of given board.
+    public void Board(Board board) {
+        try {
+            for (int i = 0; i < board.squares.size(); i++) {
+                Piece pieceToCopy = board.getSquares().get(i).getPiece();
+                if (pieceToCopy != null) {
+                    if (pieceToCopy.getName().equals("king")) {
+                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
+                    } else if (pieceToCopy.getName().equals("knight")) {
+                        this.squares.get(i).setPiece(new Knight(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("bishop")) {
+                        this.squares.get(i).setPiece(new Bishop(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("queen")) {
+                        this.squares.get(i).setPiece(new Queen(pieceToCopy.getColor()));
+                    } else if (pieceToCopy.getName().equals("rook")) {
+                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
+                    } else {
+                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
+                    }
+                }
+            }
+        } catch (ColorException e) {
+            System.err.println("Tried to create a piece that is not white or black");
+        }
+
     }
 
     //region Setup
@@ -86,7 +116,7 @@ public class Board implements Writable {
         int toSquareIndex = squares.indexOf(toSquare);
 
         Board testBoard = new Board();
-        testBoard.copyBoard(this);
+        testBoard.Board(this);
         Square testFromSquare = testBoard.getSquares().get(fromSquareIndex);
         Square testToSquare = testBoard.getSquares().get(toSquareIndex);
         testBoard.movePiece(testFromSquare, testToSquare);
@@ -143,35 +173,6 @@ public class Board implements Writable {
         toSquare.setPiece(piece);
     }
 
-    //REQUIRES: board != null
-    //MODIFIES:this
-    //EFFECTS:copies all piece locations of given board.
-    public void copyBoard(Board boardToCopy) {
-        try {
-            for (int i = 0; i < boardToCopy.squares.size(); i++) {
-                Piece pieceToCopy = boardToCopy.getSquares().get(i).getPiece();
-                if (pieceToCopy != null) {
-                    if (pieceToCopy.getName().equals("king")) {
-                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
-                    } else if (pieceToCopy.getName().equals("knight")) {
-                        this.squares.get(i).setPiece(new Knight(pieceToCopy.getColor()));
-                    } else if (pieceToCopy.getName().equals("bishop")) {
-                        this.squares.get(i).setPiece(new Bishop(pieceToCopy.getColor()));
-                    } else if (pieceToCopy.getName().equals("queen")) {
-                        this.squares.get(i).setPiece(new Queen(pieceToCopy.getColor()));
-                    } else if (pieceToCopy.getName().equals("rook")) {
-                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
-                    } else {
-                        this.squares.get(i).setPiece(copyPiece(pieceToCopy));
-                    }
-                }
-            }
-        } catch (ColorException e) {
-            System.err.println("Tried to create a piece that is not white or black");
-        }
-
-    }
-
     //REQUIRES:piece = king, rook, or pawn
     //EFFECTS: returns copy of piece with extra fields to copy: king, rook, pawn keep track if they have moved, pawn
     // keeps track of left and right en passant
@@ -201,22 +202,17 @@ public class Board implements Writable {
         return null;
     }
 
-    //REQUIRES: board != null
-    //EFFECTS: returns true if both board and this have the same pieces in the same squares
-    public boolean isIdentical(Board board) {
-        for (int i = 0; i < squares.size(); i++) {
-            Piece thisPiece = squares.get(i).getPiece();
-            Piece otherPiece = board.getSquares().get(i).getPiece();
-            if (thisPiece != null && otherPiece != null) {
-                if (!thisPiece.getName().equals(otherPiece.getName())
-                        || !thisPiece.getColor().equals(otherPiece.getColor())) {
-                    return false;
-                }
-            } else if (thisPiece != null || otherPiece != null) {
-                return false;
-            }
-        }
-        return true;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Board board = (Board) o;
+        return squares.equals(board.squares);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(squares);
     }
 
     //MODIFIES: squares with pieces

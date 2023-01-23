@@ -65,7 +65,7 @@ public class ChessGame implements Writable {
         }
         changePlayerTurn();
         Board boardToSave = new Board();
-        boardToSave.copyBoard(board);
+        boardToSave.Board(board);
         this.saveBoard(boardToSave);
     }
 
@@ -269,12 +269,11 @@ public class ChessGame implements Writable {
 
     //EFFECTS: return true if that last 3 turns with the same player turn have the same board position, else false
     private boolean isDrawByRepetition() {
-
         if (savedBoards.size() >= 10) {
             Board currentBoard = savedBoards.get(savedBoards.size() - 1);
             Board previousBoard = savedBoards.get(savedBoards.size() - 5);
             Board secondPreviousBoard = savedBoards.get(savedBoards.size() - 9);
-            return currentBoard.isIdentical(previousBoard) && currentBoard.isIdentical(secondPreviousBoard);
+            return currentBoard.equals(previousBoard) && currentBoard.equals(secondPreviousBoard);
         }
         return false;
     }
