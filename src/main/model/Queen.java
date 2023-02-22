@@ -77,14 +77,4 @@ public class Queen extends Piece {
         }
     }
 
-    @Override
-    //EFFECTS: returns this as JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("currentX", square.getXCoordinate());
-        json.put("currentY", square.getYCoordinate());
-        json.put("color", color);
-        return json;
-    }
 }

@@ -17,7 +17,7 @@ public class ChessGUI {
     private static final String JSON_STORE = "./data/chessGame.txt";
     private final JsonWriter jsonWriter;
     private final JsonReader jsonReader;
-    private ApplicationFrame currentFrame;
+    private static ApplicationFrame currentFrame;
     private ChessGame chessGame;
     private ChessGame loadedChessGame;
     private Label userNotification;
@@ -25,8 +25,10 @@ public class ChessGUI {
     private Square fromSquare;
     private Square toSquare;
 
+    private static ChessGUI chessGUI;
+
     //EFFECTS: creates chess application graphics
-    public ChessGUI() {
+    private ChessGUI() {
         jsonReader = new JsonReader(JSON_STORE);
         jsonWriter = new JsonWriter(JSON_STORE);
 
@@ -36,8 +38,18 @@ public class ChessGUI {
         fromSquare = null;
         toSquare = null;
         isPlaying = true;
-        currentFrame = new ApplicationFrame(new CommandsPanel(this), this);
-        displayCurrentGame();
+    }
+
+    private static void initialize() {
+        currentFrame = new ApplicationFrame(new CommandsPanel());
+    }
+
+    public static ChessGUI getInstance() {
+        if (chessGUI == null) {
+            chessGUI = new ChessGUI();
+            initialize();
+        }
+        return chessGUI;
     }
 
     //region DisplayingFrames
@@ -45,7 +57,7 @@ public class ChessGUI {
     //EFFECTS: displays current chess board with command panel and closes previous frame
     public void displayCurrentGame() {
         isPlaying = true;
-        ApplicationFrame newFrame = new ApplicationFrame(new CommandsPanel(this), this);
+        ApplicationFrame newFrame = new ApplicationFrame(new CommandsPanel());
         currentFrame.dispose();
         currentFrame = newFrame;
     }
@@ -55,11 +67,11 @@ public class ChessGUI {
     public void displayLoadedGame() {
         if (loadedChessGame != null) {
             chessGame = loadedChessGame;
-            if (chessGame.getSavedBoards().size() % 2 == 1) {
+            if (chessGame.getSavedSize() % 2 == 1) {
                 chessGame.changePlayerTurn();
             }
-            int lastIndex = chessGame.getSavedBoards().size() - 1;
-            Board newCurrentBoard = chessGame.getSavedBoards().get(lastIndex);
+            int lastIndex = chessGame.getSavedSize() - 1;
+            Board newCurrentBoard = chessGame.getSavedMove(lastIndex);
             chessGame.setBoard(newCurrentBoard);
             updateBoard(newCurrentBoard);
             displayCurrentGame();
@@ -73,8 +85,7 @@ public class ChessGUI {
     //EFFECTS: displays current chess board with review panel and closes previous frame
     public void displayPreviousMoves() {
         try {
-            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this, chessGame),
-                    this);
+            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(chessGame));
             isPlaying = false;
             currentFrame.dispose();
             currentFrame = newFrame;
@@ -87,9 +98,7 @@ public class ChessGUI {
     //EFFECTS: displays loaded chess board with review panel
     public void displayLoadedPreviousMoves() {
         try {
-            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(this,
-                    loadedChessGame),
-                    this);
+            ApplicationFrame newFrame = new ApplicationFrame(new ReviewPanel(loadedChessGame));
             isPlaying = false;
             currentFrame.dispose();
             currentFrame = newFrame;

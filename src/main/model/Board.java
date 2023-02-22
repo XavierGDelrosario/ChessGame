@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Objects;
 
 //Represents a chess board with 64 squares.
-public class Board implements Writable {
+public class Board {
     private final List<Square> squares;
 
     //EFFECTS:Creates a 8x8 board and list of squares with the correct coordinates
@@ -125,20 +125,25 @@ public class Board implements Writable {
 
     //MODIFIES: fromSquares, toSquares
     //EFFECTS: adds legal moves to given lists, each fromSquare has the same index as the corresponding toSquare
-    public void getLegalMoves(List<Square> fromSquares, List<Square> toSquares, String color) {
+    public void getPlayerLegalMove(List<Square> fromSquares, List<Square> toSquares, String color) {
         List<Piece> pieces = getPieces(color);
         List<Square> squares = null;
         for (Piece piece : pieces) {
-            try {
-                squares = piece.getLegalMoves(this);
-            } catch (NullBoardException e) {
-                System.err.println("Passed null board");
-            }
+            squares = getLegalMoves(piece);
             for (Square square : squares) {
                 fromSquares.add(piece.getSquare());
                 toSquares.add(square);
             }
         }
+    }
+
+    public List<Square> getLegalMoves(Piece piece) {
+        try {
+            return piece.getLegalMoves(this);
+        } catch (NullBoardException e) {
+            System.err.println("Passed null board");
+        }
+        return null;
     }
 
     //REQUIRES:color = "white" or "black", a king piece with given color exists on the board
@@ -223,26 +228,6 @@ public class Board implements Writable {
         }
     }
 
-    @Override
-    // EFFECTS: returns this as JSON object
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("pieces", piecesToJson());
-        return json;
-    }
-
-    // EFFECTS: returns pieces as a JSON array
-    private JSONArray piecesToJson() {
-        JSONArray jsonArray = new JSONArray();
-        for (Piece piece : this.getPieces("white")) {
-            jsonArray.put(piece.toJson());
-        }
-        for (Piece piece : this.getPieces("black")) {
-            jsonArray.put(piece.toJson());
-        }
-        return jsonArray;
-    }
-
     //REQUIRES: color = "white" or "black"
     //EFFECTS: returns all pieces of given color from board in no guaranteed order
     public List<Piece> getPieces(String color) {
@@ -272,6 +257,15 @@ public class Board implements Writable {
     public Square getSquare(int x, int y) {
         for (Square square : squares) {
             if (square.getXCoordinate() == x && square.getYCoordinate() == y) {
+                return square;
+            }
+        }
+        return null;
+    }
+
+    public Square getSquare(String s) {
+        for (Square square : squares) {
+            if (square.getName().equals(s)) {
                 return square;
             }
         }

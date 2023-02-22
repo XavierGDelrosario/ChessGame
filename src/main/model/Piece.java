@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Objects;
 
 //Represents a chess piece
-public abstract class Piece implements Writable {
+public abstract class Piece {
     protected final String color;
     protected String name;
     protected Square square;
@@ -31,17 +31,6 @@ public abstract class Piece implements Writable {
     //REQUIRES: this piece to exist on the board
     //EFFECTS: Returns squares that this piece can legally move to without putting the same colored king in check
     abstract List<Square> getLegalMoves(Board board) throws NullBoardException;
-
-    @Override
-    //EFFECTS: returns this as JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("currentX", square.getXCoordinate());
-        json.put("currentY", square.getYCoordinate());
-        json.put("color", color);
-        return json;
-    }
 
     public String getColor() {return  color;}
 

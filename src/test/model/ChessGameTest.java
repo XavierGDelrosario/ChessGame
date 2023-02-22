@@ -126,7 +126,7 @@ public class ChessGameTest {
         chessGame.movePiece(chessGame.getSquare(5,7), chessGame.getSquare(5,5));
         chessGame.movePiece(chessGame.getSquare(3,2), chessGame.getSquare(3,4));
         Pawn pawn = (Pawn) chessGame.getSquare(4,5).getPiece();
-        assertEquals(5, chessGame.getSavedBoards().size());
+        assertEquals(5, chessGame.getSavedSize());
         assertEquals("black", chessGame.getPlayerTurn());
         assertFalse(pawn.getCanEnPassantRight());
         Square a1 =  chessGame.getBoard().getSquare(1,1);

@@ -33,7 +33,7 @@ public class JsonWriterTest {
 
             JsonReader reader = new JsonReader("./data/testChessGame.txt");
             chessGame = reader.read();
-            assertEquals(0, chessGame.getSavedBoards().size());
+            assertEquals(0, chessGame.getSavedSize());
         } catch (IOException e) {
             fail("Exception should not have been thrown");
         }
@@ -52,9 +52,9 @@ public class JsonWriterTest {
 
             JsonReader reader = new JsonReader("./data/testTwoMovesPlayed.txt");
             chessGame = reader.read();
-            Board board1 = chessGame.getSavedBoards().get(0);
-            Board board2 = chessGame.getSavedBoards().get(1);
-            assertEquals(2, chessGame.getSavedBoards().size());
+            Board board1 = chessGame.getSavedMove(0);
+            Board board2 = chessGame.getSavedMove(1);
+            assertEquals(2, chessGame.getSavedSize());
             assertEquals("pawn", board1.getSquare(5,4).getPiece().getName());
             assertFalse(board1.getSquare(5,2).containsPiece());
             assertTrue(board1.getSquare(5,7).containsPiece());

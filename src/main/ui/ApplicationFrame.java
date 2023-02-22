@@ -18,7 +18,7 @@ public class ApplicationFrame extends JFrame {
     private GamePanel gamePanel;
 
     //EFFECTS:constructs frame with game panel and given control panel
-    public ApplicationFrame(JPanel inputPanel, ChessGUI gui) {
+    public ApplicationFrame(JPanel inputPanel) {
         setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setBackground(new Color(110, 87, 7));
@@ -29,7 +29,7 @@ public class ApplicationFrame extends JFrame {
         constraints.gridy = 0;
         constraints.weighty = 1.0;
         constraints.fill = GridBagConstraints.BOTH;
-        gamePanel = new GamePanel(gui);
+        gamePanel = new GamePanel();
         add(gamePanel, constraints);
 
         constraints.gridx = 0;

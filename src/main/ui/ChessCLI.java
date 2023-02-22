@@ -113,7 +113,7 @@ public class ChessCLI {
     private void loadPreviousBoard(ChessGame chessGame) {
         while (true) {
             System.out.println("Enter the number of the move played or q");
-            System.out.println(chessGame.getSavedBoards().size() + " moves have been played");
+            System.out.println(chessGame.getSavedSize() + " moves have been played");
             String input = scanner.nextLine();
             if (input.equals("q")) {
                 runApplication();
@@ -125,10 +125,10 @@ public class ChessCLI {
                 System.err.println("Input not an integer or q");
                 loadPreviousBoard(chessGame);
             }
-            if (index != 0 && index - 1 < chessGame.getSavedBoards().size() && index - 1 >= 0) {
-                displayBoard(chessGame.getSavedBoards().get(index - 1));
+            if (index != 0 && index - 1 < chessGame.getSavedSize() && index - 1 >= 0) {
+                displayBoard(chessGame.getSavedMove(index - 1));
             } else {
-                System.err.println("That number of moves has not been played yet, " + chessGame.getSavedBoards().size()
+                System.err.println("That number of moves has not been played yet, " + chessGame.getSavedSize()
                         + " moves have been played");
             }
         }

@@ -132,18 +132,6 @@ public class King extends Piece {
         return !rookHasMoved;
     }
 
-    @Override
-    //EFFECTS: returns this as JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("currentX", square.getXCoordinate());
-        json.put("currentY", square.getYCoordinate());
-        json.put("color", color);
-        json.put("moved", hasMoved);
-        return json;
-    }
-
     public boolean getHasMoved() {
         return hasMoved;
     }

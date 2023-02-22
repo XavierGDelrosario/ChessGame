@@ -19,18 +19,6 @@ public class Rook extends Queen {
     }
 
     @Override
-    //EFFECTS: returns this as JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        json.put("name", name);
-        json.put("currentX", square.getXCoordinate());
-        json.put("currentY", square.getYCoordinate());
-        json.put("color", color);
-        json.put("moved", hasMoved);
-        return json;
-    }
-
-    @Override
     //REQUIRES:this piece exists on the board
     //EFFECTS: returns all the squares this piece can move to and not put king with the same color in check
     //         -throws caught NullBoardException

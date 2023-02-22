@@ -334,7 +334,7 @@ class BoardTest {
         }
         List<Square> fromSquares = new ArrayList<>();
         List<Square> toSquares = new ArrayList<>();
-        board.getLegalMoves(fromSquares, toSquares, "white");
+        board.getPlayerLegalMove(fromSquares, toSquares, "white");
 
         assertEquals(9, fromSquares.size());
         assertEquals(9, toSquares.size());

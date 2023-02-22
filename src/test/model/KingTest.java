@@ -271,21 +271,4 @@ public class KingTest {
 
     }
 
-    @Test
-    public void testWritingKingInfo() {
-        try {
-            King king = new King("white");
-            board1.getSquare(1,1).setPiece(king);
-            JSONObject jsonQueen= king.toJson();
-            assertEquals("king", jsonQueen.getString("name"));
-            assertEquals("white", jsonQueen.getString("color"));
-            assertEquals(1, jsonQueen.getInt("currentX"));
-            assertEquals(1, jsonQueen.getInt("currentY"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-
-
-    }
-
 }

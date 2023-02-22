@@ -250,20 +250,4 @@ public class PawnTest {
         assertEquals(1, pawn.getSquaresCanMoveTo(board).size());
     }
 
-    @Test
-    public void testWritingPawnInfo() {
-        try {
-            Pawn pawn = new Pawn("white");
-            board.getSquare(1, 1).setPiece(pawn);
-            JSONObject jsonQueen = pawn.toJson();
-            assertEquals("pawn", jsonQueen.getString("name"));
-            assertEquals("white", jsonQueen.getString("color"));
-            assertEquals(1, jsonQueen.getInt("currentX"));
-            assertEquals(1, jsonQueen.getInt("currentY"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-
-    }
-
 }

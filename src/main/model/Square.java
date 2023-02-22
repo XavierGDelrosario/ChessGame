@@ -24,6 +24,28 @@ public class Square {
         piece = null;
     }
 
+
+    //EFFECTS: sets name to chess notation, 1,1 = a1, 4,1= d1, 8,1 = h1 etc
+    private void initializeName() {
+        if (positionX == 1) {
+            name = "a" + positionY;
+        } else if (positionX == 2) {
+            name = "b" + positionY;
+        } else if (positionX == 3) {
+            name = "c" + positionY;
+        } else if (positionX == 4) {
+            name = "d" + positionY;
+        } else if (positionX == 5) {
+            name = "e" + positionY;
+        } else if (positionX == 6) {
+            name = "f" + positionY;
+        } else if (positionX == 7) {
+            name = "g" + positionY;
+        } else if (positionX == 8) {
+            name = "h" + positionY;
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -93,25 +115,5 @@ public class Square {
         return name;
     }
 
-    //EFFECTS: sets name to chess notation, 1,1 = a1, 4,1= d1, 8,1 = h1 etc
-    private void initializeName() {
-        if (positionX == 1) {
-            name = "a" + positionY;
-        } else if (positionX == 2) {
-            name = "a" + positionY;
-        } else if (positionX == 3) {
-            name = "a" + positionY;
-        } else if (positionX == 4) {
-            name = "a" + positionY;
-        } else if (positionX == 5) {
-            name = "a" + positionY;
-        } else if (positionX == 6) {
-            name = "a" + positionY;
-        } else if (positionX == 7) {
-            name = "a" + positionY;
-        } else if (positionX == 8) {
-            name = "a" + positionY;
-        }
-    }
 
 }

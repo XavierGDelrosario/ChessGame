@@ -183,20 +183,5 @@ public class QueenTest {
     }
     //endregion
 
-    @Test
-    public void testWritingQueenInfo() {
-        try {
-            Queen queen = new Queen("white");
-            board.getSquare(1, 1).setPiece(queen);
-            JSONObject jsonQueen = queen.toJson();
-            assertEquals("queen", jsonQueen.getString("name"));
-            assertEquals("white", jsonQueen.getString("color"));
-            assertEquals(1, jsonQueen.getInt("currentX"));
-            assertEquals(1, jsonQueen.getInt("currentY"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-
-    }
 
 }

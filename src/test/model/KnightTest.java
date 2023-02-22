@@ -150,21 +150,4 @@ public class KnightTest {
         }
     }
     //endregion
-
-    @Test
-    public void testWritingKnightInfo() {
-        try {
-            Knight knight = new Knight("white");
-            board.getSquare(1, 1).setPiece(knight);
-            JSONObject jsonQueen = knight.toJson();
-            assertEquals("knight", jsonQueen.getString("name"));
-            assertEquals("white", jsonQueen.getString("color"));
-            assertEquals(1, jsonQueen.getInt("currentX"));
-            assertEquals(1, jsonQueen.getInt("currentY"));
-        } catch (ColorException e) {
-            fail("Did not expect to catch exception");
-        }
-
-    }
-
 }

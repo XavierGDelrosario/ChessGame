@@ -11,15 +11,15 @@ import java.util.List;
 //Represents a chess game
 public class ChessGame implements Writable {
     private Board board;
-    private List<Board> savedBoards;
     private String playerTurn;
+    private List<Move> savedMoves;
 
     //EFFECTS: creates a chess game
     public ChessGame() {
         board = new Board();
         board.setupBoard();
         playerTurn = "white";
-        savedBoards = new ArrayList<>();
+        savedMoves = new ArrayList<>();
     }
 
     //region PlayingGame
@@ -28,27 +28,32 @@ public class ChessGame implements Writable {
     //EFFECTS: return true if legal, else false. Make move if legal, move is legal if:
     //          -piece that is moving is the same color as the player turn
     //          -piece can move to that square
-    //      if made move end turn, log this event
+    //      if made move end turn, log this event and save move
     public boolean movePiece(Square fromSquare, Square toSquare) {
         Piece piece = fromSquare.getPiece();
         if (fromSquare.containsPiece() && piece.getColor().equals(playerTurn)) {
-            List<Square> fromSquares = new ArrayList<>();
-            List<Square> toSquares = new ArrayList<>();
-            board.getLegalMoves(fromSquares, toSquares, piece.getColor());
-            for (int i = 0; i < fromSquares.size(); i++) {
-                if (fromSquare == fromSquares.get(i) && toSquare == toSquares.get(i)) {
+            List<Square> squares = board.getLegalMoves(fromSquare.getPiece());
+                if (squares.contains(toSquare) && board.checkIsLegalMove(fromSquare,toSquare)) {
                     checkSpecialMoves(fromSquare, toSquare);
                     board.movePiece(fromSquare, toSquare);
                     endTurn();
                     logValidMove(fromSquare, toSquare);
+                    saveMove(new Move(fromSquare.getName(), toSquare.getName()));
                     return true;
-                }
             }
         }
         logInvalidMove(fromSquare, toSquare);
         return false;
     }
 
+    //EFFECTS: forcefully moves piece, does not check if it is legal
+    public void forceMovePiece(Square fromSquare, Square toSquare) {
+        if(fromSquare.containsPiece()) {
+            checkSpecialMoves(fromSquare, toSquare);
+            board.movePiece(fromSquare, toSquare);
+            endTurn();
+        }
+    }
     //MODIFIES: this, the pawns of the player whose turn it is
     //EFFECTS:  -removes en passant privileges from pawns of player whose turn it is
     //          -changes player turn from white to black and vice versa
@@ -64,9 +69,6 @@ public class ChessGame implements Writable {
             promote(pawn);
         }
         changePlayerTurn();
-        Board boardToSave = new Board();
-        boardToSave.Board(board);
-        this.saveBoard(boardToSave);
     }
 
     //MODIFIES:square with pawn
@@ -96,6 +98,7 @@ public class ChessGame implements Writable {
     }
     //endregion
 
+    //region EventLogging
     //EFFECTS: Logs an event that the player made an invalid move
     private void logInvalidMove(Square fromSquare, Square toSquare) {
         EventLog.getInstance().logEvent(new Event("Player " + playerTurn + " attempted move "
@@ -107,6 +110,7 @@ public class ChessGame implements Writable {
         EventLog.getInstance().logEvent(new Event("Player " + playerTurn + " made move "
                 + fromSquare.getName() + " to " + toSquare.getName()));
     }
+    //endregion
 
     //region SpecialMoves
     //REQUIRES: both squares != null, fromSquare piece != null
@@ -229,7 +233,7 @@ public class ChessGame implements Writable {
     private boolean isCheckMate() {
         List<Square> fromSquares = new ArrayList<>();
         List<Square> toSquares = new ArrayList<>();
-        board.getLegalMoves(fromSquares, toSquares, playerTurn);
+        board.getPlayerLegalMove(fromSquares, toSquares, playerTurn);
         return (board.isKingInCheck(playerTurn) && fromSquares.size() == 0);
     }
 
@@ -237,7 +241,7 @@ public class ChessGame implements Writable {
     private boolean isStalemate() {
         List<Square> fromSquares = new ArrayList<>();
         List<Square> toSquares = new ArrayList<>();
-        board.getLegalMoves(fromSquares, toSquares, playerTurn);
+        board.getPlayerLegalMove(fromSquares, toSquares, playerTurn);
         return (!board.isKingInCheck(playerTurn) && fromSquares.size() == 0);
     }
 
@@ -269,16 +273,17 @@ public class ChessGame implements Writable {
 
     //EFFECTS: return true if that last 3 turns with the same player turn have the same board position, else false
     private boolean isDrawByRepetition() {
-        if (savedBoards.size() >= 10) {
-            Board currentBoard = savedBoards.get(savedBoards.size() - 1);
-            Board previousBoard = savedBoards.get(savedBoards.size() - 5);
-            Board secondPreviousBoard = savedBoards.get(savedBoards.size() - 9);
+        if (savedMoves.size() >= 10) {
+            Board currentBoard = getSavedMove(savedMoves.size() - 1);
+            Board previousBoard = getSavedMove(savedMoves.size() - 5);
+            Board secondPreviousBoard = getSavedMove(savedMoves.size() - 9);
             return currentBoard.equals(previousBoard) && currentBoard.equals(secondPreviousBoard);
         }
         return false;
     }
     //endregion
 
+    //region DataPersistence
     @Override
     // EFFECTS: returns this as JSON object
     public JSONObject toJson() {
@@ -290,18 +295,16 @@ public class ChessGame implements Writable {
     // EFFECTS: returns saved boards as a JSON array
     private JSONArray boardsToJson() {
         JSONArray jsonArray = new JSONArray();
-        for (Board board : savedBoards) {
-            jsonArray.put(board.toJson());
+        for (Move move : savedMoves) {
+            jsonArray.put(move.toJson());
         }
         return jsonArray;
     }
+    //endregion
 
     //REQUIRES: board != null
     //MODIFIES: this
     //EFFECTS: adds board to saved board
-    public void saveBoard(Board board) {
-        savedBoards.add(board);
-    }
 
     public void setBoard(Board board) {
         this.board = board;
@@ -312,22 +315,32 @@ public class ChessGame implements Writable {
         return board;
     }
 
-    public List<Board> getSavedBoards() {
-        return savedBoards;
+    public int getSavedSize() {
+        return savedMoves.size();
     }
 
-    public int getSavedBoardsSize() {
-        return getSavedBoards().size();
-    }
-
-    public Board getSavedBoard(int index) {
+    public Board getSavedMove(int index) {
         EventLog.getInstance().logEvent(new Event("User displaying move " + (index + 1)));
-        return savedBoards.get(index);
+        ChessGame game = new ChessGame();
+        for (int i = 0; index >= 0; i++) {
+            Move move = savedMoves.get(i);
+            game.forceMovePiece(game.getSquare(move.getFromSquare()), game.getSquare(move.getToSquare()));
+            index--;
+        }
+        return game.getBoard();
+    }
+
+    public void saveMove(Move move) {
+        savedMoves.add(move);
     }
 
     //EFFECTS: returns square with given coordinates
     public Square getSquare(int x, int y) {
         return board.getSquare(x, y);
+    }
+
+    public Square getSquare(String s) {
+        return board.getSquare(s);
     }
 
     public String getPlayerTurn() {

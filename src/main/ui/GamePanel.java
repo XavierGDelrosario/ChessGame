@@ -16,17 +16,15 @@ public class GamePanel extends JPanel implements ActionListener {
     private static final Color darkSquare = new Color(68, 68, 68);
     private static final Color lightSquare = new Color(226, 213, 186);
     private List<SquareUI> squares;
-    private final ChessGUI gui;
 
     //EFFECTS: constructs a graphical display of chess board
-    public GamePanel(ChessGUI gui) {
-        this.gui = gui;
+    public GamePanel() {
         squares = new ArrayList<>();
         setLayout(new GridLayout(8, 8, 0, 0));
         setBorder(BorderFactory.createBevelBorder(1,Color.black,Color.BLACK));
         setVisible(true);
 
-        drawBoard(gui.getChessGame().getBoard());
+        drawBoard(ChessGUI.getInstance().getChessGame().getBoard());
     }
 
     //EFFECTS: creates and adds each squareUI from given board to squares, display square in panel
@@ -58,7 +56,7 @@ public class GamePanel extends JPanel implements ActionListener {
         if (e.getActionCommand().equals("selected")) {
             SquareUI squareUI = (SquareUI) e.getSource();
             Square square = squareUI.getSquare();
-            gui.setInputSquares(square);
+            ChessGUI.getInstance().setInputSquares(square);
         }
     }
 }
